@@ -1,0 +1,946 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html>
+
+<head>
+    <title>ODSP</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+    <link rel="stylesheet" href="/assets/css/site.css"/>
+    <link rel="stylesheet" href="/assets/libs/font-awesome/css/font-awesome.min.css"/>
+    <style>
+        .layui-input-block{
+            margin-left: 120px;
+            min-height: 36px;
+        }
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 15px;
+            width: 90px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body class="page-aside-fixed">
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-col-space15">
+
+        <div class="layui-col-md5 page-aside">
+            <span id="fl-btn" class="fl-btn">
+                <i id="fl-btn-icon" class="layui-icon layui-icon-right"></i>
+            </span>
+            <div id="fl-btn-l" class="layui-card scroll">
+                <form class="layui-form"id="uncertainForm" lay-filter="uncertainForm">
+                    <!--方法选择-->
+                    <div class="layui-card-header newheader">方法选择</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item" pane="">
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="function" value="1" lay-skin="primary" title="EMV 决策" checked="">
+                            </div>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="function" value="2" lay-skin="primary" title="EOL 决策">
+                            </div>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="function" value="3" lay-skin="primary" title="EVPI 决策">
+                            </div>
+                            <div class="layui-input-block">
+                                <input type="checkbox" name="function" value="4" lay-skin="primary" title="EUV 决策" checked="">
+                            </div>
+                        </div>
+                    </div>
+                    <!--参数设置-->
+                    <div class="layui-card-header newheader">参数设置</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">行动方案数</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="action" name="action" value="3" isChange="false" class="layui-input" lay-verify="required|action">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">自然状态数</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="state" name="state" value="3" isChange="false" class="layui-input" lay-verify="required|state">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">效用曲线系数</label>
+                            <div class="layui-input-block">
+                                <input type="text" size="18" id="utility" name="utility" value="2" class="layui-input" lay-verify="required|utility">
+                            </div>
+                        </div>
+                    </div>
+                    <!--表格系数设置-->
+                    <hr class="layui-bg-green">
+                    <div class="layui-card">
+                        <div class="layui-card-header">系数设置
+                            <span id="btnUpd" style="float: right; cursor: pointer;">
+                                <i class="fa fa-pencil-square" aria-hidden="true"></i>  编辑</i>
+                            </span>
+                        </div>
+                        <div class="layui-card-body">
+                            <table class="layui-hide" lay-size="sm" id="xishu"></table>
+                        </div>
+                    </div>
+                    <!--参数说明-->
+                    <div class="layui-card-header newheader">参数说明</div>
+                    <div class="layui-card-body">
+                        <ul class="layui-timeline">
+                            <li class="timeline-item">
+                                <div class="layui-text">
+                                    <h3 class="layui-timeline-title">行动方案数</h3>
+                                    <ul>
+                                        <li>行动方案数的取值范围为大于1的正整数</li>
+                                        <li>表示实现某一个目标可以采取的方案的个数</li>
+                                        <li>如某企业有大批量、中批量、小批量三种生产方案</li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="timeline-item">
+                                <div class="layui-text">
+                                    <h3 class="layui-timeline-title">自然状态数</h3>
+                                    <ul>
+                                        <li>自然状态数的取值范围为大于1的正整数</li>
+                                        <li>表示实现某一目标时面对的不同情况</li>
+                                        <li>如某公司产品销售会面临市场需求量大和需求量小两种状态</li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="timeline-item">
+                                <div class="layui-text">
+                                    <h3 class="layui-timeline-title">效用曲线系数</h3>
+                                    <ul>
+                                        <li>效用曲线系数的取值范围为（0,∞）</li>
+                                        <li>当效用曲线系数∈（0,1）时，表示决策者为保守型的，即厌恶风险，则决策者对利益的反映比较迟缓而对损失比较敏感，不求大利但愿稳妥</li>
+                                        <li>当效用曲线系数=1时，表示决策者为中间型的，则决策者对利益的感知效用与对损失的感知效用相同，即收益值和效用值成正比例关系</li>
+                                        <li>当效用曲线系数∈（1,∞）时，表示决策者为风险型的，即追求风险，则决策者对损失的反映比较迟缓而对利益比较敏感，比较冒进</li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="timeline-item">
+                                <div class="layui-text">
+                                    <h3 class="layui-timeline-title">自然状态概率</h3>
+                                    <ul>
+                                        <li>自然状态概率的取值范围为（0,1），所有自然状态概率之和为1</li>
+                                    </ul>
+                                </div>
+                            </li>
+
+                            <li class="timeline-item">
+                                <div class="layui-text">
+                                    <h3 class="layui-timeline-title">收益值</h3>
+                                    <ul>
+                                        <li>收益值可以取任意数值，表示决策者各方案在各自然状态下所获得的收益</li>
+                                        <li>如某企业在市场需求量大时采用大批量生产方案可得收益值为140万</li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--底部悬浮操作按钮-->
+                    <div style="height: 5rem;"></div>
+                    <div class="fl-box">
+                        <button class="layui-btn layui-btn-lg layui-btn-radius layui-btn-primary" id="calculate" lay-filter="calculate" lay-submit>
+                            <i class="fa fa-play-circle" aria-hidden="true"></i>  计算
+                        </button>
+                        <span class="verticalline"></span>
+                        <button class="layui-btn layui-btn-lg  layui-btn-radius layui-btn-primary" id="download">
+                            <i class="fa fa-arrow-circle-down" aria-hidden="true"></i>  下载
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <!--数据表格-->
+        <div id="fl-btn-r" class="layui-col-md7 page-main">
+
+            <div class="layui-card" id="incomeTableDiv">
+                <div class="layui-card-header">收益矩阵数据表
+                    <span id="showIncome" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="incomeFa"> 打开图表</i>
+                    </span>
+                </div>
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="incomeTable"></table>
+                </div>
+                <div class="layui-card-body dis-none" id="incomeEcharts">
+                    <div id="incomeEchartsDiv" class="layui-show echartsDiv"></div>
+                </div>
+            </div>
+
+            <div class="layui-card" id="emvTableDiv">
+                <div class="layui-card-header">EMV 决策法结果表
+                    <span id="showEMV" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="emvFa"> 打开图表</i>
+                    </span>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="emvTable"></table>
+                </div>
+                <div class="layui-card-body dis-none" id="emvEcharts">
+                    <div id="emvEchartsDiv" class="layui-show echartsDiv"></div>
+                </div>
+            </div>
+
+            <div class="layui-card dis-none" id="eolTableDiv">
+                <div class="layui-card-header">EOL 决策法结果表
+                    <span id="showEOL" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="eolFa"> 打开图表</i>
+                    </span>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="eolTable"></table>
+                </div>
+                <div class="layui-card-body dis-none" id="eolEcharts">
+                    <div id="eolEchartsDiv" class="layui-show echartsDiv"></div>
+                </div>
+            </div>
+
+            <div class="layui-card dis-none" id="epviTableDiv">
+                <div class="layui-card-header">EPVI 决策法结果表
+                    <span id="showEPVI" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="epviFa"> 打开图表</i>
+                    </span>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="epviTable"></table>
+                </div>
+                <div class="layui-card-body dis-none" id="epviEcharts">
+                    <div id="epviEchartsDiv" class="layui-show echartsDiv"></div>
+                </div>
+            </div>
+
+            <div class="layui-card" id="euvTableDiv">
+                <div class="layui-card-header">EUV 决策法结果表
+                    <span id="showEUV" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="euvFa"> 打开图表</i>
+                    </span>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="euvTable"></table>
+                </div>
+                <div class="layui-card-body dis-none" id="euvEcharts">
+                    <div id="euvEchartsDiv" class="layui-show echartsDiv"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/libs/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/assets/libs/slimscroll/jquery.slimscroll.js"></script>
+
+<script type="text/javascript" src="/assets/libs/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echartsTheme.js"></script>
+
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script type="text/javascript" src="/assets/js/utils.js"></script>
+<script type="text/javascript" src="/assets/js/tool.js"></script>
+
+<script>
+    //layui建议所有代码都写在layui.use()里面，相当于jquery的$(function(){})
+    var use = layui.use(['table', 'layer', 'form', 'util', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+
+        var oldAction = 3,oldState = 3;
+
+        var isUpd = "isup";
+
+        var originalHead = [
+            {field: 'income', title: '收益值'},
+            {field: '1_state', title: '自然状态1'},
+            {field: '2_state', title: '自然状态2'},
+            {field: '3_state', title: '自然状态3'}
+        ];
+
+        var originalData = [{
+            "income": "自然状态概率",
+            "1_state": "0.2",
+            "2_state": "0.5",
+            "max": "340",
+            "3_state": "0.3"
+        }, {
+            "income": "行动方案1",
+            "1_state": "140",
+            "2_state": "120",
+            "3_state": "80"
+        }, {
+            "income": "行动方案2",
+            "1_state": "200",
+            "2_state": "150",
+            "3_state": "40"
+        }, {
+            "income": "行动方案3",
+            "1_state": "340",
+            "2_state": "140",
+            "3_state": "-20"
+        }];
+
+
+        var incomeCharts = echarts.init(document.getElementById('incomeEchartsDiv'));
+        var emvCharts = echarts.init(document.getElementById('emvEchartsDiv'));
+        var eolCharts = echarts.init(document.getElementById('eolEchartsDiv'));
+        var epviCharts = echarts.init(document.getElementById('epviEchartsDiv'));
+        var euvCharts = echarts.init(document.getElementById('euvEchartsDiv'));
+
+        var chartsNames = [incomeCharts,emvCharts,eolCharts,epviCharts,euvCharts];
+
+        //点击收缩参数设置div
+        $('#fl-btn').click(function () {
+            var isExapnd = $('#fl-btn-l').hasClass('fl-btn-mini');
+            if (isExapnd) {
+                //如果已经折叠，则点击是恢复
+                $('#fl-btn-l').removeClass('fl-btn-mini');
+                $('#fl-btn-r').addClass('layui-col-md7 page-main');
+
+                $('#fl-btn-icon').removeClass('layui-icon-left');
+                $('#fl-btn-icon').addClass('layui-icon-right');
+            } else {
+                //否则折叠
+                $('#fl-btn-l').addClass('fl-btn-mini');
+                $('#fl-btn-r').removeClass('layui-col-md7 page-main');
+
+                $('#fl-btn-icon').removeClass('layui-icon-right');
+                $('#fl-btn-icon').addClass('layui-icon-left');
+            }
+
+            if(isNotEmpty(chartsNames)){
+                for (var i = 0; i < chartsNames.length; i++) {
+                    chartsNames[i].resize();
+                }
+            }
+        });
+
+        admin.putTempData('originalHead', originalHead);
+        admin.putTempData('originalData', originalData);
+
+
+        //检验行动方案和自然状态数值
+        function checkActAte(action, state) {
+            if(isEmpty(action) || isEmpty(state)){
+                layer.msg("行动方案和自然状态不能为空!");
+                return false;
+            }else if(!/^[1-9]\d*$/.test(action) || !/^[1-9]\d*$/.test(state)){
+                layer.msg('行动方案和自然状态必须是大于 0 的整数!');
+                return false;
+            }else if(action > 100 || state > 100){
+                layer.msg('最多添加 100 个行动方案和自然状态!');
+                return false;
+            }
+            return true;
+        }
+
+        //实时监听 input 值变化
+        $(function () {
+            var action = oldAction,state = oldState;
+
+            $("#action").bind("input propertychange",function(event){
+                action = $("#action").val();
+                //先判断一下有没有改变 action 或者 state 的数据
+                if(oldAction != action){
+                    $("#action").attr("isChange","true");
+                    isUpd = "noup"; //记录不是更新表格操作
+                }else{
+                    $("#action").attr("isChange","false");
+                }
+            });
+            $("#state").bind("input propertychange",function(event){
+                state = $("#state").val();
+                //先判断一下有没有改变 action 或者 state 的数据
+                if(oldState != state){
+                    $("#state").attr("isChange","true");
+                    isUpd = "noup"; //记录不是更新表格操作
+                }else{
+                    $("#state").attr("isChange","false");
+                }
+            });
+        })
+
+
+        // 添加编辑按钮点击事件
+        $('#btnUpd').click(function () {
+            //action 是行数
+            var action = $("#action").val();
+            //state + 1 是列数
+            var state = $("#state").val();
+            //校验数据
+            if (!checkActAte(action, state)) {
+                return;
+            }
+
+            layer.open({
+                type: 2,
+                title: '系数设置',
+                maxmin: true,
+                area: ['550px', '500px'],
+                content: 'risk/editForm/' + action + '/' + state + '/' + isUpd,
+                btn: ['保存', '取消'],
+                yes: function (index, layero) {
+                    var ifTable = $("div.layui-layer-content > iframe")[0].contentWindow.layui.table;
+                    //在提交数据之前先校验数据
+                    var cache = ifTable.cache.ratio;
+                    var isNull = false;
+                    var isNotNum = false;
+                    var isChance = false;
+                    var sum = 0;
+                    var isBlance = false;
+                    for (var i = 0; i <= action; i++) {
+                        var item = cache[i];
+                        for (var j = 1; j <= state; j++) {
+                            if (item[j + "_state"].trim().length == 0) {
+                                isNull = true;
+                                break;
+                            }else if(i == 0){//第一行是自然状态概率
+                                //先判断是否在 0~1 之间
+                                if(!/^(0(\.\d{1,2})?|1(\.0{1,2})?)$/.test(item[j + "_state"])){
+                                    isChance = true;
+                                }
+                                //再判断相加是否等于 1
+                                sum += parseFloat(item[j+"_state"]);
+                                console.log(parseInt(sum))
+                            } else if (i > 1 && !/^[+-]?\d*\.?\d{0,3}$/.test(item[j + "_state"])) {
+                                isNotNum = true;
+                                break;
+                            }
+                        }
+                        if(parseInt(sum) != 1){
+                            isBlance = true;
+                            break;
+                        }
+                    }
+
+                    if (isNull) {
+                        layer.msg('数据表中存在字段为空!');
+                    }else if(isChance){
+                        layer.msg('自然状态概率在 0~1 之间，最多保留两位小数!');
+                    }else if(isBlance){
+                        layer.msg('自然状态概率之和为 1 !');
+                    }else if (isNotNum) {
+                        layer.msg('数据表的字段只能为整数或保留3位小数!');
+                    }else { //如果校验通过,提交数据到系数设置的表格中
+                        layer.close(index); //如果设定了yes回调，需进行手工关闭
+
+                        var Data = JSON.parse(JSON.stringify(cache));
+                        layui.table.render({
+                            elem: '#xishu',
+                            cellMinWidth: 115,
+                            cols: [ifTable.head],
+                            data: Data
+                        });
+
+                        //更新原始数据表头和数据
+                        originalHead = ifTable.head;
+                        originalData = Data;
+                        //更新 action 与 state 的值
+                        oldAction = action;
+                        oldState = state;
+
+                        $("#action").attr("isChange","false");
+                        $("#state").attr("isChange","false");
+
+                        isUpd = "isup";
+
+                        admin.putTempData('originalHead', ifTable.head);
+                        admin.putTempData('originalData', Data);
+                    }
+                },
+                btn2: function (index, layero) { //取消按钮
+                    layer.close();
+                }
+            });
+        })
+
+
+        /**
+         * 自定义表单验证规则
+         */
+        form.verify({
+            action:function(value,item){
+                if($("#action").attr("isChange") == "true"){
+                    return '行动方案已改变，请重新设置系数!';
+                }
+                if(!/^[1-9]\d*$/.test(value)){
+                    return '行动方案必须是大于 0 的整数!';
+                }else if(value > 100 ){
+                    return '最多添加 100 个行动方案!';
+                }
+            },
+            state:function (value,item) {
+                if($("#state").attr("isChange")  == "true"){
+                    return '自然状态已改变，请重新设置系数!';
+                }
+                if(!/^[1-9]\d*$/.test(value)){
+                    return '自然状态必须是大于 0 的整数!';
+                }else if(value > 100 ){
+                    return '最多添加 100 个自然状态!';
+                }
+            },
+            utility:function (value, item) {
+                if(!/^([0-9]\d*)(\s|$|\.\d{1,2}\b)/.test(value)){
+                    return '效用曲线系数必须大于0，最多保留两位小数!';
+                }
+            }
+        })
+
+        // 表单提交事件
+        form.on('submit(calculate)', function (data) {
+            //将checkbox 封装成一个数组
+            var functions = new Array();
+            $("input[name='function']:checked").each(function () {
+                functions.push($(this).val());
+            })
+            var utility = data.field.utility;
+            layer.load(2);
+            $.post('risk/calculate', {
+                funArr:functions,
+                action:data.field.action,
+                state:data.field.state,
+                utility:data.field.utility,
+                ratioTableData: JSON.stringify(table.cache.xishu),
+            }, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    top.layer.msg(data.msg, {icon: 1});
+                    //数据返回成功,得到数据,渲染表格
+                    renderTables(data,utility);
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            });
+            return false;
+        });
+
+
+
+        /**
+         * 根据不同的 key 渲染出不同的结果表
+         * @param data
+         */
+        function renderTables(data,utility){
+            //首先渲染原始数据表
+            // var originalHead = admin.getTempData('originalHead');
+            // var originalData = admin.getTempData('originalData');
+            table.render({
+                elem: '#incomeTable',
+                cellMinWidth: 115,
+                cols: [originalHead],
+                data: originalData
+            });
+            renderCharts(originalData,incomeCharts,oldAction,oldState);
+            //然后根据不同的 key 渲染出不同的结果表
+            if(isNotEmpty(data["1"])){ //如果有选择EMV决策法
+                renderTool("EMV决策法",data["1"],'#emvTable','#emvTableDiv');
+                renderCharts(data["1"],emvCharts,oldAction,oldState,'EMV决策法');
+            }else{
+                $("#emvTableDiv").addClass('dis-none');
+            }
+            if(isNotEmpty(data["2"])){ //EOL决策法
+                renderTool("EOL决策法",data["2"],'#eolTable','#eolTableDiv');
+                renderCharts(data["2"],eolCharts,oldAction,oldState,'EOL决策法');
+            }else{
+                $("#eolTableDiv").addClass('dis-none');
+            }
+            if(isNotEmpty(data["3"])){ //EPVI决策法
+                renderTool("EMV决策法",data["3"],'#epviTable','#epviTableDiv');
+                renderCharts(data["3"],epviCharts,oldAction,oldState,'EMV决策法');
+            }else{
+                $("#epviTableDiv").addClass('dis-none');
+            }
+            if(isNotEmpty(data["4"])){//EUV决策法
+                var title = initEUVTitle();
+                renderTool(title, data["4"],'#euvTable','#euvTableDiv');
+                renderCharts(data["4"],euvCharts,oldAction,oldState,title);
+            }else{
+                $("#euvTableDiv").addClass('dis-none');
+            }
+        }
+
+        function renderTool(title,tableData,tableId,divId){
+            $(divId).removeClass('dis-none');
+            var head =JSON.parse(JSON.stringify(originalHead));
+            var result = {field:'result', title: title, minWidth:156};
+            head.push(result);
+            if(tableId == '#epviTable'){//如果是EPVI 决策
+                var except = {field:'except', title:'全情报期望收益', minWidth:156};
+                var value = {field:'value', title:'全情报价值EVPI', minWidth:156};
+                head.push(except);
+                head.push(value);
+            }
+            table.render({
+                elem: tableId,
+                cellMinWidth: 110,
+                cols: [head],
+                data: tableData
+            });
+        }
+
+
+        function renderCharts(chartsData,chartsName,action,state,CalName) {
+            var visualMapMax = chartsData[0]["max"];
+            if(isEmpty(visualMapMax)){
+                visualMapMax = 400;
+            }
+
+            var newX = new Array();
+            for (var i = 1; i <= action; i++) {
+                newX.push("行动方案"+i);
+            }
+            var newY = new Array();
+            for (var i = 1; i <= state; i++) {
+                newY.push("自然状态"+i);
+            }
+            if(isNotEmpty(CalName)){
+                newY.push(CalName);
+            }
+            //如果是epvi决策
+            if(chartsName == 'epviCharts'){
+                newY.push('全情报期望收益');
+                newY.push('全情报价值EVPI');
+            }
+
+            var newData = new Array();
+            for (var i = 1; i <= action; i++) {
+                var result = new Array();
+                var except = new Array();
+                var value = new Array();
+                var resultData;
+
+                for (var j = 1; j <= state; j++) {
+                    var item = new Array();
+                    item.push("行动方案"+i);
+                    item.push("自然状态"+j);
+                    item.push(chartsData[i][j+"_state"]);
+                    resultData = chartsData[i]["result"];
+                    newData.push(item);
+                }
+                if(isNotEmpty(CalName)){
+                    result.push("行动方案"+i);
+                    result.push(CalName);
+                    var indexBe = resultData.search("(最优方案)");
+                    var indexBi = resultData.search("(最大期望收益)");
+                    if(indexBe != -1){
+                        var newStr = resultData.substring(0,indexBe);
+                        result.push(parseFloat(newStr));
+                        //说明不是EPVI
+                        except.push("行动方案"+i);
+                        except.push("全情报期望收益");
+                        except.push(0)
+                        value.push("行动方案"+i);
+                        value.push("全情报价值EVPI");
+                        value.push(0);
+                        newData.push(except);
+                        newData.push(value);
+                    }else if(indexBi != -1){
+                        var newStr = resultData.substring(0,indexBi);
+                        result.push(parseFloat(newStr));
+                        //说明是EPVI
+                        except.push("行动方案"+i);
+                        except.push("全情报期望收益");
+                        except.push(chartsData[i]["except"])
+                        value.push("行动方案"+i);
+                        value.push("全情报价值EVPI");
+                        value.push(chartsData[i]["value"]);
+                        newData.push(except);
+                        newData.push(value);
+                    } else{
+                        result.push(parseFloat(resultData));
+                    }
+                    newData.push(result);
+                }
+
+
+            }
+
+            console.log(newX)
+            console.log(newY)
+            console.log(newData)
+            var option = {
+                tooltip: {},
+                //工具箱组件
+                toolbox: {
+                    show: true, //开启工具箱组件
+                    feature: {  //具体用到的功能配置
+                        dataView:{
+                            show:true   //开启数据视图
+                        },
+                        restore:{
+                            show:true   //还原
+                        },
+                        saveAsImage:{
+                            show:true   //保存图片
+                        }
+                    }
+                },
+
+                visualMap: {
+                    max: visualMapMax,
+                    inRange: {
+                        color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+                    }
+                },
+
+                // dataZoom: [
+                //     {
+                //         type: 'slider',
+                //         show: true,
+                //         xAxisIndex: [0],
+                //         start: 1,
+                //         end: action
+                //     },
+                //     {
+                //         type: 'slider',
+                //         show: true,
+                //         yAxisIndex: [0],
+                //         left: '93%',
+                //         start: 1,
+                //         end: state
+                //     },
+                //     {
+                //         type: 'inside',
+                //         xAxisIndex: [0],
+                //         start: 1,
+                //         end: action
+                //     },
+                //     {
+                //         type: 'inside',
+                //         yAxisIndex: [0],
+                //         start: 1,
+                //         end: state
+                //     }
+                // ],
+
+                xAxis3D: {
+                    name: '',
+                    type: 'category',
+                    data: newX
+                },
+                yAxis3D: {
+                    name:'',
+                    type: 'category',
+                    data: newY
+                },
+                zAxis3D: {
+                    name:'收益值',
+                    type: 'value'
+                },
+
+
+                grid3D: {
+                    boxWidth: 200,
+                    boxDepth: 80,
+                    viewControl: {
+                        distance: 250
+                    },
+                    light: {
+                        main: {
+                            intensity: 1.2,
+                            shadow: true
+                        },
+                        ambient: {
+                            intensity: 0.3
+                        }
+                    }
+                },
+                series: [{
+                    type: 'bar3D',
+
+                    data: newData.map(function (item) {
+                        return {
+                            value: [item[0], item[1], item[2]],
+                        }
+                    }),
+                    shading: 'lambert',
+                    label: {
+                        textStyle: {
+                            fontSize: 16,
+                            borderWidth: 1
+                        }
+                    },
+                    emphasis: {
+                        label: {
+                            textStyle: {
+                                fontSize: 20,
+                                color: '#900'
+                            }
+                        },
+                        itemStyle: {
+                            color: '#900'
+                        }
+                    }
+                }]
+            };
+
+            chartsName.clear();
+            chartsName.setOption(option, true);
+            chartsName.resize();
+        }
+
+        function initChartBut(showName,divName,faName,chartsName){
+            $(showName).click(function () {
+                var isExapnd = $(divName).hasClass('dis-none');
+                if(isExapnd){ //如果是隐藏的,则打开图表
+                    $(divName).removeClass('dis-none');
+                    $(faName).text(" 关闭图表");
+                    chartsName.resize();
+                }else {
+                    $(divName).addClass('dis-none');
+                    $(faName).text(" 打开图表");
+                }
+            })
+        }
+
+        initChartBut('#showIncome','#incomeEcharts','#incomeFa',incomeCharts);
+        initChartBut('#showEMV','#emvEcharts','#emvFa',emvCharts);
+        initChartBut('#showEOL','#eolEcharts','#eolFa',eolCharts);
+        initChartBut('#showEPVI','#epviEcharts','#epviFa',epviCharts);
+        initChartBut('#showEUV','#euvEcharts','#euvFa',euvCharts);
+
+        function initEUVTitle(){
+            var utility = $("#utility").val();
+            if(utility >0 && utility < 1){
+                return "EUV(保守型) t="+utility;
+            }else if(utility == 1){
+                return "EUV(中间型) t="+utility;
+            }else if(utility > 1){
+                return "EUV(风险型) t="+utility;
+            }
+        }
+
+
+        //初始化表数据
+        var emvData = [{
+            "income": "自然状态概率",
+            "1_state": "0.2",
+            "2_state": "0.5",
+            "3_state": "0.3",
+            "max": "340",
+            "result": ""
+        }, {
+            "income": "行动方案1",
+            "1_state": "140",
+            "2_state": "120",
+            "3_state": "80",
+            "result": "112"
+        }, {
+            "income": "行动方案2",
+            "1_state": "200",
+            "2_state": "150",
+            "3_state": "40",
+            "result": "127"
+        }, {
+            "income": "行动方案3",
+            "1_state": "340",
+            "2_state": "140",
+            "3_state": "-20",
+            "result": "132(最优方案)"
+        }];
+
+        var euvData = [{
+            "income": "自然状态概率",
+            "1_state": "0.2",
+            "2_state": "0.5",
+            "3_state": "0.3",
+            "max": "340",
+            "result": ""
+        }, {
+            "income": "行动方案1",
+            "1_state": "0.2",
+            "2_state": "0.15",
+            "3_state": "0.08",
+            "result": "0.139"
+        }, {
+            "income": "行动方案2",
+            "1_state": "0.37",
+            "2_state": "0.22",
+            "3_state": "0.03",
+            "result": "0.193"
+        }, {
+            "income": "行动方案3",
+            "1_state": "1",
+            "2_state": "0.2",
+            "3_state": "0",
+            "result": "0.3(最优方案)"
+        }]
+
+
+        //系数设置表
+        table.render({
+            elem: '#xishu',
+            cellMinWidth: 115,
+            cols: [originalHead],
+            data:originalData
+        });
+
+        //收益矩阵数据表
+        table.render({
+            elem: '#incomeTable',
+            cellMinWidth: 115,
+            cols: [originalHead],
+            data:originalData
+        });
+        renderCharts(originalData,incomeCharts,oldAction,oldState);
+
+        //EMV 结果表
+        table.render({
+            elem: '#emvTable',
+            cellMinWidth: 115,
+            cols: [[
+                {field: 'income', title: '收益值'},
+                {field: '1_state', title: '自然状态1'},
+                {field: '2_state', title: '自然状态2'},
+                {field: '3_state', title: '自然状态3'},
+                {field: 'result', title: 'EMV 决策法',minWidth:156}
+            ]],
+            data: emvData
+        });
+        renderCharts(emvData,emvCharts,oldAction,oldState,'EMV决策法');
+
+        //EUV决策法结果表
+        table.render({
+            elem: '#euvTable',
+            cellMinWidth: 115,
+            cols: [[
+                {field: 'income', title: '收益值'},
+                {field: '1_state', title: '自然状态1'},
+                {field: '2_state', title: '自然状态2'},
+                {field: '3_state', title: '自然状态3'},
+                {field: 'result', title: 'EUV(风险型) t=2',minWidth:156}
+            ]],
+            data: euvData
+        });
+        renderCharts(euvData,euvCharts,oldAction,oldState,'EUV(风险型) t=2');
+
+    });
+</script>
+</body>
+
+</html>

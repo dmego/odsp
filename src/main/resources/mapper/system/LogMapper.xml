@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.dmego.odsp.system.dao.LogMapper">
+    <select id="listFull" resultType="cn.dmego.odsp.system.model.Log" >
+      select a.*,b.nick_name,b.user_name from sys_log a left join sys_user b on a.user_id=b.user_id
+      <where>
+        <if test="startDate != null">
+            and a.create_date&gt;=#{startDate}
+        </if>
+        <if test="endDate != null">
+            and a.create_date&lt;=#{endDate}
+        </if>
+        <if test="account != null">
+            and b.user_name=#{account}
+        </if>
+      </where>
+        order by a.create_date desc
+    </select>
+
+</mapper>

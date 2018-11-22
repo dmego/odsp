@@ -1,0 +1,17 @@
+## 开发环境配置
+##
+## 数据源配置
+spring:
+    datasource:
+        driver-class-name: com.mysql.jdbc.Driver
+        type: com.alibaba.druid.pool.DruidDataSource
+        username: root
+        password: root
+        url: jdbc:mysql://localhost:3306/odsp?useSSL=false&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+
+## 日志配置
+#logging:
+#    file: odsp-dev.log
+#    level:
+#        root: warn
+#        cn.dmego.odsp: error

@@ -1,0 +1,15 @@
+用户表: user
+   use_id; //主键ID
+   user_name; //姓名
+   password; //密码
+   nick_name; //昵称
+   avatar; //头像路径
+   sex; //性别
+   phone; //电话
+   email; //邮箱
+   state; //状态
+   create_date; //创建时间
+   update_date; //更新时间
+
+角色表: role
+    role_id
