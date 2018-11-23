@@ -277,19 +277,19 @@
         myCharts.setOption(option);
 
         // 动态改变图表1数据
-        setInterval(function () {
-            for (var i = 0; i < mData.length; i++) {
-                mData[i] += (Math.random() * 50 - 25);
-                if (mData[i] < 0) {
-                    mData[i] = 0;
-                }
-            }
-            myCharts.setOption({
-                series: [{
-                    data: mData
-                }]
-            });
-        }, 1000);
+        // setInterval(function () {
+        //     for (var i = 0; i < mData.length; i++) {
+        //         mData[i] += (Math.random() * 50 - 25);
+        //         if (mData[i] < 0) {
+        //             mData[i] = 0;
+        //         }
+        //     }
+        //     myCharts.setOption({
+        //         series: [{
+        //             data: mData
+        //         }]
+        //     });
+        // }, 1000);
 
         // 渲染券核效率图表
         var myCharts2 = echarts.init(document.getElementById('hjxl'), myEchartsTheme);

@@ -13,14 +13,14 @@
     <link rel="stylesheet" href="/assets/libs/font-awesome/css/font-awesome.min.css"/>
     <style>
         .layui-input-block{
-            margin-left: 120px;
+            margin-left: 150px;
             min-height: 36px;
         }
         .layui-form-label {
             float: left;
             display: block;
             padding: 9px 15px;
-            width: 90px;
+            width: 120px;
             font-weight: 400;
             line-height: 20px;
             text-align: right;
@@ -44,29 +44,30 @@
                 <i id="fl-btn-icon" class="layui-icon layui-icon-right"></i>
             </span>
             <div id="fl-btn-l" class="layui-card scroll">
-                <form class="layui-form"id="uncertainForm" lay-filter="uncertainForm">
+                <form class="layui-form"id="dynamicForm" lay-filter="dynamicForm">
                     <!--方法选择-->
                     <div class="layui-card-header newheader">方法选择</div>
                     <div class="layui-card-body">
                         <div class="layui-form-item" pane="">
                             <div class="layui-input-block">
-                                <input type="radio" name="function" value="1" lay-skin="primary" title="背包问题" checked="">
+                                <input type="radio" name="function" value="1" lay-filter="function" title="背包问题" checked="">
                             </div>
                             <div class="layui-input-block">
-                                <input type="radio" name="function" value="2" lay-skin="primary" title="资源分配问题">
+                                <input type="radio" name="function" value="2" lay-filter="function" title="资源分配问题">
                             </div>
                             <div class="layui-input-block">
-                                <input type="radio" name="function" value="3" lay-skin="primary" title="生产与存储问题">
+                                <input type="radio" name="function" value="3" lay-filter="function" title="生产与存储问题">
                             </div>
                         </div>
                     </div>
                     <!--参数设置-->
                     <div class="layui-card-header newheader">参数设置</div>
-                    <div class="layui-card-body">
+                    <!--背包问题参数设置-->
+                    <div class="layui-card-body" id="knapsackParam">
                         <div class="layui-form-item">
                             <label class="layui-form-label">背包问题类别</label>
                             <div class="layui-input-block">
-                                <select name="packClass" lay-filter="aihao">
+                                <select name="k_class" lay-filter="aihao">
                                     <option value="0" selected="">0-1背包</option>
                                     <option value="1">多重背包</option>
                                     <option value="2">完全背包</option>
@@ -76,25 +77,71 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">物品品种数</label>
                             <div class="layui-input-block">
-                                <input type="text" id="state" name="state" value="5" isChange="false" class="layui-input" lay-verify="required|state">
+                                <input type="text" id="k_breednum" name="k_breednum" value="5" isChange="false" class="layui-input" lay-verify="required|state">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">容器容量</label>
                             <div class="layui-input-block">
-                                <input type="text" id="hopeful" name="hopeful" value="800" class="layui-input" lay-verify="required|hopeful">
+                                <input type="text" id="k_volume" name="k_volume" value="800" class="layui-input" lay-verify="required|hopeful">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">生成方案数</label>
                             <div class="layui-input-block">
-                                <select name="packClass" lay-filter="aihao">
+                                <select name="k_plan" lay-filter="aihao">
                                     <option value="0" selected="">单个</option>
                                     <option value="1">全部</option>
                                 </select>
                             </div>
                         </div>
                     </div>
+                    <!--资源分配问题参数设置-->
+                    <div class="layui-card-body  dis-none" id="resourceParam">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">项目数</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="r_itemnum" name="r_itemnum" value="4" isChange="false" class="layui-input" lay-verify="required|state">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">资源总数量</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="r_sumvalue" name="r_sumvalue" value="" placeholder="[0,+∞)" isChange="false" class="layui-input" lay-verify="required|state">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">可选择的投资策略</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="r_strategy" name="r_strategy" value="4" class="layui-input" lay-verify="required|hopeful">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">生成方案数</label>
+                            <div class="layui-input-block">
+                                <select name="r_plan" lay-filter="aihao">
+                                    <option value="0" selected="">单个</option>
+                                    <option value="1">全部</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!--生产与存储参数设置-->
+                    <div class="layui-card-body  dis-none" id="productParam">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">生产时期</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="p_stage" name="p_stage" value="5" isChange="false" class="layui-input" lay-verify="required|state">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">期初存储量</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="p_storage" name="p_storage" value="" placeholder="[0,+∞)" class="layui-input" lay-verify="required|hopeful">
+                            </div>
+                        </div>
+                    </div>
+
                     <!--表格系数设置-->
                     <hr class="layui-bg-green">
                     <div class="layui-card">
@@ -175,7 +222,7 @@
 
         <!--数据表格-->
         <div id="fl-btn-r" class="layui-col-md7 page-main">
-            <!--背包问题原始数据表-->
+            <!--原始数据表-->
             <div class="layui-card" id="packOriTableDiv">
                 <div class="layui-card-header">原始数据表
                     <span id="showPackOri" style="float: right; cursor: pointer;">
@@ -191,9 +238,9 @@
                 </div>
             </div>
 
-            <!--背包问题分析结果表-->
+            <!--分析结果表-->
             <div class="layui-card" id="packRusTableDiv">
-                <div class="layui-card-header">背包问题分析结果表
+                <div class="layui-card-header" ><span id="resultTitle">背包问题分析结果表</span>
                     <span id="showPackRus" style="float: right; cursor: pointer;">
                         <i class="fa fa-bar-chart" aria-hidden="true" id="packRusFa"> 打开图表</i>
                     </span>
@@ -239,14 +286,14 @@
 
         var isUpd = "isup";
 
-        var packOriHead = [
+        var k_oHead = [
             {field: 'stage', title: '物品(阶段)'},
             {field: 'name', title: '物品名称'},
             {field: 'weight', title: '单位物品重量'},
             {field: 'value', title: '单位物品价值'}
         ];
 
-        var packOriData = [{
+        var k_oData = [{
             "stage": "1",
             "name": "A",
             "weight": "200",
@@ -273,6 +320,78 @@
             "value": "50"
         }];
 
+        var r_oHead = [
+            {field:'income',title:'投入资源/项目/收益'},
+            {field:'1_project',title:'项目1'},
+            {field:'2_project',title:'项目2'},
+            {field:'3_project',title:'项目3'}
+        ];
+
+        var r_oData = [{
+            "income": "2",
+            "1_project": "8",
+            "2_project": "9",
+            "3_project": "10"
+        },{
+            "income": "4",
+            "1_project": "15",
+            "2_project": "20",
+            "3_project": "28"
+        },{
+            "income": "6",
+            "1_project": "30",
+            "2_project": "35",
+            "3_project": "35"
+        },{
+            "income": "8",
+            "1_project": "38",
+            "2_project": "40",
+            "3_project": "43"
+        }];
+
+        var p_oHead = [
+            {field:'stage', title:'生产时期(阶段)'},
+            {field:'need', title:'需求量'},
+            {field:'ability', title:'生产能力'},
+            {field:'proCost', title:'单位产品生产成本'},
+            {field:'stoCost', title:'单位产品存储成本'},
+            {filed:'storage', title:'最大存储量'},
+            {field:'fixedPCost', title:'固定生产成本'}
+        ];
+
+        var p_oData = [{
+            "stage": "1",
+            "need": "2",
+            "ability": "6",
+            "proCost": "1",
+            "stoCost": "0.5",
+            "storage": "3",
+            "fixedPCost": "3"
+        },{
+            "stage": "2",
+            "need": "3",
+            "ability": "4",
+            "proCost": "1",
+            "stoCost": "0.5",
+            "storage": "3",
+            "fixedPCost": "3"
+        },{
+            "stage": "3",
+            "need": "4",
+            "ability": "5",
+            "proCost": "1",
+            "stoCost": "0.5",
+            "storage": "3",
+            "fixedPCost": "3"
+        },{
+            "stage": "4",
+            "need": "2",
+            "ability": "4",
+            "proCost": "1",
+            "stoCost": "0.5",
+            "storage": "3",
+            "fixedPCost": "3"
+        },]
 
         // var incomeCharts = echarts.init(document.getElementById('incomeEchartsDiv'));
         // var maxMinCharts = echarts.init(document.getElementById('maxMinEchartsDiv'));
@@ -283,35 +402,44 @@
         //
         // var chartsNames = [incomeCharts,maxMinCharts,maxMaxCharts,savageCharts,laplaceCharts,eclecticismCharts];
 
-        //点击收缩参数设置div
-        $('#fl-btn').click(function () {
-            var isExapnd = $('#fl-btn-l').hasClass('fl-btn-mini');
-            if (isExapnd) {
-                //如果已经折叠，则点击是恢复
-                $('#fl-btn-l').removeClass('fl-btn-mini');
-                $('#fl-btn-r').addClass('layui-col-md7 page-main');
-
-                $('#fl-btn-icon').removeClass('layui-icon-left');
-                $('#fl-btn-icon').addClass('layui-icon-right');
-            } else {
-                //否则折叠
-                $('#fl-btn-l').addClass('fl-btn-mini');
-                $('#fl-btn-r').removeClass('layui-col-md7 page-main');
-
-                $('#fl-btn-icon').removeClass('layui-icon-right');
-                $('#fl-btn-icon').addClass('layui-icon-left');
-            }
-
-            if(isNotEmpty(chartsNames)){
-                for (var i = 0; i < chartsNames.length; i++) {
-                    chartsNames[i].resize();
-                }
-            }
-        });
-
 
         // admin.putTempData('originalHead', originalHead);
         // admin.putTempData('originalData', originalData);
+
+
+        /**单选点击事件
+         * 1.初始化参数设置
+         * 2.初始化系数设置
+         *
+         */
+        form.on('radio(function)',function (data) {
+            if(data.value == 1){ //背包问题
+                $("#productParam").addClass("dis-none");
+                $("#resourceParam").addClass("dis-none");
+                $("#knapsackParam").removeClass("dis-none");
+                renderTable('#xishu',k_oHead,k_oData);
+
+            }else if(data.value == 2){//资源分配问题
+                $("#productParam").addClass("dis-none");
+                $("#knapsackParam ").addClass("dis-none");
+                $("#resourceParam").removeClass("dis-none");
+                renderTable('#xishu',r_oHead,r_oData);
+            }else if(data.value == 3){ //生产与存储问题
+                $("#knapsackParam").addClass("dis-none");
+                $("#resourceParam").addClass("dis-none");
+                $("#productParam").removeClass("dis-none");
+                renderTable('#xishu',p_oHead,p_oData);
+            }
+        })
+
+        function renderTable(tableId,head,data){
+            table.render({
+                elem: tableId,
+                cellMinWidth: 115,
+                cols: [head],
+                data:data
+            });
+        }
 
 
         //检验行动方案和自然状态数值
@@ -370,7 +498,7 @@
                 title: '系数设置',
                 maxmin: true,
                 area: ['550px', '500px'],
-                content: 'uncertain/editForm/' + action + '/' + state + '/' + isUpd,
+                content: 'optimization/dynamicForm' + action + '/' + state + '/' + isUpd,
                 btn: ['保存', '取消'],
                 yes: function (index, layero) {
                     var ifTable = $("div.layui-layer-content > iframe")[0].contentWindow.layui.table;
@@ -594,9 +722,9 @@
                 }
             }
 
-            console.log(newX)
-            console.log(newY)
-            console.log(newData)
+            // console.log(newX)
+            // console.log(newY)
+            // console.log(newData)
             var option = {
                 tooltip: {},
                 //工具箱组件
@@ -778,20 +906,19 @@
         //系数设置表
         table.render({
             elem: '#xishu',
-            cellMinWidth: 110,
-            cols: [packOriHead],
-            data:packOriData
+            cellMinWidth: 115,
+            cols: [k_oHead],
+            data: k_oData
         });
 
         //背包问题原始数据表
         table.render({
             elem: '#packOriTable',
-            cellMinWidth: 110,
-            cols: [packOriHead],
-            data:packOriData
+            cellMinWidth: 115,
+            cols: [k_oHead],
+            data: k_oData
         });
         // renderCharts(originalData,incomeCharts,oldAction,oldState);
-
 
         //背包问题分析结果表
         table.render({

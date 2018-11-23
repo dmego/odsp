@@ -1,6 +1,5 @@
 package cn.dmego.odsp.algtest;
 
-import org.junit.Test;
 
 /**
  * class_name: dynamicTest
