@@ -10,7 +10,7 @@
     </select>
     
     <select id="listByRoleId" resultType="cn.dmego.odsp.system.model.Permission">
-        select * from sys_Permission where permission_id in(
+        select * from sys_permission where permission_id in(
           select permission_id from sys_role_permission where role_id = #{roleId}
         )
     </select>
