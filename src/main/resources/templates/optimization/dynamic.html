@@ -67,29 +67,29 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">背包问题类别</label>
                             <div class="layui-input-block">
-                                <select name="k_class" lay-filter="aihao">
-                                    <option value="0" selected="">0-1背包</option>
-                                    <option value="1">多重背包</option>
-                                    <option value="2">完全背包</option>
+                                <select name="kClass" lay-filter="kClass">
+                                    <option value="1" selected="">0-1背包</option>
+                                    <option value="2">多重背包</option>
+                                    <option value="3">完全背包</option>
                                 </select>
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">物品品种数</label>
                             <div class="layui-input-block">
-                                <input type="text" id="k_breednum" name="k_breednum" value="5" isChange="false" class="layui-input" lay-verify="required|state">
+                                <input type="text" id="kBreedNum" name="kBreedNum" value="5" isChange="false" class="layui-input" lay-verify="required|kBreedNum">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">容器容量</label>
                             <div class="layui-input-block">
-                                <input type="text" id="k_volume" name="k_volume" value="800" class="layui-input" lay-verify="required|hopeful">
+                                <input type="text" id="kVolume" name="kVolume" value="800" class="layui-input" lay-verify="required|kVolume">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">生成方案数</label>
                             <div class="layui-input-block">
-                                <select name="k_plan" lay-filter="aihao">
+                                <select name="kPlan" lay-filter="kPlan">
                                     <option value="0" selected="">单个</option>
                                     <option value="1">全部</option>
                                 </select>
@@ -101,25 +101,25 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">项目数</label>
                             <div class="layui-input-block">
-                                <input type="text" id="r_itemnum" name="r_itemnum" value="4" isChange="false" class="layui-input" lay-verify="required|state">
+                                <input type="text" id="rItemNum" name="rItemNum" value="3" isChange="false" class="layui-input" lay-verify="required|rItemNum">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">资源总数量</label>
                             <div class="layui-input-block">
-                                <input type="text" id="r_sumvalue" name="r_sumvalue" value="" placeholder="[0,+∞)" isChange="false" class="layui-input" lay-verify="required|state">
+                                <input type="text" id="rSumValue" name="rSumValue" value="20" placeholder="[0,+∞)" isChange="false" class="layui-input" lay-verify="required|rSumValue">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">可选择的投资策略</label>
                             <div class="layui-input-block">
-                                <input type="text" id="r_strategy" name="r_strategy" value="4" class="layui-input" lay-verify="required|hopeful">
+                                <input type="text" id="rStrategy" name="rStrategy" value="4" class="layui-input" lay-verify="required|rStrategy">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">生成方案数</label>
                             <div class="layui-input-block">
-                                <select name="r_plan" lay-filter="aihao">
+                                <select name="rPlan" lay-filter="rPlan">
                                     <option value="0" selected="">单个</option>
                                     <option value="1">全部</option>
                                 </select>
@@ -131,13 +131,13 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">生产时期</label>
                             <div class="layui-input-block">
-                                <input type="text" id="p_stage" name="p_stage" value="5" isChange="false" class="layui-input" lay-verify="required|state">
+                                <input type="text" id="pStage" name="pStage" value="5" isChange="false" class="layui-input" lay-verify="required|pStage">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">期初存储量</label>
                             <div class="layui-input-block">
-                                <input type="text" id="p_storage" name="p_storage" value="" placeholder="[0,+∞)" class="layui-input" lay-verify="required|hopeful">
+                                <input type="text" id="pStorage" name="pStorage" value="20" placeholder="[0,+∞)" class="layui-input" lay-verify="required|pStorage">
                             </div>
                         </div>
                     </div>
@@ -280,118 +280,48 @@
         var table = layui.table;
         var util = layui.util;
         var admin = layui.admin;
+        var dynamicData;
+        var oldRow,oldCol,fun,packFun,isUpd;
+        var k_oHead,k_oData,k_mHead,k_mData;
+        var r_oHead,r_oData,p_oHead,p_oData;
+        var packRusHead,packRusData;
 
-        var oldRow = 5; //初始化原始 行 5 行
-        var oldCol = 4; //初始化原始 列 4 列
+        //首先获取该页面的初始化数据
+        $.ajaxSettings.async = false; //同步获取数据
+        $.getJSON("/assets/js/optimization/dynamic.json",function (data) {
+            dynamicData = data;
+            admin.putTempData('dynamicData', data);
 
-        var isUpd = "isup";
+             oldRow = data.oldRow; //初始化原始 行 5 行
+             oldCol = data.oldCol; //初始化原始 列 4 列
+             fun = data.fun; //初始化选择的方法是 1
+             packFun = data.packFun;//初始化背包问题选择的是0-1背包
+             isUpd = data.isUpd;
 
-        var k_oHead = [
-            {field: 'stage', title: '物品(阶段)'},
-            {field: 'name', title: '物品名称'},
-            {field: 'weight', title: '单位物品重量'},
-            {field: 'value', title: '单位物品价值'}
-        ];
+             k_oHead = data.k_oHead;
+             k_oData = data.k_oData;
+             k_mHead = data.k_mHead;
+             k_mData = data.k_mData;
 
-        var k_oData = [{
-            "stage": "1",
-            "name": "A",
-            "weight": "200",
-            "value": "40"
-        }, {
-            "stage": "2",
-            "name": "B",
-            "weight": "150",
-            "value": "25"
-        }, {
-            "stage": "3",
-            "name": "C",
-            "weight": "400",
-            "value": "60"
-        }, {
-            "stage": "4",
-            "name": "D",
-            "weight": "60",
-            "value": "70"
-        }, {
-            "stage": "5",
-            "name": "E",
-            "weight": "300",
-            "value": "50"
-        }];
+             r_oHead = data.r_oHead;
+             r_oData = data.r_oData;
 
-        var r_oHead = [
-            {field:'income',title:'投入资源/项目/收益'},
-            {field:'1_project',title:'项目1'},
-            {field:'2_project',title:'项目2'},
-            {field:'3_project',title:'项目3'}
-        ];
+             p_oHead = data.p_oHead;
+             p_oData = data.p_oData;
 
-        var r_oData = [{
-            "income": "2",
-            "1_project": "8",
-            "2_project": "9",
-            "3_project": "10"
-        },{
-            "income": "4",
-            "1_project": "15",
-            "2_project": "20",
-            "3_project": "28"
-        },{
-            "income": "6",
-            "1_project": "30",
-            "2_project": "35",
-            "3_project": "35"
-        },{
-            "income": "8",
-            "1_project": "38",
-            "2_project": "40",
-            "3_project": "43"
-        }];
+             packRusHead = data.packRusHead;
+             packRusData = data.packRusData;
 
-        var p_oHead = [
-            {field:'stage', title:'生产时期(阶段)'},
-            {field:'need', title:'需求量'},
-            {field:'ability', title:'生产能力'},
-            {field:'proCost', title:'单位产品生产成本'},
-            {field:'stoCost', title:'单位产品存储成本'},
-            {filed:'storage', title:'最大存储量'},
-            {field:'fixedPCost', title:'固定生产成本'}
-        ];
+        });
 
-        var p_oData = [{
-            "stage": "1",
-            "need": "2",
-            "ability": "6",
-            "proCost": "1",
-            "stoCost": "0.5",
-            "storage": "3",
-            "fixedPCost": "3"
-        },{
-            "stage": "2",
-            "need": "3",
-            "ability": "4",
-            "proCost": "1",
-            "stoCost": "0.5",
-            "storage": "3",
-            "fixedPCost": "3"
-        },{
-            "stage": "3",
-            "need": "4",
-            "ability": "5",
-            "proCost": "1",
-            "stoCost": "0.5",
-            "storage": "3",
-            "fixedPCost": "3"
-        },{
-            "stage": "4",
-            "need": "2",
-            "ability": "4",
-            "proCost": "1",
-            "stoCost": "0.5",
-            "storage": "3",
-            "fixedPCost": "3"
-        },]
+        function renderTable(tableId,head,data){
+            table.render({
+                elem: tableId,
+                cellMinWidth: 115,
+                cols: [head],
+                data:data
+            });
+        }
 
         // var incomeCharts = echarts.init(document.getElementById('incomeEchartsDiv'));
         // var maxMinCharts = echarts.init(document.getElementById('maxMinEchartsDiv'));
@@ -403,22 +333,17 @@
         // var chartsNames = [incomeCharts,maxMinCharts,maxMaxCharts,savageCharts,laplaceCharts,eclecticismCharts];
 
 
-        // admin.putTempData('originalHead', originalHead);
-        // admin.putTempData('originalData', originalData);
-
-
         /**单选点击事件
          * 1.初始化参数设置
          * 2.初始化系数设置
-         *
          */
         form.on('radio(function)',function (data) {
+            fun = data.value;
             if(data.value == 1){ //背包问题
                 $("#productParam").addClass("dis-none");
                 $("#resourceParam").addClass("dis-none");
                 $("#knapsackParam").removeClass("dis-none");
                 renderTable('#xishu',k_oHead,k_oData);
-
             }else if(data.value == 2){//资源分配问题
                 $("#productParam").addClass("dis-none");
                 $("#knapsackParam ").addClass("dis-none");
@@ -430,66 +355,114 @@
                 $("#productParam").removeClass("dis-none");
                 renderTable('#xishu',p_oHead,p_oData);
             }
-        })
+        });
 
-        function renderTable(tableId,head,data){
-            table.render({
-                elem: tableId,
-                cellMinWidth: 115,
-                cols: [head],
-                data:data
-            });
+        //监听背包问题的选择
+        form.on('select(kClass)', function(data){
+            packFun = data.value;
+            if(data.value == 2){//如果选择的是多重背包,那么就需要重新初始化系数表格
+                renderTable('#xishu',k_mHead,k_mData);
+            }else{
+                renderTable('#xishu',k_oHead,k_oData);
+            }
+        });
+
+        // 编辑系数之前先校验数据
+        function checkActAte(fun,item1,item2) {
+            if(fun == 1){
+                if(isEmpty(item2)){
+                    layer.msg("物品品种数不能为空!");
+                    return false;
+                } else if(!/^[1-9]\d*$/.test(item2)){
+                    layer.msg('物品品种数必须是大于 0 的整数!');
+                    return false;
+                }else if(item2 > 100){
+                    layer.msg('最多添加 100 个物品品种数!');
+                    return false;
+                }
+            }else if(fun == 2){
+                if(isEmpty(item1) || isEmpty(item2)){
+                    layer.msg("项目数和可选择的投资策略不能为空!");
+                    return false;
+                }else if(!/^[1-9]\d*$/.test(item1) || !/^[1-9]\d*$/.test(item2)){
+                    layer.msg('项目数和可选择的投资策略必须是大于 0 的整数!');
+                    return false;
+                }else if(item1 > 100 || item2 > 100){
+                    layer.msg('最多添加 100 个项目数和可选择的投资策略!');
+                    return false;
+                }
+            }else if(fun == 3){
+                if(isEmpty(item1)){
+                    layer.msg("生产时期不能为空!");
+                    return false;
+                } else if(!/^[1-9]\d*$/.test(item1)){
+                    layer.msg('生产时期必须是大于 0 的整数!');
+                    return false;
+                }else if(item1 > 100){
+                    layer.msg('最多添加 100 个生产时期!');
+                    return false;
+                }
+            }
+            return true;
         }
 
-
-        //检验行动方案和自然状态数值
-        // function checkActAte(action, state) {
-        //     if(isEmpty(action) || isEmpty(state)){
-        //         layer.msg("行动方案和自然状态不能为空!");
-        //         return false;
-        //     }else if(!/^[1-9]\d*$/.test(action) || !/^[1-9]\d*$/.test(state)){
-        //         layer.msg('行动方案和自然状态必须是大于 0 的整数!');
-        //         return false;
-        //     }else if(action > 100 || state > 100){
-        //         layer.msg('最多添加 100 个行动方案和自然状态!');
-        //         return false;
-        //     }
-        //     return true;
-        // }
-
         //实时监听 input 值变化
-        // $(function () {
-        //     var action = oldAction,state = oldState;
-        //     $("#action").bind("input propertychange",function(event){
-        //         action = $("#action").val();
-        //         //先判断一下有没有改变 action 或者 state 的数据
-        //         if(oldAction != action){
-        //             $("#action").attr("isChange","true");
-        //             isUpd = "noup"; //记录不是更新表格操作
-        //         }else{
-        //             $("#action").attr("isChange","false");
-        //         }
-        //     });
-        //     $("#state").bind("input propertychange",function(event){
-        //         state = $("#state").val();
-        //         //先判断一下有没有改变 action 或者 state 的数据
-        //         if(oldState != state){
-        //             $("#state").attr("isChange","true");
-        //             isUpd = "noup"; //记录不是更新表格操作
-        //         }else{
-        //             $("#state").attr("isChange","false");
-        //         }
-        //     });
-        // })
+        $(function () {
+            var kBreedNum = $("#kBreedNum").val(); //物品种类数
+            var rItemNum = $("#rItemNum").val(); //项目数
+            var rStrategy = $("#rStrategy").val(); //可选择的投资策略
+            var pStage = $("#pStage").val(); //生产时期
+
+            $("#kBreedNum").bind("input propertychange",function(event){
+                if(kBreedNum != $("#kBreedNum").val()){
+                    $("#kBreedNum").attr("isChange","true");
+                    isUpd = "noup"; //记录不是更新表格操作
+                }else{
+                    $("#kBreedNum").attr("isChange","false");
+                }
+            });
+            $("#rItemNum").bind("input propertychange",function(event){
+                if(kBreedNum != $("#rItemNum").val()){
+                    $("#rItemNum").attr("isChange","true");
+                    isUpd = "noup"; //记录不是更新表格操作
+                }else{
+                    $("#rItemNum").attr("isChange","false");
+                }
+            });
+            $("#rStrategy").bind("input propertychange",function(event){
+                if(kBreedNum != $("#rStrategy").val()){
+                    $("#rStrategy").attr("isChange","true");
+                    isUpd = "noup"; //记录不是更新表格操作
+                }else{
+                    $("#rStrategy").attr("isChange","false");
+                }
+            });
+            $("#pStage").bind("input propertychange",function(event){
+                if(kBreedNum != $("#pStage").val()){
+                    $("#pStage").attr("isChange","true");
+                    isUpd = "noup"; //记录不是更新表格操作
+                }else{
+                    $("#pStage").attr("isChange","false");
+                }
+            });
+        })
 
         // 添加编辑按钮点击事件
         $('#btnUpd').click(function () {
-            //action 是行数
-            var action = $("#action").val();
-            //state + 1 是列数
-            var state = $("#state").val();
+            //根据选择的方法不同，传递不同的参数
+            var item1 = -1,item2 = -1;
+            if(fun == 1){ //如果选择的是背包问题
+                item1 = packFun; //参数1--背包问题类别
+                item2 = $("#kBreedNum").val();//参数2--物品品种数
+            }else if(fun == 2){//如果选择的是资源分配问题
+                item1 = $("#rItemNum").val(); //项目数
+                item2 = $("#rStrategy").val();//可选择的投资策略
+            }else if(fun == 3){//生产与存储问题
+                item1 = $("#pStage").val();//生产时期
+            }
+
             //校验数据
-            if (!checkActAte(action, state)) {
+            if (!checkActAte(fun,item1,item2)) {
                 return;
             }
 
@@ -498,7 +471,7 @@
                 title: '系数设置',
                 maxmin: true,
                 area: ['550px', '500px'],
-                content: 'optimization/dynamicForm' + action + '/' + state + '/' + isUpd,
+                content: 'dynamic/editForm/' + fun + '/' + item1 + '/' + item2 + '/' + isUpd,
                 btn: ['保存', '取消'],
                 yes: function (index, layero) {
                     var ifTable = $("div.layui-layer-content > iframe")[0].contentWindow.layui.table;
@@ -525,24 +498,32 @@
                     } else { //如果校验通过,提交数据到系数设置的表格中
                         layer.close(index); //如果设定了yes回调，需进行手工关闭
 
-                        var Data = JSON.parse(JSON.stringify(cache));
-
+                        var Data = JSON.parse(JSON.stringify(cache));//表格数据
+                        //对于表头而言,只有资源分配问题才改变了表头,其他还是原表头
+                        var Head;
+                        if(fun == 1){
+                            if(packFun == 2){
+                                Head = k_mHead;
+                                
+                            }else{
+                                Head = k_oHead;
+                            }
+                            $("#kBreedNum").attr("isChange","false");
+                        }else if(fun == 2){
+                            Head = ifTable.head;
+                            r_oHead = ifTable.head;
+                            $("#rItemNum").attr("isChange","false");
+                            $("#rStrategy").attr("isChange","false");
+                        }else if(fun == 3){
+                            Head = p_oHead;
+                            $("#pStage").attr("isChange","false");
+                        }
                         layui.table.render({
                             elem: '#xishu',
                             cellMinWidth: 110,
-                            cols: [ifTable.head],
+                            cols: [Head],
                             data: Data
                         });
-
-                        //更新原始数据表头和数据
-                        originalHead = ifTable.head;
-                        originalData = Data;
-                        //更新 action 与 state 的值
-                        oldAction = action;
-                        oldState = state;
-
-                        $("#action").attr("isChange","false");
-                        $("#state").attr("isChange","false");
 
                         isUpd = "isup";
 
@@ -560,9 +541,9 @@
          * 自定义表单验证规则
          */
         form.verify({
-            action:function(value,item){
-                if($("#action").attr("isChange") == "true"){
-                    return '行动方案已改变，请重新设置系数!';
+            kBreedNum:function(value,item){
+                if($("#kBreedNum").attr("isChange") == "true"){
+                    return '物品品种数已改变，请重新设置系数!';
                 }
                 if(!/^[1-9]\d*$/.test(value)){
                     return '行动方案必须是大于 0 的整数!';
@@ -570,21 +551,53 @@
                     return '最多添加 100 个行动方案!';
                 }
             },
-            state:function (value,item) {
-                if($("#state").attr("isChange")  == "true"){
-                    return '自然状态已改变，请重新设置系数!';
-                }
+            kVolume:function (value,item) {
                 if(!/^[1-9]\d*$/.test(value)){
-                    return '自然状态必须是大于 0 的整数!';
-                }else if(value > 100 ){
-                    return '最多添加 100 个自然状态!';
+                    return '容器容量必须是大于 0 的整数!';
+                }else if(value > 10000 ){
+                    return '最多添加 10000 个自然状态!';
                 }
             },
-            hopeful:function (value, item) {
-                if(!/^(0(\.\d{1,2})?|1(\.0{1,2})?)$/.test(value)){
-                    return '乐观系数在 0~1 之间，最多保留两位小数!';
+            rItemNum:function(value,item){
+                if($("#rItemNum").attr("isChange") == "true"){
+                    return '项目数已改变，请重新设置系数!';
                 }
-            }
+                if(!/^[1-9]\d*$/.test(value)){
+                    return '项目数必须是大于 0 的整数!';
+                }else if(value > 100 ){
+                    return '最多添加 100 个项目数!';
+                }
+            },
+            rSumValue:function (value,item) {
+                if(!/^[1-9]\d*$/.test(value)){
+                    return '资源总数量必须是大于 0 的整数!';
+                }
+            },
+            rStrategy:function(value,item){
+                if($("#rStrategy").attr("isChange") == "true"){
+                    return '可选择的投资策略已改变，请重新设置系数!';
+                }
+                if(!/^[1-9]\d*$/.test(value)){
+                    return '可选择的投资策略必须是大于 0 的整数!';
+                }else if(value > 100 ){
+                    return '最多添加 100 个可选择的投资策略!';
+                }
+            },
+            pStage:function(value,item){
+                if($("#pStage").attr("isChange") == "true"){
+                    return '生产时期已改变，请重新设置系数!';
+                }
+                if(!/^[1-9]\d*$/.test(value)){
+                    return '生产时期必须是大于 0 的整数!';
+                }else if(value > 100 ){
+                    return '最多添加 100 个生产时期!';
+                }
+            },
+            pStorage:function (value,item) {
+                if(!/^[1-9]\d*$/.test(value)){
+                    return '期初存储量必须是大于 0 的整数!';
+                }
+            },
         })
 
         // 表单提交事件
@@ -596,11 +609,16 @@
             })
             var hopeful = data.field.hopeful;
             layer.load(2);
-            $.post('uncertain/calculate', {
-                funArr:functions,
-                action:data.field.action,
-                state:data.field.state,
-                hopeful:data.field.hopeful,
+            $.post('dynamic/calculate', {
+                fun:fun,
+                packFun:packFun,
+                kBreedNum:data.field.kBreedNum,
+                kVolume:data.field.kVolume,
+                rItemNum:data.field.rItemNum,
+                rSumValue:data.field.rItemNum,
+                rStrategy:data.field.rItemNum,
+                pStage:data.field.pStage,
+                pStorage:data.field.pStorage,
                 ratioTableData: JSON.stringify(table.cache.xishu),
             }, function (data) {
                 layer.closeAll('loading');
@@ -837,71 +855,6 @@
         // initChartBut('#showSavage','#savageEcharts','#savageFa',savageCharts);
         // initChartBut('#showLaplace','#laplaceEcharts','#laplaceFa',laplaceCharts);
         // initChartBut('#showEclecticism','#eclecticismEcharts','#eclecticismFa',eclecticismCharts);
-
-
-        //初始化表数据
-        var packRusHead = [
-            {field: 'stage', title: '物品(阶段)'},
-            {field: 'name', title: '物品名称'},
-            {field: 'number', title: '选择的物品数量'},
-            {field: 'weight', title: '单位物品重量'},
-            {field: 'value', title: '单位物品价值'},
-            {field: 'sumValue', title: '物品的总价值'},
-            {field: 'rescap', title: '剩余容量'}
-        ];
-
-
-        var packRusData = [{
-            "stage": "1",
-            "name": "A",
-            "number": "1",
-            "weight": "200",
-            "value": "40",
-            "sumValue": "40",
-            "rescap": "600"
-        }, {
-            "stage": "2",
-            "name": "B",
-            "number": "1",
-            "weight": "150",
-            "value": "25",
-            "sumValue": "25",
-            "rescap": "450"
-        }, {
-            "stage": "3",
-            "name": "C",
-            "number": "0",
-            "weight": "400",
-            "value": "60",
-            "sumValue": "0",
-            "rescap": "450"
-        }, {
-            "stage": "4",
-            "name": "D",
-            "number": "1",
-            "weight": "60",
-            "value": "70",
-            "sumValue": "70",
-            "rescap": "390"
-        }, {
-            "stage": "5",
-            "name": "E",
-            "number": "1",
-            "weight": "300",
-            "value": "50",
-            "sumValue": "50",
-            "rescap": "90"
-        }, {
-            "stage": "最大价值",
-            "name": "185",
-            "number": "",
-            "weight": "",
-            "value": "",
-            "sumValue": "",
-            "rescap": ""
-        }];
-
-
 
         //系数设置表
         table.render({
