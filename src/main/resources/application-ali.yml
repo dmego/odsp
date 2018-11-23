@@ -1,0 +1,17 @@
+## 阿里云 Mysql 5.7 环境配置
+##
+## 数据源配置
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    username: odsp
+    password: 5sMxEmEiZszCdD6Z
+    url: jdbc:mysql://47.94.252.154:3306/odsp?useSSL=false&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+
+## 日志配置
+#logging:
+#    file: odsp-dev.log
+#    level:
+#        root: warn
+#        cn.dme
