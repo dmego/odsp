@@ -36,13 +36,17 @@ public class DynamicVo {
 
     private Double[][] matrix; //矩阵数据数组
 
-    private Double bestValue; //最佳结果的值
+    private Integer bestValue; //最佳结果的值
 
     //背包问题的VO对象
     private String[] packNames; //物品名称数组
     private Integer[] weights; //单位物品重量数组
     private Integer[] values; //单位物品价值数组
     private Integer[] limit; //物品限量数组
+
+    private Integer[] choiceNums; //选择物品的数量
+    private Integer[] sumValues; //物品的总价值
+    private Integer[] restVolume; //剩余容量
 
 
 

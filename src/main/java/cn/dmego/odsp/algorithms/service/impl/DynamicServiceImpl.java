@@ -5,6 +5,11 @@ import cn.dmego.odsp.algorithms.vo.DynamicVo;
 import cn.dmego.odsp.common.JsonResult;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * class_name: DynamicServiceImpl
  * package: cn.dmego.odsp.algorithms.service.impl
@@ -21,7 +26,22 @@ public class DynamicServiceImpl implements DynamicService {
     public JsonResult calculate(DynamicVo dynamicVo) {
         Integer fun = dynamicVo.getFun();
 
-        if(dynamicVo.getFun() == 1){
+        if(fun == 1){ //如果选择的是背包问题
+            Integer packFun = dynamicVo.getPackFun();
+            Integer W = dynamicVo.getKVolume();
+            Integer N = dynamicVo.getKBreedNum();
+            Integer[] w = dynamicVo.getWeights();
+            Integer[] v = dynamicVo.getValues();
+            if(packFun == 1){//01背包
+                zeroOnePack(dynamicVo,W,N,w,v);
+            }else if(packFun == 2){
+
+            }else if(packFun == 3){
+
+            }
+        }else if(fun == 2){
+
+        }else if(fun == 3){
 
         }
 
@@ -31,14 +51,57 @@ public class DynamicServiceImpl implements DynamicService {
 
 
 
+    private void packToListMap(DynamicVo dynamicVo,boolean[][] path,Integer W,Integer N,Integer[] w,Integer[] v){
+        Integer[] choiceNums = new Integer[N]; //选择物品的数量
+        Integer[] sumValues = new Integer[N]; //物品的总价值
+        Integer[] restVolume = new Integer[N]; //剩余容量
+        //逆推出选择物品的路径
+        int i = N,j = W,k = W;
+        while(i > 0 && j > 0) {
+            if(path[i][j]) { //如果选择了 i 物品
+                choiceNums[i-1] = 1; //设置选择该物品,且数量为 1
+                sumValues[i-1] = v[i];
+                System.out.print(i+" ");
+                j = j - w[i];
+            }else{
+                choiceNums[i-1] = 0;
+                sumValues[i-1] = 0;
+            }
+            i--;
+        }
+        for (int n = 0; n < N;n++){
+            if(choiceNums[n]> 0){
+                restVolume[n] = k - w[n+1];
+                k = restVolume[n];
+            }else{
+                restVolume[n] = k;
+            }
+        }
+
+        List<Map<String,String>> mapList = new ArrayList<>();
+        for (int ii = 0; ii < N; ii++) {
+            Map<String,String> map = new HashMap<>();
+        }
+
+
+
+
+        dynamicVo.setChoiceNums(choiceNums);
+        dynamicVo.setSumValues(sumValues);
+        dynamicVo.setRestVolume(restVolume);
+
+    }
+
     /**
      * 0-1背包问题 一维数组解法，记录路径
+     *
      * @param W
      * @param N
      * @param w
      * @param v
      */
-    private static void zeroOnePack(int W,int N,int[] w,int[] v) {
+    private static void zeroOnePack(DynamicVo dynamicVo,Integer W,Integer N,Integer[] w,Integer[] v) {
+
         int[] dp = new int[W+1];
         boolean[][] path = new boolean[N+1][W+1]; //记录路径
 
@@ -51,29 +114,21 @@ public class DynamicServiceImpl implements DynamicService {
             }
         }
 
-        //逆推出选择物品的路径
-        //
-//    	int i = N,j = W;
-//    	while(i > 0 && j > 0) {
-//    		//如果
-//    		if(path[i][j]) {
-//    			System.out.print(i+" ");
-//    			j = j - w[i];
-//    		}
-//    		i--;
-//    	}
+        dynamicVo.setBestValue(dp[W]);
+
+
 
         /*
          * 逆向推导，先判断最后一个物品是否可以被装入
          */
-        int q = W;
-        for(int k = N; k > 0; k--) {
-            //如果当容量为 q 时记录着 k 物品可以被装入背包，这说明该物品可以被选中
-            if(q > 0 && path[k][q]) {
-                System.out.print(k+" ");
-                q -=w[k]; //装入该 i 物品，那么背包容量还 有 q - w[k],再次循环判断 i-1 物品 在容量为  q - w[k] 是否被装入过
-            }
-        }
+//        int q = W;
+//        for(int k = N; k > 0; k--) {
+//            //如果当容量为 q 时记录着 k 物品可以被装入背包，这说明该物品可以被选中
+//            if(q > 0 && path[k][q]) {
+//                System.out.print(k+" ");
+//                q -=w[k]; //装入该 i 物品，那么背包容量还 有 q - w[k],再次循环判断 i-1 物品 在容量为  q - w[k] 是否被装入过
+//            }
+//        }
         System.out.println(dp[W]);
     }
 
@@ -85,7 +140,9 @@ public class DynamicServiceImpl implements DynamicService {
      * @param w
      * @param v
      */
-    private static void completePack(int W,int N,int[] w,int[] v) {
+    private static void completePack(DynamicVo dynamicVo,Integer W,Integer N,Integer[] w,Integer[] v) {
+
+
         int[] dp = new int[W+1];
         int[][] path = new int[N+1][W+1];
 
