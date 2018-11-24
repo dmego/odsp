@@ -1,6 +1,9 @@
 /target/
 !.mvn/wrapper/maven-wrapper.jar
 
+/src/main/resources/application-ali.yml
+/src/main/resources/application-docker.yml
+
 ### STS ###
 .apt_generated
 .classpath
