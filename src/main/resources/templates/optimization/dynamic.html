@@ -223,34 +223,34 @@
         <!--数据表格-->
         <div id="fl-btn-r" class="layui-col-md7 page-main">
             <!--原始数据表-->
-            <div class="layui-card" id="packOriTableDiv">
+            <div class="layui-card" id="originalTableDiv">
                 <div class="layui-card-header">原始数据表
-                    <span id="showPackOri" style="float: right; cursor: pointer;">
-                        <i class="fa fa-bar-chart" aria-hidden="true" id="packOriFa"> 打开图表</i>
+                    <span id="originalShow" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="originalFa"> 打开图表</i>
                     </span>
                 </div>
 
                 <div class="layui-card-body">
-                    <table class="layui-hide" id="packOriTable"></table>
+                    <table class="layui-hide" id="originalTable"></table>
                 </div>
-                <div class="layui-card-body dis-none" id="packOriEcharts">
-                    <div id="packOriEchartsDiv" class="layui-show echartsDiv"></div>
+                <div class="layui-card-body dis-none" id="originalEcharts">
+                    <div id="originalEchartsDiv" class="layui-show echartsDiv"></div>
                 </div>
             </div>
 
             <!--分析结果表-->
-            <div class="layui-card" id="packRusTableDiv">
+            <div class="layui-card" id="resultTableDiv">
                 <div class="layui-card-header" ><span id="resultTitle">背包问题分析结果表</span>
-                    <span id="showPackRus" style="float: right; cursor: pointer;">
-                        <i class="fa fa-bar-chart" aria-hidden="true" id="packRusFa"> 打开图表</i>
+                    <span id="resultShow" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="resultFa"> 打开图表</i>
                     </span>
                 </div>
 
                 <div class="layui-card-body">
-                    <table class="layui-hide" id="packRusTable"></table>
+                    <table class="layui-hide" id="resultTable"></table>
                 </div>
-                <div class="layui-card-body dis-none" id="packRusEcharts">
-                    <div id="packRusEchartsDiv" class="layui-show echartsDiv"></div>
+                <div class="layui-card-body dis-none" id="resultEcharts">
+                    <div id="resultEchartsDiv" class="layui-show echartsDiv"></div>
                 </div>
             </div>
 
@@ -284,7 +284,8 @@
         var oldRow,oldCol,fun,packFun,isUpd;
         var k_oHead,k_oData,k_mHead,k_mData;
         var r_oHead,r_oData,p_oHead,p_oData;
-        var packRusHead,packRusData;
+        // var originalHead,originalData;
+        var resultHead,resultData;
 
         //首先获取该页面的初始化数据
         $.ajaxSettings.async = false; //同步获取数据
@@ -309,8 +310,10 @@
              p_oHead = data.p_oHead;
              p_oData = data.p_oData;
 
-             packRusHead = data.packRusHead;
-             packRusData = data.packRusData;
+             // originalHead = k_oHead;
+             // originalData = k_oData;
+             resultHead = data.resultHead;
+             resultData = data.resultData;
 
         });
 
@@ -476,21 +479,22 @@
                 yes: function (index, layero) {
                     var ifTable = $("div.layui-layer-content > iframe")[0].contentWindow.layui.table;
                     //在提交数据之前先校验数据
+                    //TODO 校验
                     var cache = ifTable.cache.ratio;
                     var isNull = false;
                     var isNotNum = false;
-                    for (var i = 0; i < action; i++) {
-                        var item = cache[i];
-                        for (var j = 1; j <= state; j++) {
-                            if (item[j + "_state"].trim().length == 0) {
-                                isNull = true;
-                                break;
-                            } else if (!/^[+-]?\d*\.?\d{0,3}$/.test(item[j + "_state"])) {
-                                isNotNum = true;
-                                break;
-                            }
-                        }
-                    }
+                    // for (var i = 0; i < 10; i++) {
+                    //     var item = cache[i];
+                    //     for (var j = 1; j <= 20; j++) {
+                    //         if (item[j + "_state"].trim().length == 0) {
+                    //             isNull = true;
+                    //             break;
+                    //         } else if (!/^[+-]?\d*\.?\d{0,3}$/.test(item[j + "_state"])) {
+                    //             isNotNum = true;
+                    //             break;
+                    //         }
+                    //     }
+                    // }
                     if (isNull) {
                         layer.msg('数据表中存在字段为空!');
                     } else if (isNotNum) {
@@ -504,18 +508,26 @@
                         if(fun == 1){
                             if(packFun == 2){
                                 Head = k_mHead;
-                                
+                                k_mData = Data;
+                                dynamicData["k_mData"] = k_mData;
                             }else{
                                 Head = k_oHead;
+                                k_oData = Data;
+                                dynamicData["k_oData"] = k_oData;
                             }
                             $("#kBreedNum").attr("isChange","false");
                         }else if(fun == 2){
                             Head = ifTable.head;
                             r_oHead = ifTable.head;
+                            r_oData = Data;
+                            dynamicData["r_oHead"] = r_oHead;
+                            dynamicData["r_oData"] = r_oData;
                             $("#rItemNum").attr("isChange","false");
                             $("#rStrategy").attr("isChange","false");
                         }else if(fun == 3){
                             Head = p_oHead;
+                            p_oData = Data;
+                            dynamicData["p_oData"] = p_oData;
                             $("#pStage").attr("isChange","false");
                         }
                         layui.table.render({
@@ -526,9 +538,9 @@
                         });
 
                         isUpd = "isup";
+                        //更新dynamicData数据
+                        admin.putTempData('dynamicData', dynamicData);
 
-                        admin.putTempData('originalHead', ifTable.head);
-                        admin.putTempData('originalData', Data);
                     }
                 },
                 btn2: function (index, layero) { //取消按钮
@@ -625,7 +637,7 @@
                 if (data.code == 200) {
                     top.layer.msg(data.msg, {icon: 1});
                     //数据返回成功,得到数据,渲染表格
-                    renderTables(data,hopeful);
+                    renderTables(data);
                 } else {
                     top.layer.msg(data.msg, {icon: 2});
                 }
@@ -637,63 +649,42 @@
          * 根据不同的 key 渲染出不同的结果表
          * @param data
          */
-        function renderTables(data,hopeful){
+        function renderTables(data){
+            var originalHead,originalData;
             //首先渲染原始数据表
-            // var originalHead = admin.getTempData('originalHead');
-            // var originalData = admin.getTempData('originalData');
+            if(fun == 1){
+                if(packFun == 2){
+                    originalHead =  k_mHead;
+                    originalData = k_mData;
+                }else{
+                    originalHead =  k_oHead;
+                    originalData = k_oData;
+                }
+            }else if(fun == 2){
+                originalHead =  r_oHead;
+                originalData = r_oData;
+            }else if(fun == 3){
+                originalHead =  p_oHead;
+                originalData = p_oData;
+            };
+            console.log(originalData)
+            console.log(originalHead)
             table.render({
-                elem: '#incomeTable',
-                cellMinWidth: 110,
+                elem: '#originalTable',
+                cellMinWidth: 115,
                 cols: [originalHead],
                 data: originalData
             });
-            renderCharts(originalData,incomeCharts,oldAction,oldState);
 
-            //然后根据不同的 key 渲染出不同的结果表
-            //maxMinTable maxMaxTable savageTable laplaceTable eclecticismTable
-            if(isNotEmpty(data["1"])){ //如果有选择悲观决策
-                renderTool("悲观决策法",data["1"],'#maxMinTable','#maxMinTableDiv');
-                renderCharts(data["1"],maxMinCharts,oldAction,oldState,'悲观决策法');
-            }else{
-                $("#maxMinTableDiv").addClass('dis-none');
-            }
-            if(isNotEmpty(data["2"])){ //乐观决策
-                renderTool("乐观决策法",data["2"],'#maxMaxTable','#maxMaxTableDiv');
-                renderCharts(data["2"],maxMaxCharts,oldAction,oldState,'乐观决策法');
-            }else{
-                $("#maxMaxTableDiv").addClass('dis-none');
-            }
-            if(isNotEmpty(data["3"])){ //最小机会
-                renderTool("最小机会损失准则",data["3"],'#savageTable','#savageTableDiv');
-                renderCharts(data["3"],savageCharts,oldAction,oldState,'最小机会损失准则');
-            }else{
-                $("#savageTableDiv").addClass('dis-none');
-            }
-            if(isNotEmpty(data["4"])){
-                renderTool("等概率准则",data["4"],'#laplaceTable','#laplaceTableDiv');
-                renderCharts(data["4"],laplaceCharts,oldAction,oldState,'等概率准则');
-            }else{
-                $("#laplaceTableDiv").addClass('dis-none');
-            }
-            if(isNotEmpty(data["5"])){
-                renderTool("折中主义准则 a="+hopeful ,data["5"],'#eclecticismTable','#eclecticismTableDiv');
-                renderCharts(data["5"],eclecticismCharts,oldAction,oldState,'折中主义准则');
-            }else{
-                $("#eclecticismTableDiv").addClass('dis-none');
-            }
-        }
-
-        function renderTool(title,tableData,tableId,divId,chartsName){
-            $(divId).removeClass('dis-none');
-            var head =JSON.parse(JSON.stringify(originalHead));
-            var result = {field:'result', title: title, minWidth:156};
-            head.push(result);
+            //renderCharts(originalData,incomeCharts,oldAction,oldState);
+            //渲染结果表
             table.render({
-                elem: tableId,
-                cellMinWidth: 110,
-                cols: [head],
-                data: tableData
+                elem: '#resultTable',
+                cellMinWidth: 130,
+                cols: [resultHead],
+                data: data.result
             });
+
         }
 
         function renderCharts(chartsData,chartsName,action,state,CalName) {
@@ -864,21 +855,21 @@
             data: k_oData
         });
 
-        //背包问题原始数据表
+        //原始数据表
         table.render({
-            elem: '#packOriTable',
+            elem: '#originalTable',
             cellMinWidth: 115,
             cols: [k_oHead],
             data: k_oData
         });
         // renderCharts(originalData,incomeCharts,oldAction,oldState);
 
-        //背包问题分析结果表
+        //分析结果表
         table.render({
-            elem: '#packRusTable',
+            elem: '#resultTable',
             cellMinWidth: 130,
-            cols: [packRusHead],
-            data: packRusData
+            cols: [resultHead],
+            data: resultData
         });
 
     });

@@ -56,7 +56,6 @@ public class DynamicController {
         CommonUtil.jsonToArray(dynamicVo);
         JsonResult calculate = dynamicService.calculate(dynamicVo);
 
-        System.out.println(dynamicVo.toString());
         CommonUtil.retState(calculate); //根据计算结果大小设置返回 code 参数
 
         return calculate;

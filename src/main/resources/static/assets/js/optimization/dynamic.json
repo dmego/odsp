@@ -225,7 +225,7 @@
       "fixedPCost": "3"
     }
   ],
-  "packRusHead": [
+  "resultHead": [
     {
       "field": "stage",
       "title": "物品(阶段)"
@@ -255,7 +255,7 @@
       "title": "剩余容量"
     }
   ],
-  "packRusData": [
+  "resultData": [
     {
       "stage": "1",
       "name": "A",
