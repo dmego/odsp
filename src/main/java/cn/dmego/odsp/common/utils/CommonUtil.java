@@ -63,15 +63,16 @@ public class CommonUtil {
             Integer kVolume = dynamicVo.getKVolume(); //背包容量
 
             String[] packNames = new String[kBreedNum];
-            Integer[] weights = new Integer[kBreedNum];
-            Integer[] values = new Integer[kBreedNum];
-            Integer[] limits = new Integer[kBreedNum];
+            Integer[] weights = new Integer[kBreedNum+1];
+            Integer[] values = new Integer[kBreedNum+1];
+            Integer[] limits = new Integer[kBreedNum+1];
 
-            for (int i = 0; i < array.size(); i++) {
-                JSONObject jo = array.getJSONObject(i);
-                packNames[i] = jo.getString("name");
-                weights[i] = jo.getInteger("weights");
-                values[i] = jo.getInteger("values");
+            weights[0] = 0; values[0] = 0; limits[0] = 0;
+            for (int i = 1; i <= array.size(); i++) {
+                JSONObject jo = array.getJSONObject(i-1);
+                packNames[i-1] = jo.getString("name");
+                weights[i] = jo.getInteger("weight");
+                values[i] = jo.getInteger("value");
                 if(packFun == 2){//如果是多重背包
                     limits[i] = jo.getInteger("limit");
                 }
