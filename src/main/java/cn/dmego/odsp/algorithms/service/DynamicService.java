@@ -1,5 +1,8 @@
 package cn.dmego.odsp.algorithms.service;
 
+import cn.dmego.odsp.algorithms.vo.DynamicVo;
+import cn.dmego.odsp.common.JsonResult;
+
 /**
  * class_name: DynamicService
  * package: cn.dmego.odsp.algorithms.service
@@ -9,4 +12,6 @@ package cn.dmego.odsp.algorithms.service;
  * creat_time: 12:55
  **/
 public interface DynamicService {
+
+    JsonResult calculate(DynamicVo dynamicVo);
 }

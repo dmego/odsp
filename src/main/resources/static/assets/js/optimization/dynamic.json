@@ -1,0 +1,314 @@
+{
+  "oldRow": 5,
+  "oldCol": 4,
+  "fun": 1,
+  "packFun": 1,
+  "isUpd": "isup",
+  "k_oHead": [
+    {
+      "field": "stage",
+      "title": "物品(阶段)"
+    },
+    {
+      "field": "name",
+      "title": "物品名称"
+    },
+    {
+      "field": "weight",
+      "title": "单位物品重量"
+    },
+    {
+      "field": "value",
+      "title": "单位物品价值"
+    }
+  ],
+  "k_oData": [
+    {
+      "stage": "1",
+      "name": "A",
+      "weight": "200",
+      "value": "40"
+    },
+    {
+      "stage": "2",
+      "name": "B",
+      "weight": "150",
+      "value": "25"
+    },
+    {
+      "stage": "3",
+      "name": "C",
+      "weight": "400",
+      "value": "60"
+    },
+    {
+      "stage": "4",
+      "name": "D",
+      "weight": "60",
+      "value": "70"
+    },
+    {
+      "stage": "5",
+      "name": "E",
+      "weight": "300",
+      "value": "50"
+    }
+  ],
+  "k_mHead": [
+    {
+      "field": "stage",
+      "title": "物品(阶段)"
+    },
+    {
+      "field": "name",
+      "title": "物品名称"
+    },
+    {
+      "field": "limit",
+      "title": "物品限量"
+    },
+    {
+      "field": "weight",
+      "title": "单位物品重量"
+    },
+    {
+      "field": "value",
+      "title": "单位物品价值"
+    }
+  ],
+  "k_mData": [
+    {
+      "stage": "1",
+      "name": "A",
+      "limit": "15",
+      "weight": "200",
+      "value": "40"
+    },
+    {
+      "stage": "2",
+      "name": "B",
+      "limit": "10",
+      "weight": "150",
+      "value": "25"
+    },
+    {
+      "stage": "3",
+      "name": "C",
+      "limit": "10",
+      "weight": "400",
+      "value": "60"
+    },
+    {
+      "stage": "4",
+      "name": "D",
+      "limit": "20",
+      "weight": "60",
+      "value": "70"
+    },
+    {
+      "stage": "5",
+      "name": "E",
+      "limit": "12",
+      "weight": "300",
+      "value": "50"
+    }
+  ],
+  "r_oHead": [
+    {
+      "field": "income",
+      "title": "投入资源/项目/收益"
+    },
+    {
+      "field": "1_project",
+      "title": "项目1"
+    },
+    {
+      "field": "2_project",
+      "title": "项目2"
+    },
+    {
+      "field": "3_project",
+      "title": "项目3"
+    }
+  ],
+  "r_oData": [
+    {
+      "income": "2",
+      "1_project": "8",
+      "2_project": "9",
+      "3_project": "10"
+    },
+    {
+      "income": "4",
+      "1_project": "15",
+      "2_project": "20",
+      "3_project": "28"
+    },
+    {
+      "income": "6",
+      "1_project": "30",
+      "2_project": "35",
+      "3_project": "35"
+    },
+    {
+      "income": "8",
+      "1_project": "38",
+      "2_project": "40",
+      "3_project": "43"
+    }
+  ],
+  "p_oHead": [
+    {
+      "field": "stage",
+      "title": "生产时期(阶段)"
+    },
+    {
+      "field": "need",
+      "title": "需求量"
+    },
+    {
+      "field": "ability",
+      "title": "生产能力"
+    },
+    {
+      "field": "proCost",
+      "title": "单位产品生产成本"
+    },
+    {
+      "field": "stoCost",
+      "title": "单位产品存储成本"
+    },
+    {
+      "field": "storage",
+      "title": "最大存储量"
+    },
+    {
+      "field": "fixedPCost",
+      "title": "固定生产成本"
+    }
+  ],
+  "p_oData": [
+    {
+      "stage": "1",
+      "need": "2",
+      "ability": "6",
+      "proCost": "1",
+      "stoCost": "0.5",
+      "storage": "3",
+      "fixedPCost": "3"
+    },
+    {
+      "stage": "2",
+      "need": "3",
+      "ability": "4",
+      "proCost": "1",
+      "stoCost": "0.5",
+      "storage": "3",
+      "fixedPCost": "3"
+    },
+    {
+      "stage": "3",
+      "need": "4",
+      "ability": "5",
+      "proCost": "1",
+      "stoCost": "0.5",
+      "storage": "3",
+      "fixedPCost": "3"
+    },
+    {
+      "stage": "4",
+      "need": "2",
+      "ability": "4",
+      "proCost": "1",
+      "stoCost": "0.5",
+      "storage": "3",
+      "fixedPCost": "3"
+    }
+  ],
+  "packRusHead": [
+    {
+      "field": "stage",
+      "title": "物品(阶段)"
+    },
+    {
+      "field": "name",
+      "title": "物品名称"
+    },
+    {
+      "field": "number",
+      "title": "选择的物品数量"
+    },
+    {
+      "field": "weight",
+      "title": "单位物品重量"
+    },
+    {
+      "field": "value",
+      "title": "单位物品价值"
+    },
+    {
+      "field": "sumValue",
+      "title": "物品的总价值"
+    },
+    {
+      "field": "rescap",
+      "title": "剩余容量"
+    }
+  ],
+  "packRusData": [
+    {
+      "stage": "1",
+      "name": "A",
+      "number": "1",
+      "weight": "200",
+      "value": "40",
+      "sumValue": "40",
+      "rescap": "600"
+    },
+    {
+      "stage": "2",
+      "name": "B",
+      "number": "1",
+      "weight": "150",
+      "value": "25",
+      "sumValue": "25",
+      "rescap": "450"
+    },
+    {
+      "stage": "3",
+      "name": "C",
+      "number": "0",
+      "weight": "400",
+      "value": "60",
+      "sumValue": "0",
+      "rescap": "450"
+    },
+    {
+      "stage": "4",
+      "name": "D",
+      "number": "1",
+      "weight": "60",
+      "value": "70",
+      "sumValue": "70",
+      "rescap": "390"
+    },
+    {
+      "stage": "5",
+      "name": "E",
+      "number": "1",
+      "weight": "300",
+      "value": "50",
+      "sumValue": "50",
+      "rescap": "90"
+    },
+    {
+      "stage": "最大价值",
+      "name": "185",
+      "number": "",
+      "weight": "",
+      "value": "",
+      "sumValue": "",
+      "rescap": ""
+    }
+  ]
+}

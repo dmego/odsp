@@ -1,35 +1,25 @@
-package cn.dmego.odsp.algorithms.service.impl;
+package cn.dmego.odsp.algtest;
 
-import cn.dmego.odsp.algorithms.service.DynamicService;
-import cn.dmego.odsp.algorithms.vo.DynamicVo;
-import cn.dmego.odsp.common.JsonResult;
-import org.springframework.stereotype.Service;
+public class knapsackTest {
+    private static int[] w = {0,200,150,400,60,300}; //单位物品重量数组
+    private static int[] v = {0,40,25,60,70,50}; //单位物品价值数组
+    private static int N = 5; //物品种类
+    private static int W = 800; //背包容量
 
-/**
- * class_name: DynamicServiceImpl
- * package: cn.dmego.odsp.algorithms.service.impl
- * describe: 动态规划 Service 接口实现类
- * creat_user: Dmego
- * creat_date: 2018/11/22
- * creat_time: 12:54
- **/
-@Service
-public class DynamicServiceImpl implements DynamicService {
+    public static void main(String[] args) {
+        int[] ww =  {0,4,7,5};
+        int[] vv = {0,5,9,6};
 
+        int W = 800;
+        int w[] = {0,250,150,400,350,300};
+        int v[] = {0,40,25,60,70,50 };
+        int cot[] = {0,15,10,10,20,12 };
 
-    @Override
-    public JsonResult calculate(DynamicVo dynamicVo) {
-        Integer fun = dynamicVo.getFun();
-
-        if(dynamicVo.getFun() == 1){
-
-        }
-
-
-        return null;
+//		zeroOnePack(W, N, w, v);
+//		zeroOnePack(10, 3, ww, vv);
+//		completePack(W, N, w, v);
+        multiplePack(800,5,w,v,cot);
     }
-
-
 
     /**
      * 0-1背包问题 一维数组解法，记录路径
@@ -38,17 +28,34 @@ public class DynamicServiceImpl implements DynamicService {
      * @param w
      * @param v
      */
-    private static void zeroOnePack(int W,int N,int[] w,int[] v) {
-        int[] dp = new int[W+1];
+    public static void zeroOnePack(int W,int N,int[] w,int[] v) {
+        /* 选用 1 维数组来优化空间，当进行第  i 次循环时，所有的dp[0~W] 都还没被更新
+         * 也就是说，dp[j] 还记录着前 i-1 个物品在容量为 j 时的最大价值
+         * 这就相当于还记录着 dp[i -1][j]和dp[i - 1][j-w[i]]+v[i]
+         *为了保证每一次更新时，dp[j] 的值都是 i-1 层循环时的值，必须倒序循环，
+         *假设你这个时候第一个数是求的dp[0], 一直求到了第dp[10], 那么你这个时候再去调用dp[10-w[i]].
+         *那么排在10前面的数肯定已经被第 i 层的循环动过了，而不再是 i-1 层循环时的数。
+         *
+         */
+
+        //如果是二维数组，那么 dp[i][j] 表示前 i 件物品放入 容量为 j的背包中可以获得的最大收益值
+        //这里使用一维数组，求最大收益值，所以不用保留每种情况，只有最后前 N 种物品放入 W 容量的背包中的最大收益值就行
+        int[] dp = new int[W+1]; //第 i 件物品 放入一个容量为w的背包中可以获得的最大收益值
+
         boolean[][] path = new boolean[N+1][W+1]; //记录路径
 
+        //针对每一种物品进行循环判断，判断该物品是否可以被装入背包
         for(int i = 1; i <= N; i++) {
+            //从最大容量开始，判断第 i 种物品是否可以被装入
             for(int j = W; j >=w[i]; j--) {
+                //如果装入第 i 种物品能获取最大收益，则装入，并且记录下，在该容量下，可以装入  i 物品
                 if(dp[j] < dp[j - w[i]] + v[i]) {
-                    dp[j] = dp[j - w[i]] + v[i];
-                    path[i][j] = true;
+                    dp[j] = dp[j - w[i]] + v[i]; //更新前 i 种物品 放入容量为 j 背包中的最大收益值。
+                    path[i][j] = true; //这里可以理解为第 i 个物品在背包容量为  j 时可以被放入背包中，并且保证值最大
+
                 }
             }
+            System.out.println();
         }
 
         //逆推出选择物品的路径
@@ -85,7 +92,7 @@ public class DynamicServiceImpl implements DynamicService {
      * @param w
      * @param v
      */
-    private static void completePack(int W,int N,int[] w,int[] v) {
+    public static void completePack(int W,int N,int[] w,int[] v) {
         int[] dp = new int[W+1];
         int[][] path = new int[N+1][W+1];
 
@@ -124,7 +131,7 @@ public class DynamicServiceImpl implements DynamicService {
      * @param v
      * @param cot
      */
-    private static void multiplePack(int W,int N,int[] w,int[] v,int[] cot) {
+    public static void multiplePack(int W,int N,int[] w,int[] v,int[] cot) {
         int[] dp = new int[W+1];
         int[][] path = new int[N+1][W+1];
 

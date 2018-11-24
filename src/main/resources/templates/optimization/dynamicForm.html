@@ -1,10 +1,194 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
 
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ODSP</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+</head>
+
+<body>
+<table class="layui-table" id="ratio" lay-filter="ratio"></table>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script type="text/javascript" src="/assets/js/utils.js"></script>
+<script>
+    // layui建议所有代码都写在layui.use()里面，相当于jquery的$(function(){})
+    layui.use(['table', 'layer', 'form', 'util', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+
+        var fun = "${fun}";
+        var item1 = "${item1}";
+        var item2 = "${item2}"
+        var isUpd = "${isUpd}"; //是否是更新数据表
+
+        var reg = /^[+-]?\d*\.?\d{0,3}$/; //正则验证 字段只能为整数或保留3位小数
+
+
+        function renderTable(tableId,head,data,col){
+            if(fun == 2){ //如果是资源分配
+                for (var i = 0; i <= col; i++) {
+                    head[i].edit = 'text';
+                }
+            }else{//背包,生产
+                for (var i = 1; i < col; i++) {
+                    head[i].edit = 'text';
+                }
+            }
+            table.render({
+                elem: tableId,
+                limit: 100,
+                height:'full-110',
+                cellMinWidth: 110,
+                cols: [head],
+                data:data
+            });
+        };
+
+        //初始化新的空表格
+        function newTable(tableId,head,col){
+            var data = [];
+            if(fun == 1){//背包
+                for (var i = 1; i < col; i++) {
+                    head[i].edit = 'text';
+                }
+                for (var i = 1; i <= item2; i++) {
+                    var row = {};
+                    row['stage'] = i;
+                    row['name'] = 'A'+i;
+                    if(item1 == 2){//多重背包
+                        row['limit'] = 15;
+                    }
+                    row['weight'] = 100;
+                    row['value'] = 40;
+                    data.push(row);
+                }
+
+            }else if(fun == 2){//资源分配
+                for (var i = 0; i <= col; i++) {
+                    head[i].edit = 'text';
+                }
+                //先生成Head
+                var returnHead =[];
+                head = [];
+                var income = {field:'income', title:'投入资源/项目/收益'};
+                returnHead.push(income);
+                head.push(income);
+                for (var i = 1; i <= item2; i++) {
+                    var col = {field:i+'_project', title:'项目'+i,edit:'text'};
+                    var col2 =  {field:i+'_project', title:'自然状态'+i};
+                    returnHead.push(col2);
+                    head.push(col);
+                }
+                // var returnHead = JSON.parse(JSON.stringify(head));
+                table.head = returnHead;
+                for (var i = 1; i <=item1; i++) {
+                    var row = {};
+                    row['income'] = i;
+                    for (var j = 1; j <=item2; j++) {
+                        row[j+'_project'] = j;
+                    }
+                    data.push(row);
+                }
+
+            }else if(fun == 3){//生产存储
+                for (var i = 1; i < col; i++) {
+                    head[i].edit = 'text';
+                }
+                for (var i = 1; i <= item1; i++) {
+                    var row = {};
+                    row['stage'] = i;
+                    row['need'] = 2;
+                    row['ability'] = 4;
+                    row['proCost'] = 1;
+                    row['stoCost'] = 0.5;
+                    row['storage'] = 3;
+                    row['fixedPCost'] = 3;
+                    data.push(row);
+                }
+            }
+
+            table.render({
+                elem: '#ratio',
+                limit: 100,
+                height:'full-20',
+                cellMinWidth: 110,
+                cols: [head],
+                data: data
+            });
+        };
+
+        $(function () {
+            var data = admin.getTempData('dynamicData');
+            if(isNotEmpty(data)){
+                var k_oHead = data.k_oHead;
+                var k_oData = data.k_oData;
+                var k_mHead = data.k_mHead;
+                var k_mData = data.k_mData;
+
+                var r_oHead = data.r_oHead;
+                var r_oData = data.r_oData;
+
+                var p_oHead = data.p_oHead;
+                var p_oData = data.p_oData;
+            }
+
+            //如果是更新数据表
+            if(isUpd == "isup" && isNotEmpty("dynamicData")){
+                if(fun == 1){//如果背包问题,
+                    if(item1 == 2){//如果是多重背包
+                        renderTable('#ratio',k_mHead,k_mData,4);
+                    }else{
+                        renderTable('#ratio',k_oHead,k_oData,4);
+                    }
+                }else if(fun == 2){
+                    renderTable('#ratio',r_oHead,r_oData,item1);
+                }else if(fun == 3){
+                    renderTable('#ratio',p_oHead,p_oData,7);
+                }
+            }
+            //如果是初始化一张空表
+            else if(isUpd == "noup" || isNotEmpty("dynamicData")){
+                if(fun == 1){//如果背包问题,
+                    if(item1 == 2){//如果是多重背包
+                        newTable('#ratio',k_mHead,4);
+                    }else{
+                        newTable('#ratio',k_oHead,4);
+                    }
+                }else if(fun == 2){
+                    newTable('#ratio',r_oHead,item1);
+                }else if(fun == 3){
+                    newTable('#ratio',p_oHead,7);
+                }
+            }
+
+            //监听单元格编辑
+            table.on('edit(ratio)',function (obj) {
+                var value = obj.value; //得到修改后的值
+                if(value.trim().length == 0){
+                    layer.msg('字段不能为空');
+                }
+                if(!reg.test(value)){
+                    layer.msg('字段只能为整数或保留3位小数');
+                }
+            })
+        });
+
+    });
+</script>
 </body>
+
 </html>
+
+
+
