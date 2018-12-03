@@ -107,7 +107,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">资源总数量</label>
                             <div class="layui-input-block">
-                                <input type="text" id="rSumValue" name="rSumValue" value="20" placeholder="[0,+∞)" isChange="false" class="layui-input" lay-verify="required|rSumValue">
+                                <input type="text" id="rSumValue" name="rSumValue" value="8" placeholder="[0,+∞)" isChange="false" class="layui-input" lay-verify="required|rSumValue">
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -280,12 +280,16 @@
         var table = layui.table;
         var util = layui.util;
         var admin = layui.admin;
+
         var dynamicData;
         var oldRow,oldCol,fun,packFun,isUpd;
+
         var k_oHead,k_oData,k_mHead,k_mData;
         var r_oHead,r_oData,p_oHead,p_oData;
         // var originalHead,originalData;
         var resultHead,resultData;
+
+        var resultRHead,resultPHead;
 
         //首先获取该页面的初始化数据
         $.ajaxSettings.async = false; //同步获取数据
@@ -314,6 +318,8 @@
              // originalData = k_oData;
              resultHead = data.resultHead;
              resultData = data.resultData;
+
+             resultRHead = data.resultRHead;
 
         });
 
@@ -505,7 +511,7 @@
                         var Data = JSON.parse(JSON.stringify(cache));//表格数据
                         //对于表头而言,只有资源分配问题才改变了表头,其他还是原表头
                         var Head;
-                        if(fun == 1){
+                        if(fun == 1){ //背包
                             if(packFun == 2){
                                 Head = k_mHead;
                                 k_mData = Data;
@@ -516,20 +522,28 @@
                                 dynamicData["k_oData"] = k_oData;
                             }
                             $("#kBreedNum").attr("isChange","false");
-                        }else if(fun == 2){
-                            Head = ifTable.head;
-                            r_oHead = ifTable.head;
+                        }else if(fun == 2){ //资源分配
+                            if(isUpd == "isup"){ //如果是更新数据表,表头不变
+                                Head = r_oHead;
+                            }else if(isUpd == "noup"){ //如果是一直新表,则表头改变
+                                Head = ifTable.head;
+                                r_oHead = ifTable.head;
+                            }
                             r_oData = Data;
                             dynamicData["r_oHead"] = r_oHead;
                             dynamicData["r_oData"] = r_oData;
                             $("#rItemNum").attr("isChange","false");
                             $("#rStrategy").attr("isChange","false");
-                        }else if(fun == 3){
+                        }else if(fun == 3){ //生产存储
                             Head = p_oHead;
                             p_oData = Data;
                             dynamicData["p_oData"] = p_oData;
                             $("#pStage").attr("isChange","false");
                         }
+
+                        // console.log(Head);
+                        // console.log(Data);
+                        //重新渲染系数表
                         layui.table.render({
                             elem: '#xishu',
                             cellMinWidth: 110,
@@ -627,8 +641,8 @@
                 kBreedNum:data.field.kBreedNum,
                 kVolume:data.field.kVolume,
                 rItemNum:data.field.rItemNum,
-                rSumValue:data.field.rItemNum,
-                rStrategy:data.field.rItemNum,
+                rSumValue:data.field.rSumValue,
+                rStrategy:data.field.rStrategy,
                 pStage:data.field.pStage,
                 pStorage:data.field.pStorage,
                 ratioTableData: JSON.stringify(table.cache.xishu),
@@ -651,8 +665,8 @@
          */
         function renderTables(data){
             var originalHead,originalData;
-            //首先渲染原始数据表
-            if(fun == 1){
+            //首先确定原始数据表的表头及数据
+            if(fun == 1){ // 背包问题
                 if(packFun == 2){
                     originalHead =  k_mHead;
                     originalData = k_mData;
@@ -660,15 +674,21 @@
                     originalHead =  k_oHead;
                     originalData = k_oData;
                 }
-            }else if(fun == 2){
+            }else if(fun == 2){ //资源分配问题
                 originalHead =  r_oHead;
                 originalData = r_oData;
-            }else if(fun == 3){
+
+                resultHead = resultRHead;
+
+            }else if(fun == 3){ //生成与存储问题
                 originalHead =  p_oHead;
                 originalData = p_oData;
+
+                resultHead = resultPHead;
             };
-            console.log(originalData)
-            console.log(originalHead)
+            // console.log(originalData)
+            // console.log(originalHead)
+            //渲染原始数据表
             table.render({
                 elem: '#originalTable',
                 cellMinWidth: 115,
@@ -677,6 +697,7 @@
             });
 
             //renderCharts(originalData,incomeCharts,oldAction,oldState);
+            // console.log(resultHead);
             //渲染结果表
             table.render({
                 elem: '#resultTable',

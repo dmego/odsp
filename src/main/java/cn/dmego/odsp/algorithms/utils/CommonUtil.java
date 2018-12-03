@@ -1,4 +1,4 @@
-package cn.dmego.odsp.common.utils;
+package cn.dmego.odsp.algorithms.utils;
 
 import cn.dmego.odsp.algorithms.vo.DecisionVo;
 import cn.dmego.odsp.algorithms.vo.DynamicVo;
@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 public class CommonUtil {
 
     /**
-     * 将 json 字符串转化成二维数组
+     * 将 json 字符串转化成二维数组 决策分析问题
      *
      * @param decisionVo
      * @return
@@ -83,7 +83,28 @@ public class CommonUtil {
             dynamicVo.setLimit(limits);
             dynamicVo.setPackNames(packNames);
 
-        }else if(fun == 2){
+        }else if(fun == 2){ //如果是资源分配问题
+            Integer ri = dynamicVo.getRItemNum(); //项目数
+            Integer rs = dynamicVo.getRStrategy(); //可选投资策略数
+            Integer[] strategy = new Integer[rs]; //可选投资策略数组
+            Integer[][] matrix = new Integer[ri][rs]; //矩阵数据数组
+
+            //为可选投资策略数组赋值
+            for (int i = 0; i < array.size(); i++) {
+                JSONObject jo = array.getJSONObject(i);
+                strategy[i] = jo.getInteger("income");
+            }
+
+            //为矩阵数据数组赋值
+            for (int i = 0; i < ri; i++) {
+                for (int j = 0; j < rs; j++) {
+                    JSONObject jo = array.getJSONObject(j);
+                    matrix[i][j] = jo.getInteger((i+1)+"_project");
+                }
+            }
+
+            dynamicVo.setStrategy(strategy);
+            dynamicVo.setMatrix(matrix);
 
         }else if(fun == 3){
 
@@ -150,4 +171,5 @@ public class CommonUtil {
         Double max = max1 >= max2 ? max1 : max2;
         return String.valueOf(max);
     }
+
 }

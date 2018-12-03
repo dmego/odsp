@@ -1,6 +1,5 @@
 package cn.dmego.odsp.algorithms.vo;
 
-import io.swagger.models.auth.In;
 import lombok.Data;
 
 /**
@@ -34,7 +33,7 @@ public class DynamicVo {
 
     private String ratioTableData; //json 字符串格式的表格数据
 
-    private Double[][] matrix; //矩阵数据数组
+    private Integer[][] matrix; //矩阵数据数组
 
     private Integer bestValue; //最佳结果的值
 
@@ -47,6 +46,10 @@ public class DynamicVo {
     private Integer[] choiceNums; //选择物品的数量
     private Integer[] sumValues; //物品的总价值
     private Integer[] restVolume; //剩余容量
+
+    //资源分配问题VO对象
+    private Integer[] strategy; //可选投资策略数组
+
 
 
 

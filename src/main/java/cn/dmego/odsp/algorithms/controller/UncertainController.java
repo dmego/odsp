@@ -1,7 +1,7 @@
 package cn.dmego.odsp.algorithms.controller;
 
 import cn.dmego.odsp.common.JsonResult;
-import cn.dmego.odsp.common.utils.CommonUtil;
+import cn.dmego.odsp.algorithms.utils.CommonUtil;
 import cn.dmego.odsp.algorithms.service.UncertainService;
 import cn.dmego.odsp.algorithms.vo.DecisionVo;
 import org.springframework.beans.factory.annotation.Autowired;
