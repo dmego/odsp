@@ -3,9 +3,7 @@ package cn.dmego.odsp.algorithms.controller;
 import cn.dmego.odsp.algorithms.service.DynamicService;
 import cn.dmego.odsp.algorithms.vo.DynamicVo;
 import cn.dmego.odsp.common.JsonResult;
-import cn.dmego.odsp.common.utils.CommonUtil;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+import cn.dmego.odsp.algorithms.utils.CommonUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -55,8 +53,6 @@ public class DynamicController {
 
         CommonUtil.jsonToArray(dynamicVo);
         JsonResult calculate = dynamicService.calculate(dynamicVo);
-
-        CommonUtil.retState(calculate); //根据计算结果大小设置返回 code 参数
 
         return calculate;
     }

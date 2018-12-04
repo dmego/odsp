@@ -1,7 +1,7 @@
 package cn.dmego.odsp.algorithms.service.impl;
 
 import cn.dmego.odsp.common.JsonResult;
-import cn.dmego.odsp.common.utils.CommonUtil;
+import cn.dmego.odsp.algorithms.utils.CommonUtil;
 import cn.dmego.odsp.algorithms.service.UncertainService;
 import cn.dmego.odsp.algorithms.vo.DecisionVo;
 import org.springframework.stereotype.Service;
@@ -49,6 +49,8 @@ public class UncertainServiceImpl implements UncertainService {
                 jsonResult.put("5",eclecticismMaps);
             }
         }
+
+        CommonUtil.retState(jsonResult,200);
         return jsonResult;
     }
 

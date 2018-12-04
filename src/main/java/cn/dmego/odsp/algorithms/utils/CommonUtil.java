@@ -1,4 +1,4 @@
-package cn.dmego.odsp.common.utils;
+package cn.dmego.odsp.algorithms.utils;
 
 import cn.dmego.odsp.algorithms.vo.DecisionVo;
 import cn.dmego.odsp.algorithms.vo.DynamicVo;
@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 public class CommonUtil {
 
     /**
-     * 将 json 字符串转化成二维数组
+     * 将 json 字符串转化成二维数组 决策分析问题
      *
      * @param decisionVo
      * @return
@@ -63,17 +63,19 @@ public class CommonUtil {
             Integer kVolume = dynamicVo.getKVolume(); //背包容量
 
             String[] packNames = new String[kBreedNum];
-            Integer[] weights = new Integer[kBreedNum+1];
-            Integer[] values = new Integer[kBreedNum+1];
-            Integer[] limits = new Integer[kBreedNum+1];
+            Integer[] weights = new Integer[kBreedNum + 1];
+            Integer[] values = new Integer[kBreedNum + 1];
+            Integer[] limits = new Integer[kBreedNum + 1];
 
-            weights[0] = 0; values[0] = 0; limits[0] = 0;
+            weights[0] = 0;
+            values[0] = 0;
+            limits[0] = 0;
             for (int i = 1; i <= array.size(); i++) {
-                JSONObject jo = array.getJSONObject(i-1);
-                packNames[i-1] = jo.getString("name");
+                JSONObject jo = array.getJSONObject(i - 1);
+                packNames[i - 1] = jo.getString("name");
                 weights[i] = jo.getInteger("weight");
                 values[i] = jo.getInteger("value");
-                if(packFun == 2){//如果是多重背包
+                if (packFun == 2) {//如果是多重背包
                     limits[i] = jo.getInteger("limit");
                 }
             }
@@ -83,26 +85,68 @@ public class CommonUtil {
             dynamicVo.setLimit(limits);
             dynamicVo.setPackNames(packNames);
 
-        }else if(fun == 2){
+        } else if (fun == 2) { //如果是资源分配问题
+            Integer ri = dynamicVo.getRItemNum(); //项目数
+            Integer rs = dynamicVo.getRStrategy(); //可选投资策略数
+            Integer[] strategy = new Integer[rs]; //可选投资策略数组
+            Integer[][] matrix = new Integer[ri][rs]; //矩阵数据数组
 
-        }else if(fun == 3){
+            //为可选投资策略数组赋值
+            for (int i = 0; i < array.size(); i++) {
+                JSONObject jo = array.getJSONObject(i);
+                strategy[i] = jo.getInteger("income");
+            }
 
+            //为矩阵数据数组赋值
+            for (int i = 0; i < ri; i++) {
+                for (int j = 0; j < rs; j++) {
+                    JSONObject jo = array.getJSONObject(j);
+                    matrix[i][j] = jo.getInteger((i + 1) + "_project");
+                }
+            }
+
+            dynamicVo.setStrategy(strategy);
+            dynamicVo.setMatrix(matrix);
+
+        } else if (fun == 3) { //如果是生产与存储问题
+            Integer n = dynamicVo.getPStage();//生产时期(阶段数)
+            Integer[] demand = new Integer[n];
+            Integer[] productPower = new Integer[n];
+            Double[] unitProductCost = new Double[n];
+            Double[] unitStorageCost = new Double[n];
+            Double[] fixedProductCost = new Double[n];
+            Integer[] maxStorage = new Integer[n];
+
+            for (int i = 0; i < array.size(); i++) {
+                JSONObject jo = array.getJSONObject(i);
+                demand[i] = jo.getInteger("need");
+                productPower[i] = jo.getInteger("ability");
+                unitProductCost[i] = jo.getDouble("proCost");
+                unitStorageCost[i] = jo.getDouble("stoCost");
+                fixedProductCost[i] = jo.getDouble("fixedPCost");
+                maxStorage[i] = jo.getInteger("storage");
+            }
+
+            dynamicVo.setDemand(demand);
+            dynamicVo.setProductPower(productPower);
+            dynamicVo.setUnitProductCost(unitProductCost);
+            dynamicVo.setUnitStorageCost(unitStorageCost);
+            dynamicVo.setFixedProductCost(fixedProductCost);
+            dynamicVo.setMaxStorage(maxStorage);
         }
-
-
     }
 
     /**
-     * 查看结果集大小，设置返回 code 参数
+     * 设置返回json中的 code 参数
      *
      * @param calculate
      * @return
      */
-    public static JsonResult retState(JsonResult calculate) {
-        if (calculate.size() > 0 && calculate != null) {
+    public static JsonResult retState(JsonResult calculate,int code) {
+        if (code == 200 && calculate.size() > 0 && calculate != null) {
             calculate.setCode(200);
             calculate.setMessage("计算成功!");
-        } else {
+        } else{
             calculate.setCode(500);
             calculate.setMessage("计算失败!");
         }
@@ -150,4 +194,5 @@ public class CommonUtil {
         Double max = max1 >= max2 ? max1 : max2;
         return String.valueOf(max);
     }
+
 }

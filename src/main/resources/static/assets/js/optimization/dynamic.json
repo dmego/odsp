@@ -310,5 +310,49 @@
       "sumValue": "",
       "rescap": ""
     }
+  ],
+  "resultRHead": [
+    {
+      "field": "stage",
+      "title": "项目(阶段)"
+    },
+    {
+      "field": "input",
+      "title": "投入资源数"
+    },
+    {
+      "field": "income",
+      "title": "项目收益"
+    },
+    {
+      "field": "rest",
+      "title": "剩余资源"
+    }
+  ],
+  "resultPHead": [
+    {
+      "field": "stage",
+      "title": "生产时期(阶段)"
+    },
+    {
+      "field": "endS",
+      "title": "期末存储量"
+    },
+    {
+      "field": "bestP",
+      "title": "最优生产量"
+    },
+    {
+      "field": "pCost",
+      "title": "生产费用"
+    },
+    {
+      "field": "sCost",
+      "title": "存储费用"
+    },
+    {
+      "field": "sumCost",
+      "title": "单个时期生产总费用"
+    }
   ]
 }

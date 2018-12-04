@@ -12,7 +12,7 @@ beetlsql:
 spring:
   ## 多环境配置
   profiles:
-    active: docker
+    active: dev
   ## json 时间格式设置
   ## 这里不能用“-”，必须用“/”，因为js的new Date()方法ie不支持“-”会出现NaN
   jackson:

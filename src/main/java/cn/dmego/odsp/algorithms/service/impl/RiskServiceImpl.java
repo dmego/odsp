@@ -1,7 +1,7 @@
 package cn.dmego.odsp.algorithms.service.impl;
 
 import cn.dmego.odsp.common.JsonResult;
-import cn.dmego.odsp.common.utils.CommonUtil;
+import cn.dmego.odsp.algorithms.utils.CommonUtil;
 import cn.dmego.odsp.algorithms.service.RiskService;
 import cn.dmego.odsp.algorithms.vo.DecisionVo;
 import org.springframework.stereotype.Service;
@@ -44,6 +44,7 @@ public class RiskServiceImpl implements RiskService {
             }
         }
 
+        CommonUtil.retState(jsonResult,200);
         return jsonResult;
     }
 
