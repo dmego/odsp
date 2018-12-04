@@ -32,9 +32,6 @@
         var item2 = "${item2}"
         var isUpd = "${isUpd}"; //是否是更新数据表
 
-        var reg = /^[+-]?\d*\.?\d{0,3}$/; //正则验证 字段只能为整数或保留3位小数
-
-
         function renderTable(tableId,head,data,col){
             if(fun == 2){ //如果是资源分配
                 for (var i = 0; i <= col; i++) {
@@ -75,9 +72,7 @@
                 }
 
             }else if(fun == 2){//资源分配
-                // for (var i = 0; i <= col; i++) {
-                //     head[i].edit = 'text';
-                // }
+
                 //先生成Head
                 var returnHead =[];
                 head = [];
@@ -173,18 +168,46 @@
                 }
             }
 
+
+            var rag0 = /^[0-9]\d*$/;
+            var rag2 = /^[+-]?\d*\.?\d{0,3}$/;
+            var rag3 = /^[+]?\d*\.?\d{0,3}$/;
+
             //监听单元格编辑
             table.on('edit(ratio)',function (obj) {
                 var value = obj.value; //得到修改后的值
+                var field = obj.field; //得到字段
                 if(value.trim().length == 0){
                     layer.msg('字段不能为空');
-                }
-                if(!reg.test(value)){
-                    layer.msg('字段只能为整数或保留3位小数');
+                }else if(fun == 1){ //如果是背包问题
+                    if(field == 'weight' || field == 'value'){ //要求是大于 0 的整数
+                        if(!rag0.test(value)){
+                            layer.msg('字段要求是非负的整数');
+                        }
+                    }
+                }else if(fun == 2){ //资源分配
+                    if(field == 'income'){ //如果是投入资源,必须是非负整数
+                        if(!rag0.test(value)){
+                            layer.msg('字段要求是非负的整数');
+                        }
+                    }else{
+                        if(!rag2.test(value)){
+                            layer.msg('字段只能为整数或保留3位的小数');
+                        }
+                    }
+                }else if(fun == 3){
+                    if(field == 'need' || field == 'ability' || field == 'storage'){
+                        if(!rag0.test(value)){
+                            layer.msg('字段要求是非负的整数');
+                        }
+                    }else if(field == 'proCost' || field == 'stoCost' || field == 'fixedPCost'){
+                        if(!rag3.test(value)){
+                            layer.msg('字段只能为非负整数或保留3位的非负小数');
+                        }
+                    }
                 }
             })
         });
-
     });
 </script>
 </body>

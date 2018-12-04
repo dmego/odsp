@@ -29,7 +29,7 @@ public class DynamicVo {
 
     private Integer pStage;//生产时期
 
-    private Integer pStorage;//期初存储量
+    private Integer pStorage;//期初存储量 init storage
 
     private String ratioTableData; //json 字符串格式的表格数据
 
@@ -50,7 +50,11 @@ public class DynamicVo {
     //资源分配问题VO对象
     private Integer[] strategy; //可选投资策略数组
 
-
-
-
+    //生产与存储问题VO对象
+    private Integer[] demand; //需求量 demand
+    private Integer[] productPower; //生产能力 product power
+    private Double[] unitProductCost; //单位产品生产成本 unit product cost
+    private Double[] unitStorageCost; //单位产品存储成本 unit storage cost
+    private Double[] fixedProductCost; //固定生产成本 fixed product cost
+    private Integer[] maxStorage; //最大存储量 max storage
 }

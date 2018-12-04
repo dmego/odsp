@@ -44,6 +44,7 @@ public class RiskServiceImpl implements RiskService {
             }
         }
 
+        CommonUtil.retState(jsonResult,200);
         return jsonResult;
     }
 

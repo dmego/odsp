@@ -1,8 +1,10 @@
 package cn.dmego.odsp.algorithms.service.impl;
 
 import cn.dmego.odsp.algorithms.service.DynamicService;
+import cn.dmego.odsp.algorithms.utils.CommonUtil;
 import cn.dmego.odsp.algorithms.vo.DynamicVo;
 import cn.dmego.odsp.common.JsonResult;
+import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -50,10 +52,25 @@ public class DynamicServiceImpl implements DynamicService {
 
             mapList = resource(W, N, r, g);
 
-        }else if(fun == 3){ //如果选择的是生成与存储问题
+        }else if(fun == 3){ //如果选择的是生产与存储问题
+            Integer init = dynamicVo.getPStorage(); //期初存储量
+            Integer[] d = dynamicVo.getDemand();
+            Integer[] p = dynamicVo.getProductPower();
+            Double[] pc = dynamicVo.getUnitProductCost();
+            Double[] sc = dynamicVo.getUnitStorageCost();
+            Integer[] ms = dynamicVo.getMaxStorage();
+            Double[] fc = dynamicVo.getFixedProductCost();
 
+            //首先判断出生产能力是否大于需求量
+            if(!comparePD(init, p, d)){
+                jsonResult = JsonResult.error(500, "需求超过生产能力!请调整输入数据");
+                return jsonResult;
+            }else{
+                mapList = product(init,d,p,pc,sc,ms,fc);
+            }
         }
         jsonResult.put("result",mapList);
+        CommonUtil.retState(jsonResult,200);
         return jsonResult;
     }
 
@@ -152,8 +169,6 @@ public class DynamicServiceImpl implements DynamicService {
         }
         return restVolume;
     }
-
-
 
     /**
      * 0-1背包问题 一维数组解法，记录路径
@@ -262,6 +277,9 @@ public class DynamicServiceImpl implements DynamicService {
             p[0][i] = 0; //初始化 当 项目数为0时,所有分配资源的情况,最大收益都为 0
         }
 
+        /*------------
+            核心代码
+        -------------*/
         //从第 1 个项目开始
         for (int i = 1; i <= N; i++) {
             //从分配 1 个资源开始
@@ -324,4 +342,144 @@ public class DynamicServiceImpl implements DynamicService {
         return mapList;
     }
 
+    /**
+     *  生产与存储问题
+     *
+     * @param init 期初存储量 init storage
+     * @param d 需求量 demand
+     * @param p 生产能力 product power
+     * @param pc 单位产品生产成本 unit product cost
+     * @param sc 单位产品存储成本 unit storage cost
+     * @param ms 最大存储量 max storage
+     * @param fc 固定生产成本 fixed product cost
+     * @return
+     */
+    private static List<Map<String, String>> product(Integer init, Integer[] d,Integer[] p, Double[] pc, Double[] sc, Integer[] ms, Double[] fc){
+
+        //1.先做初始化工作
+        int n = d.length; //阶段数
+        List<Double[]> f = new ArrayList<>(); //用来记录前 i 个 阶段在库存为 j 时的最小成本费用
+        List<Integer[]> m = new ArrayList<>(); //记录生产量
+        //初始化都为0
+        for(int i = 0; i < n; i++) {
+            int jr = Math.min(ms[i], sum(d, i)) + 1;
+            Double[] df = new Double[jr];
+            Integer[] im = new Integer[jr];
+            for(int j = 0 ; j < jr; j++) {
+                df[j] = 0.0;
+                im[j] = 0;
+            }
+            f.add(df);
+            m.add(im);
+            if(i == n - 1) {
+                f.add(df.clone()); //克隆一个数组,深拷贝
+                m.add(im.clone());
+            }
+        }
+
+
+        /*------------
+            核心代码
+        -------------*/
+        //2.从最后一个阶段开始计算
+        for (int i = n-1; i >=0 ; i--) {
+            for (int j = 0; j < Math.min(ms[i],sum(d, i)) + 1; j++) {
+                f.get(i)[j] = Double.POSITIVE_INFINITY; //先初始化费用为无穷大
+                for (int k = Math.max(0, d[i] - j); k < min(p[i],sum(d, i) - j, ms[i] - j + d[i]) + 1; k++) {
+                    double w = 0;
+                    if(k == 0){
+                        w = (j + k -d[i]) * sc[i];
+                    }else{
+                        w = fc[i] + k * pc[i] + (j + k - d[i]) * sc[i];
+                    }
+                    if(j + k - d[i] < f.get(i + 1).length && f.get(i)[j] > f.get(i + 1)[j + k - d[i]] + w){
+                        f.get(i)[j] = f.get(i + 1)[j + k - d[i]] + w;
+                        m.get(i)[j] = k;
+                    }
+                }
+            }
+        }
+
+        //3.求出每个阶段最优生产量和期末存储量等中间显示结果值
+        double minValue = f.get(0)[init]; //最小费用
+        int[] endStorage = new int[n];//期末存储量
+        int[] optimalYield = new int[n]; //最优生产量
+        double[] productCost = new double[n]; //生产费用
+        double[] storageCost = new double[n]; //存储费用
+        double[] unitSumCost = new double[n]; //单个时期生产总费用
+
+        for (int i = 0; i < n; i++) {
+            if(init < 0){
+                break;
+            }
+            optimalYield[i] = m.get(i)[init];
+            init = m.get(i)[init] + init - d[i];
+            endStorage[i] = init;
+            storageCost[i] = init * sc[i];
+            if(optimalYield[i] == 0){
+                productCost[i] = 0;
+            }else{
+                productCost[i] = optimalYield[i] * pc[i] + fc[i];
+            }
+            unitSumCost[i] = storageCost[i] + productCost[i];
+        }
+
+        //4.生产与存储问题求得的结果封装成List<Map<String, String>>并返回
+        List<Map<String,String>> mapList = new ArrayList<>();
+        for (int i = 0; i <= n; i++) {
+            Map<String,String> map = new HashMap<>();
+            if(i == n){
+                map.put("stage", "最小费用为"); //生产时期(阶段)
+                map.put("endS", String.valueOf(minValue)); //期末存储量
+                map.put("bestP", ""); //最优生产量
+                map.put("pCost",""); //生产费用
+                map.put("sCost",""); //存储费用
+                map.put("sumCost",""); //单个时期生产总费用
+            }else{
+                map.put("stage", i+1+""); //生产时期(阶段)
+                map.put("endS", String.valueOf(endStorage[i])); //期末存储量
+                map.put("bestP", String.valueOf(optimalYield[i])); //最优生产量
+                map.put("pCost",String.valueOf(productCost[i])); //生产费用
+                map.put("sCost",String.valueOf(storageCost[i])); //存储费用
+                map.put("sumCost",String.valueOf(unitSumCost[i])); //单个时期生产总费用
+            }
+            mapList.add(map);
+        }
+        return mapList;
+    }
+
+    /**
+     *  求 整数数组 d 第 a 个下标之后的所有元素之后
+     */
+    private static int sum(Integer[] d, int a){
+        int sum = 0;
+        for (int i = d.length - 1; i >= a; i--) {
+            sum += d[i];
+        }
+        return sum;
+    }
+
+    /**
+     *  返回 整数 a, b, c 中的最小值
+     */
+    private static int min(int a, int b, int c){
+        int min = a < b ? a : b;
+        return min < c ? min : c;
+    }
+
+    /**
+     *  比较每个阶段的生产量和需求量的大小
+     */
+    private static boolean comparePD(Integer init, Integer[] p, Integer[] d){
+        int product = init;
+        int demand = 0;
+        for (int i = 0; i < d.length; i++) {
+            product +=p[i];
+            demand +=d[i];
+            if(product < demand){
+                return false;
+            }
+        }
+        return true;
+    }
 }

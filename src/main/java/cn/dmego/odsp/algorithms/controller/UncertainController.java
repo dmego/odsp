@@ -59,15 +59,13 @@ public class UncertainController {
     @ResponseBody
     @RequestMapping("/calculate")
     public JsonResult calculate(@RequestParam("funArr[]") List<Integer> funArr, DecisionVo uncertainVo){
-        System.out.println(funArr);
+
         Double tableData[][] = CommonUtil.jsonToArray(uncertainVo);
 
         uncertainVo.setFunctions(funArr);
         uncertainVo.setMatrix(tableData);
 
         JsonResult calculate = uncertainService.calculate(uncertainVo);
-
-        CommonUtil.retState(calculate);
 
         return calculate;
     }

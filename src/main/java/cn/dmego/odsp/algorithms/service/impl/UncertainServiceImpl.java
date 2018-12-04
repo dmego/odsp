@@ -49,6 +49,8 @@ public class UncertainServiceImpl implements UncertainService {
                 jsonResult.put("5",eclecticismMaps);
             }
         }
+
+        CommonUtil.retState(jsonResult,200);
         return jsonResult;
     }
 

@@ -12,10 +12,11 @@
     <link rel="stylesheet" href="/assets/css/site.css"/>
     <link rel="stylesheet" href="/assets/libs/font-awesome/css/font-awesome.min.css"/>
     <style>
-        .layui-input-block{
+        .layui-input-block {
             margin-left: 150px;
             min-height: 36px;
         }
+
         .layui-form-label {
             float: left;
             display: block;
@@ -44,13 +45,14 @@
                 <i id="fl-btn-icon" class="layui-icon layui-icon-right"></i>
             </span>
             <div id="fl-btn-l" class="layui-card scroll">
-                <form class="layui-form"id="dynamicForm" lay-filter="dynamicForm">
+                <form class="layui-form" id="dynamicForm" lay-filter="dynamicForm">
                     <!--方法选择-->
                     <div class="layui-card-header newheader">方法选择</div>
                     <div class="layui-card-body">
                         <div class="layui-form-item" pane="">
                             <div class="layui-input-block">
-                                <input type="radio" name="function" value="1" lay-filter="function" title="背包问题" checked="">
+                                <input type="radio" name="function" value="1" lay-filter="function" title="背包问题"
+                                       checked="">
                             </div>
                             <div class="layui-input-block">
                                 <input type="radio" name="function" value="2" lay-filter="function" title="资源分配问题">
@@ -77,13 +79,15 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">物品品种数</label>
                             <div class="layui-input-block">
-                                <input type="text" id="kBreedNum" name="kBreedNum" value="5" isChange="false" class="layui-input" lay-verify="required|kBreedNum">
+                                <input type="text" id="kBreedNum" name="kBreedNum" value="5" isChange="false"
+                                       class="layui-input" lay-verify="required|kBreedNum">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">容器容量</label>
                             <div class="layui-input-block">
-                                <input type="text" id="kVolume" name="kVolume" value="800" class="layui-input" lay-verify="required|kVolume">
+                                <input type="text" id="kVolume" name="kVolume" value="800" class="layui-input"
+                                       lay-verify="required|kVolume">
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -101,19 +105,22 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">项目数</label>
                             <div class="layui-input-block">
-                                <input type="text" id="rItemNum" name="rItemNum" value="3" isChange="false" class="layui-input" lay-verify="required|rItemNum">
+                                <input type="text" id="rItemNum" name="rItemNum" value="3" isChange="false"
+                                       class="layui-input" lay-verify="required|rItemNum">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">资源总数量</label>
                             <div class="layui-input-block">
-                                <input type="text" id="rSumValue" name="rSumValue" value="8" placeholder="[0,+∞)" isChange="false" class="layui-input" lay-verify="required|rSumValue">
+                                <input type="text" id="rSumValue" name="rSumValue" value="8" placeholder="[0,+∞)"
+                                       isChange="false" class="layui-input" lay-verify="required|rSumValue">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">可选择的投资策略</label>
                             <div class="layui-input-block">
-                                <input type="text" id="rStrategy" name="rStrategy" value="4" class="layui-input" lay-verify="required|rStrategy">
+                                <input type="text" id="rStrategy" name="rStrategy" value="4" class="layui-input"
+                                       lay-verify="required|rStrategy">
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -131,13 +138,15 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">生产时期</label>
                             <div class="layui-input-block">
-                                <input type="text" id="pStage" name="pStage" value="5" isChange="false" class="layui-input" lay-verify="required|pStage">
+                                <input type="text" id="pStage" name="pStage" value="4" isChange="false"
+                                       class="layui-input" lay-verify="required|pStage">
                             </div>
                         </div>
                         <div class="layui-form-item">
                             <label class="layui-form-label">期初存储量</label>
                             <div class="layui-input-block">
-                                <input type="text" id="pStorage" name="pStorage" value="20" placeholder="[0,+∞)" class="layui-input" lay-verify="required|pStorage">
+                                <input type="text" id="pStorage" name="pStorage" value="0" placeholder="[0,+∞)"
+                                       class="layui-input" lay-verify="required|pStorage">
                             </div>
                         </div>
                     </div>
@@ -207,12 +216,13 @@
                     <!--底部悬浮操作按钮-->
                     <div style="height: 5rem;"></div>
                     <div class="fl-box">
-                        <button class="layui-btn layui-btn-lg layui-btn-radius layui-btn-primary" id="calculate" lay-filter="calculate" lay-submit>
-                            <i class="fa fa-play-circle" aria-hidden="true"></i>  计算
+                        <button class="layui-btn layui-btn-lg layui-btn-radius layui-btn-primary" id="calculate"
+                                lay-filter="calculate" lay-submit>
+                            <i class="fa fa-play-circle" aria-hidden="true"></i> 计算
                         </button>
                         <span class="verticalline"></span>
                         <button class="layui-btn layui-btn-lg  layui-btn-radius layui-btn-primary" id="download">
-                            <i class="fa fa-arrow-circle-down" aria-hidden="true"></i>  下载
+                            <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> 下载
                         </button>
                     </div>
                 </form>
@@ -240,7 +250,7 @@
 
             <!--分析结果表-->
             <div class="layui-card" id="resultTableDiv">
-                <div class="layui-card-header" ><span id="resultTitle">背包问题分析结果表</span>
+                <div class="layui-card-header"><span id="resultTitle">背包问题分析结果表</span>
                     <span id="resultShow" style="float: right; cursor: pointer;">
                         <i class="fa fa-bar-chart" aria-hidden="true" id="resultFa"> 打开图表</i>
                     </span>
@@ -282,53 +292,52 @@
         var admin = layui.admin;
 
         var dynamicData;
-        var oldRow,oldCol,fun,packFun,isUpd;
+        var oldRow, oldCol, fun, packFun, isUpd;
 
-        var k_oHead,k_oData,k_mHead,k_mData;
-        var r_oHead,r_oData,p_oHead,p_oData;
-        // var originalHead,originalData;
-        var resultHead,resultData;
+        var k_oHead, k_oData, k_mHead, k_mData;
+        var r_oHead, r_oData, p_oHead, p_oData;
 
-        var resultRHead,resultPHead;
+        var resultHead, resultData;
+        var resultKHead, resultRHead, resultPHead;
 
         //首先获取该页面的初始化数据
         $.ajaxSettings.async = false; //同步获取数据
-        $.getJSON("/assets/js/optimization/dynamic.json",function (data) {
+        $.getJSON("/assets/js/optimization/dynamic.json", function (data) {
             dynamicData = data;
             admin.putTempData('dynamicData', data);
 
-             oldRow = data.oldRow; //初始化原始 行 5 行
-             oldCol = data.oldCol; //初始化原始 列 4 列
-             fun = data.fun; //初始化选择的方法是 1
-             packFun = data.packFun;//初始化背包问题选择的是0-1背包
-             isUpd = data.isUpd;
+            oldRow = data.oldRow; //初始化原始 行 5 行
+            oldCol = data.oldCol; //初始化原始 列 4 列
+            fun = data.fun; //初始化选择的方法是 1
+            packFun = data.packFun;//初始化背包问题选择的是0-1背包
+            isUpd = data.isUpd;
 
-             k_oHead = data.k_oHead;
-             k_oData = data.k_oData;
-             k_mHead = data.k_mHead;
-             k_mData = data.k_mData;
+            k_oHead = data.k_oHead;
+            k_oData = data.k_oData;
+            k_mHead = data.k_mHead;
+            k_mData = data.k_mData;
 
-             r_oHead = data.r_oHead;
-             r_oData = data.r_oData;
+            r_oHead = data.r_oHead;
+            r_oData = data.r_oData;
 
-             p_oHead = data.p_oHead;
-             p_oData = data.p_oData;
+            p_oHead = data.p_oHead;
+            p_oData = data.p_oData;
 
-             // originalHead = k_oHead;
-             // originalData = k_oData;
-             resultHead = data.resultHead;
-             resultData = data.resultData;
+            resultHead = data.resultHead;
+            resultData = data.resultData;
 
-             resultRHead = data.resultRHead;
+            resultKHead = data.resultHead;
+            resultRHead = data.resultRHead;
+            resultPHead = data.resultPHead;
 
         });
 
-        function renderTable(tableId,head,data){
+        function renderTable(tableId, head, data) {
             table.render({
                 elem: tableId,
                 cellMinWidth: 115,
                 cols: [head],
-                data:data
+                data: data
             });
         }
 
@@ -346,68 +355,68 @@
          * 1.初始化参数设置
          * 2.初始化系数设置
          */
-        form.on('radio(function)',function (data) {
+        form.on('radio(function)', function (data) {
             fun = data.value;
-            if(data.value == 1){ //背包问题
+            if (data.value == 1) { //背包问题
                 $("#productParam").addClass("dis-none");
                 $("#resourceParam").addClass("dis-none");
                 $("#knapsackParam").removeClass("dis-none");
-                renderTable('#xishu',k_oHead,k_oData);
-            }else if(data.value == 2){//资源分配问题
+                renderTable('#xishu', k_oHead, k_oData);
+            } else if (data.value == 2) {//资源分配问题
                 $("#productParam").addClass("dis-none");
                 $("#knapsackParam ").addClass("dis-none");
                 $("#resourceParam").removeClass("dis-none");
-                renderTable('#xishu',r_oHead,r_oData);
-            }else if(data.value == 3){ //生产与存储问题
+                renderTable('#xishu', r_oHead, r_oData);
+            } else if (data.value == 3) { //生产与存储问题
                 $("#knapsackParam").addClass("dis-none");
                 $("#resourceParam").addClass("dis-none");
                 $("#productParam").removeClass("dis-none");
-                renderTable('#xishu',p_oHead,p_oData);
+                renderTable('#xishu', p_oHead, p_oData);
             }
         });
 
         //监听背包问题的选择
-        form.on('select(kClass)', function(data){
+        form.on('select(kClass)', function (data) {
             packFun = data.value;
-            if(data.value == 2){//如果选择的是多重背包,那么就需要重新初始化系数表格
-                renderTable('#xishu',k_mHead,k_mData);
-            }else{
-                renderTable('#xishu',k_oHead,k_oData);
+            if (data.value == 2) {//如果选择的是多重背包,那么就需要重新初始化系数表格
+                renderTable('#xishu', k_mHead, k_mData);
+            } else {
+                renderTable('#xishu', k_oHead, k_oData);
             }
         });
 
         // 编辑系数之前先校验数据
-        function checkActAte(fun,item1,item2) {
-            if(fun == 1){
-                if(isEmpty(item2)){
+        function checkActAte(fun, item1, item2) {
+            if (fun == 1) {
+                if (isEmpty(item2)) {
                     layer.msg("物品品种数不能为空!");
                     return false;
-                } else if(!/^[1-9]\d*$/.test(item2)){
+                } else if (!/^[1-9]\d*$/.test(item2)) {
                     layer.msg('物品品种数必须是大于 0 的整数!');
                     return false;
-                }else if(item2 > 100){
+                } else if (item2 > 100) {
                     layer.msg('最多添加 100 个物品品种数!');
                     return false;
                 }
-            }else if(fun == 2){
-                if(isEmpty(item1) || isEmpty(item2)){
+            } else if (fun == 2) {
+                if (isEmpty(item1) || isEmpty(item2)) {
                     layer.msg("项目数和可选择的投资策略不能为空!");
                     return false;
-                }else if(!/^[1-9]\d*$/.test(item1) || !/^[1-9]\d*$/.test(item2)){
+                } else if (!/^[1-9]\d*$/.test(item1) || !/^[1-9]\d*$/.test(item2)) {
                     layer.msg('项目数和可选择的投资策略必须是大于 0 的整数!');
                     return false;
-                }else if(item1 > 100 || item2 > 100){
+                } else if (item1 > 100 || item2 > 100) {
                     layer.msg('最多添加 100 个项目数和可选择的投资策略!');
                     return false;
                 }
-            }else if(fun == 3){
-                if(isEmpty(item1)){
+            } else if (fun == 3) {
+                if (isEmpty(item1)) {
                     layer.msg("生产时期不能为空!");
                     return false;
-                } else if(!/^[1-9]\d*$/.test(item1)){
+                } else if (!/^[1-9]\d*$/.test(item1)) {
                     layer.msg('生产时期必须是大于 0 的整数!');
                     return false;
-                }else if(item1 > 100){
+                } else if (item1 > 100) {
                     layer.msg('最多添加 100 个生产时期!');
                     return false;
                 }
@@ -422,36 +431,36 @@
             var rStrategy = $("#rStrategy").val(); //可选择的投资策略
             var pStage = $("#pStage").val(); //生产时期
 
-            $("#kBreedNum").bind("input propertychange",function(event){
-                if(kBreedNum != $("#kBreedNum").val()){
-                    $("#kBreedNum").attr("isChange","true");
+            $("#kBreedNum").bind("input propertychange", function (event) {
+                if (kBreedNum != $("#kBreedNum").val()) {
+                    $("#kBreedNum").attr("isChange", "true");
                     isUpd = "noup"; //记录不是更新表格操作
-                }else{
-                    $("#kBreedNum").attr("isChange","false");
+                } else {
+                    $("#kBreedNum").attr("isChange", "false");
                 }
             });
-            $("#rItemNum").bind("input propertychange",function(event){
-                if(kBreedNum != $("#rItemNum").val()){
-                    $("#rItemNum").attr("isChange","true");
+            $("#rItemNum").bind("input propertychange", function (event) {
+                if (kBreedNum != $("#rItemNum").val()) {
+                    $("#rItemNum").attr("isChange", "true");
                     isUpd = "noup"; //记录不是更新表格操作
-                }else{
-                    $("#rItemNum").attr("isChange","false");
+                } else {
+                    $("#rItemNum").attr("isChange", "false");
                 }
             });
-            $("#rStrategy").bind("input propertychange",function(event){
-                if(kBreedNum != $("#rStrategy").val()){
-                    $("#rStrategy").attr("isChange","true");
+            $("#rStrategy").bind("input propertychange", function (event) {
+                if (kBreedNum != $("#rStrategy").val()) {
+                    $("#rStrategy").attr("isChange", "true");
                     isUpd = "noup"; //记录不是更新表格操作
-                }else{
-                    $("#rStrategy").attr("isChange","false");
+                } else {
+                    $("#rStrategy").attr("isChange", "false");
                 }
             });
-            $("#pStage").bind("input propertychange",function(event){
-                if(kBreedNum != $("#pStage").val()){
-                    $("#pStage").attr("isChange","true");
+            $("#pStage").bind("input propertychange", function (event) {
+                if (kBreedNum != $("#pStage").val()) {
+                    $("#pStage").attr("isChange", "true");
                     isUpd = "noup"; //记录不是更新表格操作
-                }else{
-                    $("#pStage").attr("isChange","false");
+                } else {
+                    $("#pStage").attr("isChange", "false");
                 }
             });
         })
@@ -459,19 +468,19 @@
         // 添加编辑按钮点击事件
         $('#btnUpd').click(function () {
             //根据选择的方法不同，传递不同的参数
-            var item1 = -1,item2 = -1;
-            if(fun == 1){ //如果选择的是背包问题
+            var item1 = -1, item2 = -1;
+            if (fun == 1) { //如果选择的是背包问题
                 item1 = packFun; //参数1--背包问题类别
                 item2 = $("#kBreedNum").val();//参数2--物品品种数
-            }else if(fun == 2){//如果选择的是资源分配问题
+            } else if (fun == 2) {//如果选择的是资源分配问题
                 item1 = $("#rItemNum").val(); //项目数
                 item2 = $("#rStrategy").val();//可选择的投资策略
-            }else if(fun == 3){//生产与存储问题
+            } else if (fun == 3) {//生产与存储问题
                 item1 = $("#pStage").val();//生产时期
             }
 
             //校验数据
-            if (!checkActAte(fun,item1,item2)) {
+            if (!checkActAte(fun, item1, item2)) {
                 return;
             }
 
@@ -485,60 +494,114 @@
                 yes: function (index, layero) {
                     var ifTable = $("div.layui-layer-content > iframe")[0].contentWindow.layui.table;
                     //在提交数据之前先校验数据
-                    //TODO 校验
                     var cache = ifTable.cache.ratio;
                     var isNull = false;
-                    var isNotNum = false;
-                    // for (var i = 0; i < 10; i++) {
-                    //     var item = cache[i];
-                    //     for (var j = 1; j <= 20; j++) {
-                    //         if (item[j + "_state"].trim().length == 0) {
-                    //             isNull = true;
-                    //             break;
-                    //         } else if (!/^[+-]?\d*\.?\d{0,3}$/.test(item[j + "_state"])) {
-                    //             isNotNum = true;
-                    //             break;
-                    //         }
-                    //     }
-                    // }
+                    var isNoDoubleM = false; //整数或保留3位小数
+                    var isNoInt = false; //非负的整数
+                    var isNoDouble = false; //非负整数或保留3位小数
+
+                    var rag1 = /^[1-9]\d*$/; //大于 0 整数
+                    var rag0 = /^[0-9]\d*$/; //非负的整数
+                    var rag2 = /^[+-]?\d*\.?\d{0,3}$/; //整数或保留3位小数
+                    var rag3 = /^[+]?\d*\.?\d{0,3}$/; //非负整数或保留3位小数
+
+                    // console.log(cache)
+                    // console.log(cache[0])
+
+                    for (var i = 0; i < cache.length; i++) {
+                        var item = cache[i];
+                        //每个模型校验的数据不同
+                        if (fun == 1) { //背包
+                            //先校验非空
+                            if(isEmpty(item['name']) || isEmpty(item['weight']) || isEmpty(item['value']) ){
+                                isNull = true; break;
+                            }
+                            //第2:单位物品重量,第3:单位物品价值需要大于0整数
+                            if (!rag0.test(item['weight']) || !rag0.test(item['value'])) {
+                                isNoInt = true; break;
+                            }
+                        } else if (fun == 2) { //资源分配问题
+                            //先校验非空
+                            if(isEmpty(item['income'])){
+                                isNull = true; break;
+                            }
+                            //检验投资为非负整数
+                            if(!rag0.test(item['income'])){
+                                isNoInt = true; break;
+                            }
+                            //检验所有项目收益为整数或保留3位的小数
+                            var jNull = false,jNoDoubleM = false;
+                            for (var j = 1; j <= $("#rItemNum").val(); j++) {
+                                if(isEmpty(item[j+'_project'])) {
+                                    jNull = true; break;
+                                }else if(!rag2.test(item[j+'_project'])){
+                                    jNoDoubleM = true; break;
+                                }
+                            }
+                            if(jNull){
+                                isNull = true; break;
+                            }
+                            if(jNoDoubleM){
+                                isNoDoubleM = true; break;
+                            }
+                        } else if (fun == 3) {
+                            //先校验非空
+                            if(isEmpty(item['need']) || isEmpty(item['ability']) || isEmpty(item['proCost']) || isEmpty(item['stoCost']) || isEmpty(item['storage']) || isEmpty(item['fixedPCost'])){
+                                isNull = true; break;
+                            }
+                            //再校验非负整数
+                            if(!rag0.test(item['need']) || !rag0.test(item['ability']) || !rag0.test(item['storage'])){
+                                isNoInt = true; break;
+                            }
+                            //再校验非负整数或保留3位的非负小数
+                            if(!rag3.test(item['proCost']) || !rag3.test(item['stoCost']) || !rag3.test(item['fixedPCost'])){
+                                isNoDouble = true; break;
+                            }
+                        }
+                    }
+
                     if (isNull) {
                         layer.msg('数据表中存在字段为空!');
-                    } else if (isNotNum) {
-                        layer.msg('数据表的字段只能为整数或保留3位小数!');
-                    } else { //如果校验通过,提交数据到系数设置的表格中
+                    } else if (isNoInt) {
+                        layer.msg('数据表的字段只能为非负整数!');
+                    } else if(isNoDoubleM){
+                        layer.msg('数据表的字段只能为整数或保留3位的小数!');
+                    }else if(isNoDouble){
+                        layer.msg('数据表的字段只能为非负整数或保留3位的非负小数!');
+                    }else { //如果校验通过,提交数据到系数设置的表格中
                         layer.close(index); //如果设定了yes回调，需进行手工关闭
 
                         var Data = JSON.parse(JSON.stringify(cache));//表格数据
                         //对于表头而言,只有资源分配问题才改变了表头,其他还是原表头
                         var Head;
-                        if(fun == 1){ //背包
-                            if(packFun == 2){
+                        if (fun == 1) { //背包
+                            if (packFun == 2) {
                                 Head = k_mHead;
                                 k_mData = Data;
                                 dynamicData["k_mData"] = k_mData;
-                            }else{
+                            } else {
                                 Head = k_oHead;
                                 k_oData = Data;
                                 dynamicData["k_oData"] = k_oData;
                             }
-                            $("#kBreedNum").attr("isChange","false");
-                        }else if(fun == 2){ //资源分配
-                            if(isUpd == "isup"){ //如果是更新数据表,表头不变
+                            $("#kBreedNum").attr("isChange", "false");
+                        } else if (fun == 2) { //资源分配
+                            if (isUpd == "isup") { //如果是更新数据表,表头不变
                                 Head = r_oHead;
-                            }else if(isUpd == "noup"){ //如果是一直新表,则表头改变
+                            } else if (isUpd == "noup") { //如果是一直新表,则表头改变
                                 Head = ifTable.head;
                                 r_oHead = ifTable.head;
                             }
                             r_oData = Data;
                             dynamicData["r_oHead"] = r_oHead;
                             dynamicData["r_oData"] = r_oData;
-                            $("#rItemNum").attr("isChange","false");
-                            $("#rStrategy").attr("isChange","false");
-                        }else if(fun == 3){ //生产存储
+                            $("#rItemNum").attr("isChange", "false");
+                            $("#rStrategy").attr("isChange", "false");
+                        } else if (fun == 3) { //生产存储
                             Head = p_oHead;
                             p_oData = Data;
                             dynamicData["p_oData"] = p_oData;
-                            $("#pStage").attr("isChange","false");
+                            $("#pStage").attr("isChange", "false");
                         }
 
                         // console.log(Head);
@@ -554,7 +617,6 @@
                         isUpd = "isup";
                         //更新dynamicData数据
                         admin.putTempData('dynamicData', dynamicData);
-
                     }
                 },
                 btn2: function (index, layero) { //取消按钮
@@ -567,61 +629,63 @@
          * 自定义表单验证规则
          */
         form.verify({
-            kBreedNum:function(value,item){
-                if($("#kBreedNum").attr("isChange") == "true"){
-                    return '物品品种数已改变，请重新设置系数!';
-                }
-                if(!/^[1-9]\d*$/.test(value)){
-                    return '行动方案必须是大于 0 的整数!';
-                }else if(value > 100 ){
+            kBreedNum: function (value, item) {
+                if (!/^[1-9]\d*$/.test(value)) {
+                    return '物品品种数必须是大于 0 的整数!';
+                } else if (value > 100) {
                     return '最多添加 100 个行动方案!';
                 }
+                if ($("#kBreedNum").attr("isChange") == "true") {
+                    return '物品品种数已改变，请重新设置系数!';
+                }
             },
-            kVolume:function (value,item) {
-                if(!/^[1-9]\d*$/.test(value)){
+            kVolume: function (value, item) {
+                if (!/^[1-9]\d*$/.test(value)) {
                     return '容器容量必须是大于 0 的整数!';
-                }else if(value > 10000 ){
-                    return '最多添加 10000 个自然状态!';
+                } else if (value > 1000000) {
+                    return '容器容量不能超过 1000000!';
                 }
             },
-            rItemNum:function(value,item){
-                if($("#rItemNum").attr("isChange") == "true"){
-                    return '项目数已改变，请重新设置系数!';
-                }
-                if(!/^[1-9]\d*$/.test(value)){
+            rItemNum: function (value, item) {
+                if (!/^[1-9]\d*$/.test(value)) {
                     return '项目数必须是大于 0 的整数!';
-                }else if(value > 100 ){
+                } else if (value > 100) {
                     return '最多添加 100 个项目数!';
                 }
+                if ($("#rItemNum").attr("isChange") == "true") {
+                    return '项目数已改变，请重新设置系数!';
+                }
             },
-            rSumValue:function (value,item) {
-                if(!/^[1-9]\d*$/.test(value)){
+            rSumValue: function (value, item) {
+                if (!/^[1-9]\d*$/.test(value)) {
                     return '资源总数量必须是大于 0 的整数!';
+                } else if (value > 1000000) {
+                    return '资源总数量不能超过 1000000!';
                 }
             },
-            rStrategy:function(value,item){
-                if($("#rStrategy").attr("isChange") == "true"){
-                    return '可选择的投资策略已改变，请重新设置系数!';
-                }
-                if(!/^[1-9]\d*$/.test(value)){
+            rStrategy: function (value, item) {
+                if (!/^[1-9]\d*$/.test(value)) {
                     return '可选择的投资策略必须是大于 0 的整数!';
-                }else if(value > 100 ){
+                } else if (value > 100) {
                     return '最多添加 100 个可选择的投资策略!';
                 }
-            },
-            pStage:function(value,item){
-                if($("#pStage").attr("isChange") == "true"){
-                    return '生产时期已改变，请重新设置系数!';
+                if ($("#rStrategy").attr("isChange") == "true") {
+                    return '可选择的投资策略已改变，请重新设置系数!';
                 }
-                if(!/^[1-9]\d*$/.test(value)){
+            },
+            pStage: function (value, item) {
+                if (!/^[1-9]\d*$/.test(value)) {
                     return '生产时期必须是大于 0 的整数!';
-                }else if(value > 100 ){
+                } else if (value > 100) {
                     return '最多添加 100 个生产时期!';
                 }
+                if ($("#pStage").attr("isChange") == "true") {
+                    return '生产时期已改变，请重新设置系数!';
+                }
             },
-            pStorage:function (value,item) {
-                if(!/^[1-9]\d*$/.test(value)){
-                    return '期初存储量必须是大于 0 的整数!';
+            pStorage: function (value, item) {
+                if (!/^[0-9]\d*$/.test(value)) {
+                    return '期初存储量必须是非负整数!';
                 }
             },
         })
@@ -633,18 +697,17 @@
             $("input[name='function']:checked").each(function () {
                 functions.push($(this).val());
             })
-            var hopeful = data.field.hopeful;
             layer.load(2);
             $.post('dynamic/calculate', {
-                fun:fun,
-                packFun:packFun,
-                kBreedNum:data.field.kBreedNum,
-                kVolume:data.field.kVolume,
-                rItemNum:data.field.rItemNum,
-                rSumValue:data.field.rSumValue,
-                rStrategy:data.field.rStrategy,
-                pStage:data.field.pStage,
-                pStorage:data.field.pStorage,
+                fun: fun,
+                packFun: packFun,
+                kBreedNum: data.field.kBreedNum,
+                kVolume: data.field.kVolume,
+                rItemNum: data.field.rItemNum,
+                rSumValue: data.field.rSumValue,
+                rStrategy: data.field.rStrategy,
+                pStage: data.field.pStage,
+                pStorage: data.field.pStorage,
                 ratioTableData: JSON.stringify(table.cache.xishu),
             }, function (data) {
                 layer.closeAll('loading');
@@ -663,29 +726,31 @@
          * 根据不同的 key 渲染出不同的结果表
          * @param data
          */
-        function renderTables(data){
-            var originalHead,originalData;
+        function renderTables(data) {
+            var originalHead, originalData;
             //首先确定原始数据表的表头及数据
-            if(fun == 1){ // 背包问题
-                if(packFun == 2){
-                    originalHead =  k_mHead;
+            if (fun == 1) { // 背包问题
+                if (packFun == 2) {
+                    originalHead = k_mHead;
                     originalData = k_mData;
-                }else{
-                    originalHead =  k_oHead;
+                } else {
+                    originalHead = k_oHead;
                     originalData = k_oData;
                 }
-            }else if(fun == 2){ //资源分配问题
-                originalHead =  r_oHead;
+                resultHead = resultKHead;
+            } else if (fun == 2) { //资源分配问题
+                originalHead = r_oHead;
                 originalData = r_oData;
 
                 resultHead = resultRHead;
 
-            }else if(fun == 3){ //生成与存储问题
-                originalHead =  p_oHead;
+            } else if (fun == 3) { //生产与存储问题
+                originalHead = p_oHead;
                 originalData = p_oData;
 
                 resultHead = resultPHead;
-            };
+            }
+            ;
             // console.log(originalData)
             // console.log(originalHead)
             //渲染原始数据表
@@ -708,20 +773,20 @@
 
         }
 
-        function renderCharts(chartsData,chartsName,action,state,CalName) {
+        function renderCharts(chartsData, chartsName, action, state, CalName) {
             var visualMapMax = chartsData[0]["max"];
-            if(isEmpty(visualMapMax)){
+            if (isEmpty(visualMapMax)) {
                 visualMapMax = 400;
             }
             var newX = new Array();
             for (var i = 1; i <= action; i++) {
-                newX.push("行动方案"+i);
+                newX.push("行动方案" + i);
             }
             var newY = new Array();
             for (var i = 1; i <= state; i++) {
-                newY.push("自然状态"+i);
+                newY.push("自然状态" + i);
             }
-            if(isNotEmpty(CalName)){
+            if (isNotEmpty(CalName)) {
                 newY.push(CalName);
             }
             var newData = new Array();
@@ -731,20 +796,20 @@
 
                 for (var j = 1; j <= state; j++) {
                     var item = new Array();
-                    item.push("行动方案"+i)
-                    item.push("自然状态"+j);
-                    item.push(chartsData[i-1][j+"_state"]);
-                    resultData = chartsData[i-1]["result"];
+                    item.push("行动方案" + i)
+                    item.push("自然状态" + j);
+                    item.push(chartsData[i - 1][j + "_state"]);
+                    resultData = chartsData[i - 1]["result"];
                     newData.push(item);
                 }
-                if(isNotEmpty(CalName)){
-                    result.push("行动方案"+i);
+                if (isNotEmpty(CalName)) {
+                    result.push("行动方案" + i);
                     result.push(CalName);
                     var index = resultData.search("(最优方案)");
-                    if(index != -1){
-                        var newStr = resultData.substring(0,index);
+                    if (index != -1) {
+                        var newStr = resultData.substring(0, index);
                         result.push(parseFloat(newStr));
-                    }else{
+                    } else {
                         result.push(parseFloat(resultData));
                     }
 
@@ -761,14 +826,14 @@
                 toolbox: {
                     show: true, //开启工具箱组件
                     feature: {  //具体用到的功能配置
-                        dataView:{
-                            show:true   //开启数据视图
+                        dataView: {
+                            show: true   //开启数据视图
                         },
-                        restore:{
-                            show:true   //还原
+                        restore: {
+                            show: true   //还原
                         },
-                        saveAsImage:{
-                            show:true   //保存图片
+                        saveAsImage: {
+                            show: true   //保存图片
                         }
                     }
                 },
@@ -785,15 +850,15 @@
                     data: newX
                 },
                 yAxis3D: {
-                    name:'',
+                    name: '',
                     type: 'category',
                     data: newY
                 },
                 zAxis3D: {
-                    name:'收益值',
+                    name: '收益值',
                     type: 'value'
                 },
-                grid:{
+                grid: {
                     top: '20%', bottom: '20%'
                 },
 
@@ -847,14 +912,14 @@
             chartsName.resize();
         }
 
-        function initChartBut(showName,divName,faName,chartsName){
+        function initChartBut(showName, divName, faName, chartsName) {
             $(showName).click(function () {
                 var isExapnd = $(divName).hasClass('dis-none');
-                if(isExapnd){ //如果是隐藏的,则打开图表
+                if (isExapnd) { //如果是隐藏的,则打开图表
                     $(divName).removeClass('dis-none');
                     $(faName).text(" 关闭图表");
                     chartsName.resize();
-                }else {
+                } else {
                     $(divName).addClass('dis-none');
                     $(faName).text(" 打开图表");
                 }

@@ -66,9 +66,6 @@ public class RiskController {
         riskVo.setMatrix(tableData); //将转换的二维数组对象保存到 VO 对象中
 
         JsonResult calculate = riskService.calculate(riskVo); //计算并返回计算结果
-
-        CommonUtil.retState(calculate); //根据计算结果大小设置返回 code 参数
-
         return calculate;
 
     }
