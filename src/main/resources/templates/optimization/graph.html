@@ -45,108 +45,70 @@
                 <i id="fl-btn-icon" class="layui-icon layui-icon-right"></i>
             </span>
             <div id="fl-btn-l" class="layui-card scroll">
-                <form class="layui-form" id="dynamicForm" lay-filter="dynamicForm">
+                <form class="layui-form" id="graphForm" lay-filter="graphForm">
                     <!--方法选择-->
                     <div class="layui-card-header newheader">方法选择</div>
                     <div class="layui-card-body">
                         <div class="layui-form-item" pane="">
                             <div class="layui-input-block">
-                                <input type="radio" name="function" value="1" lay-filter="function" title="背包问题"
+                                <input type="radio" name="function" value="1" lay-filter="function" title="最短路径问题"
                                        checked="">
                             </div>
                             <div class="layui-input-block">
-                                <input type="radio" name="function" value="2" lay-filter="function" title="资源分配问题">
+                                <input type="radio" name="function" value="2" lay-filter="function" title="最小生成树">
                             </div>
                             <div class="layui-input-block">
-                                <input type="radio" name="function" value="3" lay-filter="function" title="生产与存储问题">
+                                <input type="radio" name="function" value="3" lay-filter="function" title="最大流问题">
+                            </div>
+                            <div class="layui-input-block">
+                                <input type="radio" name="function" value="4" lay-filter="function" title="最小费用最大流问题">
                             </div>
                         </div>
                     </div>
                     <!--参数设置-->
                     <div class="layui-card-header newheader">参数设置</div>
-                    <!--背包问题参数设置-->
-                    <div class="layui-card-body" id="knapsackParam">
+                    <!--最短路径问题参数设置-->
+                    <div class="layui-card-body minPathParam">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">背包问题类别</label>
+                            <label class="layui-form-label">弧个数</label>
                             <div class="layui-input-block">
-                                <select name="kClass" lay-filter="kClass">
-                                    <option value="1" selected="">0-1背包</option>
-                                    <option value="2">多重背包</option>
-                                    <option value="3">完全背包</option>
-                                </select>
+                                <input type="text" id="mpArcNum" name="mpArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|mpArcNum">
                             </div>
                         </div>
                         <div class="layui-form-item">
-                            <label class="layui-form-label">物品品种数</label>
+                            <label class="layui-form-label">图类型</label>
                             <div class="layui-input-block">
-                                <input type="text" id="kBreedNum" name="kBreedNum" value="5" isChange="false"
-                                       class="layui-input" lay-verify="required|kBreedNum">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">容器容量</label>
-                            <div class="layui-input-block">
-                                <input type="text" id="kVolume" name="kVolume" value="800" class="layui-input"
-                                       lay-verify="required|kVolume">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">生成方案数</label>
-                            <div class="layui-input-block">
-                                <select name="kPlan" lay-filter="kPlan">
-                                    <option value="0" selected="">单个</option>
-                                    <option value="1">全部</option>
+                                <select name="gType" lay-filter="gType">
+g                                    <option value="1">有向图</option>
+                                     <option value="2">无向图</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <!--资源分配问题参数设置-->
-                    <div class="layui-card-body  dis-none" id="resourceParam">
+                    <!--最小生成树参数设置-->
+                    <div class="layui-card-body minTreeParam dis-none">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">项目数</label>
+                            <label class="layui-form-label">弧个数</label>
                             <div class="layui-input-block">
-                                <input type="text" id="rItemNum" name="rItemNum" value="3" isChange="false"
-                                       class="layui-input" lay-verify="required|rItemNum">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">资源总数量</label>
-                            <div class="layui-input-block">
-                                <input type="text" id="rSumValue" name="rSumValue" value="8" placeholder="[0,+∞)"
-                                       isChange="false" class="layui-input" lay-verify="required|rSumValue">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">可选择的投资策略</label>
-                            <div class="layui-input-block">
-                                <input type="text" id="rStrategy" name="rStrategy" value="4" class="layui-input"
-                                       lay-verify="required|rStrategy">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">生成方案数</label>
-                            <div class="layui-input-block">
-                                <select name="rPlan" lay-filter="rPlan">
-                                    <option value="0" selected="">单个</option>
-                                    <option value="1">全部</option>
-                                </select>
+                                <input type="text" id="mtArcNum" name="mtArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|mtArcNum">
                             </div>
                         </div>
                     </div>
-                    <!--生产与存储参数设置-->
-                    <div class="layui-card-body  dis-none" id="productParam">
+                    <!--最大流问题参数设置-->
+                    <div class="layui-card-body maxFlowParam dis-none">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">生产时期</label>
+                            <label class="layui-form-label">弧个数</label>
                             <div class="layui-input-block">
-                                <input type="text" id="pStage" name="pStage" value="4" isChange="false"
-                                       class="layui-input" lay-verify="required|pStage">
+                                <input type="text" id="mfArcNum" name="mfArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|mfArcNum">
                             </div>
                         </div>
+                    </div>
+                    <!--最小费用最大流问题参数设置-->
+                    <div class="layui-card-body minCostMaxFlowParam dis-none">
                         <div class="layui-form-item">
-                            <label class="layui-form-label">期初存储量</label>
+                            <label class="layui-form-label">弧个数</label>
                             <div class="layui-input-block">
-                                <input type="text" id="pStorage" name="pStorage" value="0" placeholder="[0,+∞)"
-                                       class="layui-input" lay-verify="required|pStorage">
+                                <input type="text" id="mfArcNum" name="mfArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|mfArcNum">
                             </div>
                         </div>
                     </div>
@@ -163,51 +125,122 @@
                             <table class="layui-hide" lay-size="sm" id="xishu"></table>
                         </div>
                     </div>
+
+                    <hr class="layui-bg-green">
+                    <!--参数配置-->
+
+                    <!--最短路径问题参数配置-->
+                    <div class="layui-card-body minPathParam">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">节点数</label>
+                            <div class="layui-input-block">
+                                <input type="text" disabled="disabled" id="mpNodeNum" name="mpNodeNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|nodeNum">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">起点</label>
+                            <div class="layui-input-block">
+                                <select name="gType" lay-filter="mpStart">
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D" selected>D</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">终点</label>
+                            <div class="layui-input-block">
+                                <select name="gType" lay-filter="mpEnd">
+                                    <option value="A">A</option>
+                                    <option value="B"  selected>B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!--最小生成树参数设置-->
+                    <div class="layui-card-body minTreeParam dis-none">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">节点数</label>
+                            <div class="layui-input-block">
+                                <input type="text" disabled="disabled" id="mtNodeNum" name="mtNodeNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|nodeNum">
+                            </div>
+                        </div>
+                    </div>
+                    <!--最大流问题参数设置-->
+                    <div class="layui-card-body maxFlowParam dis-none">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">节点数</label>
+                            <div class="layui-input-block">
+                                <input type="text" disabled="disabled" id="mfNodeNum" name="mfNodeNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|nodeNum">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">起点</label>
+                            <div class="layui-input-block">
+                                <select name="gType" lay-filter="mfStart">
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D" selected>D</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">终点</label>
+                            <div class="layui-input-block">
+                                <select name="gType" lay-filter="mfEnd">
+                                    <option value="A">A</option>
+                                    <option value="B" selected>B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!--最小费用最大流问题参数设置-->
+                    <div class="layui-card-body minCostMaxFlowParam dis-none">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">节点数</label>
+                            <div class="layui-input-block">
+                                <input type="text" disabled="disabled" id="mcNodeNum" name="mcNodeNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|nodeNum">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">起点</label>
+                            <div class="layui-input-block">
+                                <select name="gType" lay-filter="mcStart">
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D" selected>D</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">终点</label>
+                            <div class="layui-input-block">
+                                <select name="gType" lay-filter="mcEnd">
+                                    <option value="A">A</option>
+                                    <option value="B" selected>B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
                     <!--参数说明-->
                     <div class="layui-card-header newheader">参数说明</div>
                     <div class="layui-card-body">
                         <ul class="layui-timeline">
                             <li class="timeline-item">
                                 <div class="layui-text">
-                                    <h3 class="layui-timeline-title">背包问题</h3>
                                     <ul>
-                                        <li>物品品种数表示可选择的物品有多少种</li>
-                                        <li>容器容量表示容器最多容纳的物品重量或体积</li>
-                                        <li>物品限量每种物品最多可取的数量</li>
-                                        <li>单位物品重量表示每个物品的重量</li>
-                                        <li>单位物品价值表示每个物品价值</li>
-                                        <li>最大价值表示容器最终所容纳物品的价值</li>
-                                        <li>生成方案数可能有多种，例如有固定的资金，投资A项目和C项目，或者投资B项目和D项目，最终得到的收益是一样的</li>
-                                    </ul>
-                                </div>
-                            </li>
-
-                            <li class="timeline-item">
-                                <div class="layui-text">
-                                    <h3 class="layui-timeline-title">资源分配问题</h3>
-                                    <ul>
-                                        <li>项目数表示将资源分配给多少项目</li>
-                                        <li>资源总数量表示可用于分配的资源总量有多少</li>
-                                        <li>可选择的投资策略表示有多少种资源分配策略</li>
-                                        <li>投入资源表示每种投资策略投入的资源数</li>
-                                        <li>收益表示每个项目在每种投入资源所获得的收益</li>
-                                    </ul>
-                                </div>
-                            </li>
-
-                            <li class="timeline-item">
-                                <div class="layui-text">
-                                    <h3 class="layui-timeline-title">生产与存储问题</h3>
-                                    <ul>
-                                        <li>生产时期表示考虑多少个生产周期</li>
-                                        <li>期初存储量表示在开始生产前仓库中有多少库存</li>
-                                        <li>需求量表示每个时期顾客需要多少产品</li>
-                                        <li>生产能力表示每个时期能生产多少产品</li>
-                                        <li>需求量表示每个时期顾客需要多少产品</li>
-                                        <li>单位产品生产成本表示每生产一件产品所产生的费用</li>
-                                        <li>单位产品存储成本表示每存储一件产品所产生的保管费</li>
-                                        <li>最大存储量表示仓库可以容纳或者为降低存储成本限定的最大库存量</li>
-                                        <li>固定生产成本不因生产产品数量的增加而增加，如厂房和机器设备的折旧、房屋租金等</li>
+                                        <li>权数：实际中权可以代表两点之间的距离、费用、利润、时间、容量等。</li>
+                                        <li>容量：单位时间内弧(I,j)的最大通过能力。</li>
                                     </ul>
                                 </div>
                             </li>
@@ -248,9 +281,9 @@
                 </div>
             </div>
 
-            <!--分析结果表-->
+            <!--最终结果表-->
             <div class="layui-card" id="resultTableDiv">
-                <div class="layui-card-header"><span id="resultTitle">背包问题分析结果表</span>
+                <div class="layui-card-header"><span id="resultTitle">最终结果表</span>
                     <span id="resultShow" style="float: right; cursor: pointer;">
                         <i class="fa fa-bar-chart" aria-hidden="true" id="resultFa"> 打开图表</i>
                     </span>
@@ -291,45 +324,39 @@
         var util = layui.util;
         var admin = layui.admin;
 
-        var dynamicData;
-        var oldRow, oldCol, fun, packFun, isUpd;
+        var graphData;
+        var oldRow, oldCol, fun, isUpd;
 
-        var k_oHead, k_oData, k_mHead, k_mData;
-        var r_oHead, r_oData, p_oHead, p_oData;
+        var mpHead, mpData, mtHead, mtData, mfHead, mfData,mcHead, mcData;
 
         var resultHead, resultData;
-        var resultKHead, resultRHead, resultPHead;
+        var resultMfHead, resultMcHead;
 
         //首先获取该页面的初始化数据
         $.ajaxSettings.async = false; //同步获取数据
-        $.getJSON("/assets/js/optimization/dynamic.json", function (data) {
-            dynamicData = data;
-            admin.putTempData('dynamicData', data);
+        $.getJSON("/assets/js/optimization/graph.json", function (data) {
+            graphData = data;
+            admin.putTempData('graphData', data);
 
             oldRow = data.oldRow; //初始化原始 行 5 行
             oldCol = data.oldCol; //初始化原始 列 4 列
             fun = data.fun; //初始化选择的方法是 1
-            packFun = data.packFun;//初始化背包问题选择的是0-1背包
             isUpd = data.isUpd;
 
-            k_oHead = data.k_oHead;
-            k_oData = data.k_oData;
-            k_mHead = data.k_mHead;
-            k_mData = data.k_mData;
-
-            r_oHead = data.r_oHead;
-            r_oData = data.r_oData;
-
-            p_oHead = data.p_oHead;
-            p_oData = data.p_oData;
+            mpHead = data.mpHead; //最小路径
+            mpData = data.mpData;
+            mtHead = data.mpHead; //最小生成树
+            mtData = data.mpData;
+            mfHead = data.mfHead; //最大流
+            mfData = data.mfData;
+            mcHead = data.mcHead; //最大流最小费用
+            mcData = data.mcData;
 
             resultHead = data.resultHead;
             resultData = data.resultData;
 
-            resultKHead = data.resultHead;
-            resultRHead = data.resultRHead;
-            resultPHead = data.resultPHead;
-
+            resultMfHead = data.resultMfHead; //最大流结果表头
+            resultMcHead = data.resultMcHead; //最大流最小费用表头
         });
 
         function renderTable(tableId, head, data) {
@@ -354,34 +381,34 @@
         /**单选点击事件
          * 1.初始化参数设置
          * 2.初始化系数设置
+         * 3.初始化参数配置
          */
         form.on('radio(function)', function (data) {
             fun = data.value;
-            if (data.value == 1) { //背包问题
-                $("#productParam").addClass("dis-none");
-                $("#resourceParam").addClass("dis-none");
-                $("#knapsackParam").removeClass("dis-none");
-                renderTable('#xishu', k_oHead, k_oData);
-            } else if (data.value == 2) {//资源分配问题
-                $("#productParam").addClass("dis-none");
-                $("#knapsackParam ").addClass("dis-none");
-                $("#resourceParam").removeClass("dis-none");
-                renderTable('#xishu', r_oHead, r_oData);
-            } else if (data.value == 3) { //生产与存储问题
-                $("#knapsackParam").addClass("dis-none");
-                $("#resourceParam").addClass("dis-none");
-                $("#productParam").removeClass("dis-none");
-                renderTable('#xishu', p_oHead, p_oData);
-            }
-        });
-
-        //监听背包问题的选择
-        form.on('select(kClass)', function (data) {
-            packFun = data.value;
-            if (data.value == 2) {//如果选择的是多重背包,那么就需要重新初始化系数表格
-                renderTable('#xishu', k_mHead, k_mData);
-            } else {
-                renderTable('#xishu', k_oHead, k_oData);
+            if (data.value == 1) { //最短路径问题
+                $(".minTreeParam").addClass("dis-none");
+                $(".maxFlowParam").addClass("dis-none");
+                $(".minCostMaxFlowParam").addClass("dis-none");
+                $(".minPathParam").removeClass("dis-none");
+                renderTable('#xishu', mpHead, mpData);
+            } else if (data.value == 2) {//最小生成树
+                $(".minPathParam").addClass("dis-none");
+                $(".maxFlowParam").addClass("dis-none");
+                $(".minCostMaxFlowParam").addClass("dis-none");
+                $(".minTreeParam").removeClass("dis-none");
+                renderTable('#xishu', mtHead, mtData);
+            } else if (data.value == 3) { //最大流问题
+                $(".minPathParam").addClass("dis-none");
+                $(".minTreeParam").addClass("dis-none");
+                $(".minCostMaxFlowParam").addClass("dis-none");
+                $(".maxFlowParam").removeClass("dis-none");
+                renderTable('#xishu', mfHead, mfData);
+            } else if (data.value == 4){ //最小费用最大流问题
+                $(".minPathParam").addClass("dis-none");
+                $(".maxFlowParam").addClass("dis-none");
+                $(".minTreeParam").addClass("dis-none");
+                $(".minCostMaxFlowParam").removeClass("dis-none");
+                renderTable('#xishu', mcHead, mcData);
             }
         });
 
@@ -513,49 +540,60 @@
                         //每个模型校验的数据不同
                         if (fun == 1) { //背包
                             //先校验非空
-                            if(isEmpty(item['name']) || isEmpty(item['weight']) || isEmpty(item['value']) ){
-                                isNull = true; break;
+                            if (isEmpty(item['name']) || isEmpty(item['weight']) || isEmpty(item['value'])) {
+                                isNull = true;
+                                break;
                             }
                             //第2:单位物品重量,第3:单位物品价值需要大于0整数
                             if (!rag0.test(item['weight']) || !rag0.test(item['value'])) {
-                                isNoInt = true; break;
+                                isNoInt = true;
+                                break;
                             }
                         } else if (fun == 2) { //资源分配问题
                             //先校验非空
-                            if(isEmpty(item['income'])){
-                                isNull = true; break;
+                            if (isEmpty(item['income'])) {
+                                isNull = true;
+                                break;
                             }
                             //检验投资为非负整数
-                            if(!rag0.test(item['income'])){
-                                isNoInt = true; break;
+                            if (!rag0.test(item['income'])) {
+                                isNoInt = true;
+                                break;
                             }
                             //检验所有项目收益为整数或保留3位的小数
-                            var jNull = false,jNoDoubleM = false;
+                            var jNull = false, jNoDoubleM = false;
                             for (var j = 1; j <= $("#rItemNum").val(); j++) {
-                                if(isEmpty(item[j+'_project'])) {
-                                    jNull = true; break;
-                                }else if(!rag2.test(item[j+'_project'])){
-                                    jNoDoubleM = true; break;
+                                if (isEmpty(item[j + '_project'])) {
+                                    jNull = true;
+                                    break;
+                                } else if (!rag2.test(item[j + '_project'])) {
+                                    jNoDoubleM = true;
+                                    break;
                                 }
                             }
-                            if(jNull){
-                                isNull = true; break;
+                            if (jNull) {
+                                isNull = true;
+                                break;
                             }
-                            if(jNoDoubleM){
-                                isNoDoubleM = true; break;
+                            if (jNoDoubleM) {
+                                isNoDoubleM = true;
+                                break;
                             }
                         } else if (fun == 3) {
                             //先校验非空
-                            if(isEmpty(item['need']) || isEmpty(item['ability']) || isEmpty(item['proCost']) || isEmpty(item['stoCost']) || isEmpty(item['storage']) || isEmpty(item['fixedPCost'])){
-                                isNull = true; break;
+                            if (isEmpty(item['need']) || isEmpty(item['ability']) || isEmpty(item['proCost']) || isEmpty(item['stoCost']) || isEmpty(item['storage']) || isEmpty(item['fixedPCost'])) {
+                                isNull = true;
+                                break;
                             }
                             //再校验非负整数
-                            if(!rag0.test(item['need']) || !rag0.test(item['ability']) || !rag0.test(item['storage'])){
-                                isNoInt = true; break;
+                            if (!rag0.test(item['need']) || !rag0.test(item['ability']) || !rag0.test(item['storage'])) {
+                                isNoInt = true;
+                                break;
                             }
                             //再校验非负整数或保留3位的非负小数
-                            if(!rag3.test(item['proCost']) || !rag3.test(item['stoCost']) || !rag3.test(item['fixedPCost'])){
-                                isNoDouble = true; break;
+                            if (!rag3.test(item['proCost']) || !rag3.test(item['stoCost']) || !rag3.test(item['fixedPCost'])) {
+                                isNoDouble = true;
+                                break;
                             }
                         }
                     }
@@ -564,11 +602,11 @@
                         layer.msg('数据表中存在字段为空!');
                     } else if (isNoInt) {
                         layer.msg('数据表的字段只能为非负整数!');
-                    } else if(isNoDoubleM){
+                    } else if (isNoDoubleM) {
                         layer.msg('数据表的字段只能为整数或保留3位的小数!');
-                    }else if(isNoDouble){
+                    } else if (isNoDouble) {
                         layer.msg('数据表的字段只能为非负整数或保留3位的非负小数!');
-                    }else { //如果校验通过,提交数据到系数设置的表格中
+                    } else { //如果校验通过,提交数据到系数设置的表格中
                         layer.close(index); //如果设定了yes回调，需进行手工关闭
 
                         var Data = JSON.parse(JSON.stringify(cache));//表格数据
@@ -943,23 +981,23 @@
         table.render({
             elem: '#xishu',
             cellMinWidth: 115,
-            cols: [k_oHead],
-            data: k_oData
+            cols: [mpHead],
+            data: mpData
         });
 
         //原始数据表
         table.render({
             elem: '#originalTable',
             cellMinWidth: 115,
-            cols: [k_oHead],
-            data: k_oData
+            cols: [mpHead],
+            data: mpData
         });
         // renderCharts(originalData,incomeCharts,oldAction,oldState);
 
         //分析结果表
         table.render({
             elem: '#resultTable',
-            cellMinWidth: 130,
+            cellMinWidth: 245,
             cols: [resultHead],
             data: resultData
         });

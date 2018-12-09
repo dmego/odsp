@@ -4,7 +4,6 @@ import cn.dmego.odsp.algorithms.service.DynamicService;
 import cn.dmego.odsp.algorithms.utils.CommonUtil;
 import cn.dmego.odsp.algorithms.vo.DynamicVo;
 import cn.dmego.odsp.common.JsonResult;
-import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
