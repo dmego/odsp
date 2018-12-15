@@ -13,6 +13,8 @@ import lombok.Data;
 @Data
 public class Graph {
 
+    private EData[] edges; //边数组
+
     //邻接表中对应的链表顶点
     private class ENode{
         int ivex;      //该边所指向顶点的位置
@@ -31,6 +33,8 @@ public class Graph {
 
     public Graph(String[] vexs, EData[] edges) {
 
+        this.edges = edges;
+
         // 初始化"顶点数"和"边数"
         int vlen = vexs.length;
         int elen = edges.length;
@@ -47,9 +51,9 @@ public class Graph {
         mEdgNum = elen;
         for (int i = 0; i < elen; i++) {
             // 读取边的起始顶点和结束顶点
-            String c1 = edges[i].start;
-            String c2 = edges[i].end;
-            double weight = edges[i].weight;
+            String c1 = edges[i].getStart();
+            String c2 = edges[i].getEnd();
+            double weight = edges[i].getWeight();
 
             // 读取边的起始顶点和结束顶点
             int p1 = getPosition(c1);
@@ -80,7 +84,6 @@ public class Graph {
      */
     private void linkLast(ENode list, ENode node) {
         ENode p = list;
-
         while(p.nextEdge!=null)
             p = p.nextEdge;
         p.nextEdge = node;
@@ -89,11 +92,52 @@ public class Graph {
     /*
      * 返回ch位置
      */
-    private int getPosition(String ch) {
+    public int getPosition(String ch) {
         for(int i=0; i<mVexs.length; i++)
-            if(mVexs[i].data==ch)
+            if(mVexs[i].data.equals(ch))
                 return i;
         return -1;
+    }
+    /*
+     * 获取i的终点
+     */
+    public int getEnd(int[] vends, int i) {
+        while (vends[i] != 0)
+            i = vends[i];
+        return i;
+    }
+
+    /*
+     * 深度优先搜索遍历图的递归实现
+     */
+    private void DFS(int i, boolean[] visited) {
+        ENode node;
+        visited[i] = true;
+        node = mVexs[i].firstEdge;
+        while (node != null) {
+            if (!visited[node.ivex])
+                DFS(node.ivex, visited);
+            node = node.nextEdge;
+        }
+    }
+
+    /*
+     * 深度优先搜索遍历图
+     * 返回连通分量,判断图是否连通
+     */
+    public int DFS() {
+        boolean[] visited = new boolean[mVexs.length];// 顶点访问标记
+
+        // 初始化所有顶点都没有被访问
+        for (int i = 0; i < mVexs.length; i++)
+            visited[i] = false;
+        int count = 0;
+        for (int i = 0; i < mVexs.length; i++) {
+            if (!visited[i])
+                count++;
+            DFS(i, visited);
+        }
+        return count;
     }
 
 }

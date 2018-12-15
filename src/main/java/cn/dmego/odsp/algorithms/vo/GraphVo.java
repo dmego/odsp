@@ -1,5 +1,7 @@
 package cn.dmego.odsp.algorithms.vo;
 
+import cn.dmego.odsp.algorithms.model.EData;
+import cn.dmego.odsp.algorithms.model.Graph;
 import lombok.Data;
 
 /**
@@ -17,23 +19,15 @@ public class GraphVo {
 
     private Integer gType; //选择的图类型
 
-    private Integer mpArcNum;
-    private String mpStart;
-    private String mpEnd;
+    private Integer arcNum; //边,弧的条数
 
-    private Integer mfArcNum;
-    private String mfStart;
-    private String mfEnd;
+    private String start; //起点
 
-    private Integer mtArcNum;
-    private String mtStart;
-    private String mtEnd;
-
-    private Integer mcArcNum;
-    private String mcStart;
-    private String mcEnd;
+    private String end; //终点
 
     private String ratioTableData; //json 字符串格式的表格数据
+
+    private Graph graph;
 
     private Integer[][] matrix; //矩阵数据数组
 

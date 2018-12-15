@@ -454,7 +454,8 @@
                             elem: '#xishu',
                             cellMinWidth: 115,
                             cols: [ifTable.head],
-                            data: Data
+                            data: Data,
+                            limit: 100
                         });
 
                         //更新原始数据表头和数据
@@ -553,7 +554,9 @@
                 elem: '#incomeTable',
                 cellMinWidth: 115,
                 cols: [originalHead],
-                data: originalData
+                data: originalData,
+                limit: 100
+
             });
             renderCharts(originalData,incomeCharts,oldAction,oldState);
             //然后根据不同的 key 渲染出不同的结果表
@@ -599,7 +602,8 @@
                 elem: tableId,
                 cellMinWidth: 110,
                 cols: [head],
-                data: tableData
+                data: tableData,
+                limit: 100
             });
         }
 
@@ -897,7 +901,8 @@
             elem: '#xishu',
             cellMinWidth: 115,
             cols: [originalHead],
-            data:originalData
+            data:originalData,
+            limit: 100
         });
 
         //收益矩阵数据表
@@ -905,7 +910,8 @@
             elem: '#incomeTable',
             cellMinWidth: 115,
             cols: [originalHead],
-            data:originalData
+            data:originalData,
+            limit: 100
         });
         renderCharts(originalData,incomeCharts,oldAction,oldState);
 
@@ -920,7 +926,8 @@
                 {field: '3_state', title: '自然状态3'},
                 {field: 'result', title: 'EMV 决策法',minWidth:156}
             ]],
-            data: emvData
+            data: emvData,
+            limit: 100
         });
         renderCharts(emvData,emvCharts,oldAction,oldState,'EMV决策法');
 
@@ -935,7 +942,8 @@
                 {field: '3_state', title: '自然状态3'},
                 {field: 'result', title: 'EUV(风险型) t=2',minWidth:156}
             ]],
-            data: euvData
+            data: euvData,
+            limit: 100
         });
         renderCharts(euvData,euvCharts,oldAction,oldState,'EUV(风险型) t=2');
 

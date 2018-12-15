@@ -337,7 +337,8 @@
                 elem: tableId,
                 cellMinWidth: 115,
                 cols: [head],
-                data: data
+                data: data,
+                limit: 100
             });
         }
 
@@ -610,7 +611,9 @@
                             elem: '#xishu',
                             cellMinWidth: 110,
                             cols: [Head],
-                            data: Data
+                            data: Data,
+                            limit: 100
+
                         });
 
                         isUpd = "isup";
@@ -764,7 +767,8 @@
                 elem: '#originalTable',
                 cellMinWidth: 115,
                 cols: [originalHead],
-                data: originalData
+                data: originalData,
+                limit: 100
             });
 
             //renderCharts(originalData,incomeCharts,oldAction,oldState);
@@ -774,7 +778,8 @@
                 elem: '#resultTable',
                 cellMinWidth: 130,
                 cols: [resultHead],
-                data: data.result
+                data: data.result,
+                limit: 100
             });
 
         }
@@ -944,7 +949,8 @@
             elem: '#xishu',
             cellMinWidth: 115,
             cols: [k_oHead],
-            data: k_oData
+            data: k_oData,
+            limit: 100
         });
 
         //原始数据表
@@ -952,7 +958,8 @@
             elem: '#originalTable',
             cellMinWidth: 115,
             cols: [k_oHead],
-            data: k_oData
+            data: k_oData,
+            limit: 100
         });
         // renderCharts(originalData,incomeCharts,oldAction,oldState);
 
@@ -961,7 +968,8 @@
             elem: '#resultTable',
             cellMinWidth: 130,
             cols: [resultHead],
-            data: resultData
+            data: resultData,
+            limit: 100
         });
 
     });

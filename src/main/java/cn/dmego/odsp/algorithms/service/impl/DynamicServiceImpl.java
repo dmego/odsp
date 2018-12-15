@@ -62,7 +62,7 @@ public class DynamicServiceImpl implements DynamicService {
 
             //首先判断出生产能力是否大于需求量
             if(!comparePD(init, p, d)){
-                jsonResult = JsonResult.error(500, "需求超过生产能力!请调整输入数据");
+                jsonResult = JsonResult.error(500, "需求超过生产能力!请调整输入数据!");
                 return jsonResult;
             }else{
                 mapList = product(init,d,p,pc,sc,ms,fc);

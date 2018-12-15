@@ -1,5 +1,8 @@
 package cn.dmego.odsp.algorithms.service;
 
+import cn.dmego.odsp.algorithms.vo.GraphVo;
+import cn.dmego.odsp.common.JsonResult;
+
 /**
  * class_name: GraphService
  * package: cn.dmego.odsp.algorithms.service
@@ -9,5 +12,7 @@ package cn.dmego.odsp.algorithms.service;
  * creat_time: 23:34
  **/
 public interface GraphService {
+
+    JsonResult calculate(GraphVo graphVo);
 
 }
