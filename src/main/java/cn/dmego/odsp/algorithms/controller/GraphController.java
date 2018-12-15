@@ -2,10 +2,14 @@ package cn.dmego.odsp.algorithms.controller;
 
 import cn.dmego.odsp.algorithms.service.GraphService;
 
+import cn.dmego.odsp.algorithms.vo.GraphVo;
+import cn.dmego.odsp.common.JsonResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 /**
  * class_name: GraphController
@@ -24,7 +28,23 @@ public class GraphController {
 
     @RequestMapping
     public String graph(Model model){
+
         return "optimization/graph.html";
+    }
+
+    @RequestMapping("/editForm/{fun}/{item}/{isUpd}")
+    public String graphForm(@PathVariable("fun") int fun,@PathVariable("item") int item,@PathVariable("isUpd") String isUpd,Model model){
+        model.addAttribute("fun",fun);
+        model.addAttribute("item",item);
+        model.addAttribute("isUpd",isUpd);
+        return "optimization/graphForm.html";
+    }
+
+    @ResponseBody
+    @RequestMapping("/calculate")
+    public JsonResult calculate(GraphVo graphVo){
+
+        return null;
     }
 
 

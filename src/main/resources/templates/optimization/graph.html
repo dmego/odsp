@@ -72,7 +72,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">弧个数</label>
                             <div class="layui-input-block">
-                                <input type="text" id="mpArcNum" name="mpArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|mpArcNum">
+                                <input type="text" id="mpArcNum" name="mpArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|arcNum">
                             </div>
                         </div>
                         <div class="layui-form-item">
@@ -90,7 +90,7 @@ g                                    <option value="1">有向图</option>
                         <div class="layui-form-item">
                             <label class="layui-form-label">弧个数</label>
                             <div class="layui-input-block">
-                                <input type="text" id="mtArcNum" name="mtArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|mtArcNum">
+                                <input type="text" id="mtArcNum" name="mtArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|arcNum">
                             </div>
                         </div>
                     </div>
@@ -99,7 +99,7 @@ g                                    <option value="1">有向图</option>
                         <div class="layui-form-item">
                             <label class="layui-form-label">弧个数</label>
                             <div class="layui-input-block">
-                                <input type="text" id="mfArcNum" name="mfArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|mfArcNum">
+                                <input type="text" id="mfArcNum" name="mfArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|arcNum">
                             </div>
                         </div>
                     </div>
@@ -108,7 +108,7 @@ g                                    <option value="1">有向图</option>
                         <div class="layui-form-item">
                             <label class="layui-form-label">弧个数</label>
                             <div class="layui-input-block">
-                                <input type="text" id="mfArcNum" name="mfArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|mfArcNum">
+                                <input type="text" id="mcArcNum" name="mcArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|arcNum">
                             </div>
                         </div>
                     </div>
@@ -140,7 +140,7 @@ g                                    <option value="1">有向图</option>
                         <div class="layui-form-item">
                             <label class="layui-form-label">起点</label>
                             <div class="layui-input-block">
-                                <select name="gType" lay-filter="mpStart">
+                                <select id="mpStart" lay-filter="mpStart">
                                     <option value="A">A</option>
                                     <option value="B">B</option>
                                     <option value="C">C</option>
@@ -151,7 +151,7 @@ g                                    <option value="1">有向图</option>
                         <div class="layui-form-item">
                             <label class="layui-form-label">终点</label>
                             <div class="layui-input-block">
-                                <select name="gType" lay-filter="mpEnd">
+                                <select id="mpEnd" lay-filter="mpEnd">
                                     <option value="A">A</option>
                                     <option value="B"  selected>B</option>
                                     <option value="C">C</option>
@@ -180,7 +180,7 @@ g                                    <option value="1">有向图</option>
                         <div class="layui-form-item">
                             <label class="layui-form-label">起点</label>
                             <div class="layui-input-block">
-                                <select name="gType" lay-filter="mfStart">
+                                <select id="mfStart" lay-filter="mfStart">
                                     <option value="A">A</option>
                                     <option value="B">B</option>
                                     <option value="C">C</option>
@@ -191,7 +191,7 @@ g                                    <option value="1">有向图</option>
                         <div class="layui-form-item">
                             <label class="layui-form-label">终点</label>
                             <div class="layui-input-block">
-                                <select name="gType" lay-filter="mfEnd">
+                                <select id="mfEnd" lay-filter="mfEnd">
                                     <option value="A">A</option>
                                     <option value="B" selected>B</option>
                                     <option value="C">C</option>
@@ -211,7 +211,7 @@ g                                    <option value="1">有向图</option>
                         <div class="layui-form-item">
                             <label class="layui-form-label">起点</label>
                             <div class="layui-input-block">
-                                <select name="gType" lay-filter="mcStart">
+                                <select id="mcStart" lay-filter="mcStart">
                                     <option value="A">A</option>
                                     <option value="B">B</option>
                                     <option value="C">C</option>
@@ -222,7 +222,7 @@ g                                    <option value="1">有向图</option>
                         <div class="layui-form-item">
                             <label class="layui-form-label">终点</label>
                             <div class="layui-input-block">
-                                <select name="gType" lay-filter="mcEnd">
+                                <select id="mcEnd" lay-filter="mcEnd">
                                     <option value="A">A</option>
                                     <option value="B" selected>B</option>
                                     <option value="C">C</option>
@@ -332,6 +332,8 @@ g                                    <option value="1">有向图</option>
         var resultHead, resultData;
         var resultMfHead, resultMcHead;
 
+        var gType, mpStart, mpEnd, mtStart, mtEnd, mfStart, mfEnd, mcStart, mcEnd;
+
         //首先获取该页面的初始化数据
         $.ajaxSettings.async = false; //同步获取数据
         $.getJSON("/assets/js/optimization/graph.json", function (data) {
@@ -413,81 +415,54 @@ g                                    <option value="1">有向图</option>
         });
 
         // 编辑系数之前先校验数据
-        function checkActAte(fun, item1, item2) {
-            if (fun == 1) {
-                if (isEmpty(item2)) {
-                    layer.msg("物品品种数不能为空!");
+        function checkActAte(item) {
+                if (item < 1) {
+                    layer.msg("弧个数必须大于1!");
                     return false;
-                } else if (!/^[1-9]\d*$/.test(item2)) {
-                    layer.msg('物品品种数必须是大于 0 的整数!');
-                    return false;
-                } else if (item2 > 100) {
-                    layer.msg('最多添加 100 个物品品种数!');
+                }else if (item > 100) {
+                    layer.msg("最多添加 100 条弧!");
                     return false;
                 }
-            } else if (fun == 2) {
-                if (isEmpty(item1) || isEmpty(item2)) {
-                    layer.msg("项目数和可选择的投资策略不能为空!");
-                    return false;
-                } else if (!/^[1-9]\d*$/.test(item1) || !/^[1-9]\d*$/.test(item2)) {
-                    layer.msg('项目数和可选择的投资策略必须是大于 0 的整数!');
-                    return false;
-                } else if (item1 > 100 || item2 > 100) {
-                    layer.msg('最多添加 100 个项目数和可选择的投资策略!');
-                    return false;
-                }
-            } else if (fun == 3) {
-                if (isEmpty(item1)) {
-                    layer.msg("生产时期不能为空!");
-                    return false;
-                } else if (!/^[1-9]\d*$/.test(item1)) {
-                    layer.msg('生产时期必须是大于 0 的整数!');
-                    return false;
-                } else if (item1 > 100) {
-                    layer.msg('最多添加 100 个生产时期!');
-                    return false;
-                }
-            }
             return true;
         }
 
         //实时监听 input 值变化
         $(function () {
-            var kBreedNum = $("#kBreedNum").val(); //物品种类数
-            var rItemNum = $("#rItemNum").val(); //项目数
-            var rStrategy = $("#rStrategy").val(); //可选择的投资策略
-            var pStage = $("#pStage").val(); //生产时期
+            var mpArcNum = $("#mpArcNum").val();
+            var mtArcNum = $("#mtArcNum").val();
+            var mfArcNum = $("#mfArcNum").val();
+            var mcArcNum = $("#mcArcNum").val();
 
-            $("#kBreedNum").bind("input propertychange", function (event) {
-                if (kBreedNum != $("#kBreedNum").val()) {
-                    $("#kBreedNum").attr("isChange", "true");
+            $("#mpArcNum").bind("input propertychange", function (event) {
+                if (mpArcNum != $("#mpArcNum").val()) {
+                    $("#mpArcNum").attr("isChange", "true");
                     isUpd = "noup"; //记录不是更新表格操作
                 } else {
-                    $("#kBreedNum").attr("isChange", "false");
+                    $("#mpArcNum").attr("isChange", "false");
                 }
             });
-            $("#rItemNum").bind("input propertychange", function (event) {
-                if (kBreedNum != $("#rItemNum").val()) {
-                    $("#rItemNum").attr("isChange", "true");
+            $("#mtArcNum").bind("input propertychange", function (event) {
+                if (mtArcNum != $("#mtArcNum").val()) {
+                    $("#mtArcNum").attr("isChange", "true");
                     isUpd = "noup"; //记录不是更新表格操作
                 } else {
-                    $("#rItemNum").attr("isChange", "false");
+                    $("#mtArcNum").attr("isChange", "false");
                 }
             });
-            $("#rStrategy").bind("input propertychange", function (event) {
-                if (kBreedNum != $("#rStrategy").val()) {
-                    $("#rStrategy").attr("isChange", "true");
+            $("#mfArcNum").bind("input propertychange", function (event) {
+                if (mfArcNum != $("#mfArcNum").val()) {
+                    $("#mfArcNum").attr("isChange", "true");
                     isUpd = "noup"; //记录不是更新表格操作
                 } else {
-                    $("#rStrategy").attr("isChange", "false");
+                    $("#mfArcNum").attr("isChange", "false");
                 }
             });
-            $("#pStage").bind("input propertychange", function (event) {
-                if (kBreedNum != $("#pStage").val()) {
-                    $("#pStage").attr("isChange", "true");
+            $("#mcArcNum").bind("input propertychange", function (event) {
+                if (mcArcNum != $("#mcArcNum").val()) {
+                    $("#mcArcNum").attr("isChange", "true");
                     isUpd = "noup"; //记录不是更新表格操作
                 } else {
-                    $("#pStage").attr("isChange", "false");
+                    $("#mcArcNum").attr("isChange", "false");
                 }
             });
         })
@@ -495,19 +470,19 @@ g                                    <option value="1">有向图</option>
         // 添加编辑按钮点击事件
         $('#btnUpd').click(function () {
             //根据选择的方法不同，传递不同的参数
-            var item1 = -1, item2 = -1;
-            if (fun == 1) { //如果选择的是背包问题
-                item1 = packFun; //参数1--背包问题类别
-                item2 = $("#kBreedNum").val();//参数2--物品品种数
-            } else if (fun == 2) {//如果选择的是资源分配问题
-                item1 = $("#rItemNum").val(); //项目数
-                item2 = $("#rStrategy").val();//可选择的投资策略
-            } else if (fun == 3) {//生产与存储问题
-                item1 = $("#pStage").val();//生产时期
+            var item = -1; //弧的个数
+            if (fun == 1) { //如果选择的最短路径
+                item = $("#mpArcNum").val();
+            } else if (fun == 2) {
+                item = $("#mtArcNum").val();
+            } else if (fun == 3) {
+                item = $("#mfArcNum").val();
+            }else if(fun == 4){
+                item = $("#mcArcNum").val();
             }
 
             //校验数据
-            if (!checkActAte(fun, item1, item2)) {
+            if (!checkActAte(item)) {
                 return;
             }
 
@@ -516,82 +491,47 @@ g                                    <option value="1">有向图</option>
                 title: '系数设置',
                 maxmin: true,
                 area: ['550px', '500px'],
-                content: 'dynamic/editForm/' + fun + '/' + item1 + '/' + item2 + '/' + isUpd,
+                content: 'graph/editForm/' + fun + '/' + item + '/' + isUpd,
                 btn: ['保存', '取消'],
                 yes: function (index, layero) {
                     var ifTable = $("div.layui-layer-content > iframe")[0].contentWindow.layui.table;
                     //在提交数据之前先校验数据
                     var cache = ifTable.cache.ratio;
                     var isNull = false;
-                    var isNoDoubleM = false; //整数或保留3位小数
-                    var isNoInt = false; //非负的整数
                     var isNoDouble = false; //非负整数或保留3位小数
 
-                    var rag1 = /^[1-9]\d*$/; //大于 0 整数
-                    var rag0 = /^[0-9]\d*$/; //非负的整数
-                    var rag2 = /^[+-]?\d*\.?\d{0,3}$/; //整数或保留3位小数
-                    var rag3 = /^[+]?\d*\.?\d{0,3}$/; //非负整数或保留3位小数
+                    var rag = /^[+]?\d*\.?\d{0,3}$/; //非负整数或保留3位小数
 
                     // console.log(cache)
                     // console.log(cache[0])
 
+                    //for 循环进行校验
                     for (var i = 0; i < cache.length; i++) {
                         var item = cache[i];
-                        //每个模型校验的数据不同
-                        if (fun == 1) { //背包
+                        if(fun == 1 || fun == 2){
                             //先校验非空
-                            if (isEmpty(item['name']) || isEmpty(item['weight']) || isEmpty(item['value'])) {
+                            if (isEmpty(item['start']) || isEmpty(item['end']) || isEmpty(item['weight'])) {
                                 isNull = true;
                                 break;
-                            }
-                            //第2:单位物品重量,第3:单位物品价值需要大于0整数
-                            if (!rag0.test(item['weight']) || !rag0.test(item['value'])) {
-                                isNoInt = true;
+                            } else if (!rag.test(item['weight'])) {
+                                isNoDouble = true;
                                 break;
                             }
-                        } else if (fun == 2) { //资源分配问题
+                        } else if(fun == 3){
                             //先校验非空
-                            if (isEmpty(item['income'])) {
+                            if (isEmpty(item['start']) || isEmpty(item['end']) || isEmpty(item['VU'])) {
                                 isNull = true;
                                 break;
-                            }
-                            //检验投资为非负整数
-                            if (!rag0.test(item['income'])) {
-                                isNoInt = true;
+                            } else if (!rag.test(item['VU'])) {
+                                isNoDouble = true;
                                 break;
                             }
-                            //检验所有项目收益为整数或保留3位的小数
-                            var jNull = false, jNoDoubleM = false;
-                            for (var j = 1; j <= $("#rItemNum").val(); j++) {
-                                if (isEmpty(item[j + '_project'])) {
-                                    jNull = true;
-                                    break;
-                                } else if (!rag2.test(item[j + '_project'])) {
-                                    jNoDoubleM = true;
-                                    break;
-                                }
-                            }
-                            if (jNull) {
-                                isNull = true;
-                                break;
-                            }
-                            if (jNoDoubleM) {
-                                isNoDoubleM = true;
-                                break;
-                            }
-                        } else if (fun == 3) {
+                        } else if(fun == 4){
                             //先校验非空
-                            if (isEmpty(item['need']) || isEmpty(item['ability']) || isEmpty(item['proCost']) || isEmpty(item['stoCost']) || isEmpty(item['storage']) || isEmpty(item['fixedPCost'])) {
+                            if (isEmpty(item['start']) || isEmpty(item['end']) || isEmpty(item['VU']) || isEmpty(item['cost'])) {
                                 isNull = true;
                                 break;
-                            }
-                            //再校验非负整数
-                            if (!rag0.test(item['need']) || !rag0.test(item['ability']) || !rag0.test(item['storage'])) {
-                                isNoInt = true;
-                                break;
-                            }
-                            //再校验非负整数或保留3位的非负小数
-                            if (!rag3.test(item['proCost']) || !rag3.test(item['stoCost']) || !rag3.test(item['fixedPCost'])) {
+                            } else if (!rag.test(item['VU']) || !rag.test(item['cost'])) {
                                 isNoDouble = true;
                                 break;
                             }
@@ -600,49 +540,39 @@ g                                    <option value="1">有向图</option>
 
                     if (isNull) {
                         layer.msg('数据表中存在字段为空!');
-                    } else if (isNoInt) {
-                        layer.msg('数据表的字段只能为非负整数!');
-                    } else if (isNoDoubleM) {
-                        layer.msg('数据表的字段只能为整数或保留3位的小数!');
                     } else if (isNoDouble) {
                         layer.msg('数据表的字段只能为非负整数或保留3位的非负小数!');
                     } else { //如果校验通过,提交数据到系数设置的表格中
                         layer.close(index); //如果设定了yes回调，需进行手工关闭
 
                         var Data = JSON.parse(JSON.stringify(cache));//表格数据
+
                         //对于表头而言,只有资源分配问题才改变了表头,其他还是原表头
                         var Head;
-                        if (fun == 1) { //背包
-                            if (packFun == 2) {
-                                Head = k_mHead;
-                                k_mData = Data;
-                                dynamicData["k_mData"] = k_mData;
-                            } else {
-                                Head = k_oHead;
-                                k_oData = Data;
-                                dynamicData["k_oData"] = k_oData;
-                            }
-                            $("#kBreedNum").attr("isChange", "false");
-                        } else if (fun == 2) { //资源分配
-                            if (isUpd == "isup") { //如果是更新数据表,表头不变
-                                Head = r_oHead;
-                            } else if (isUpd == "noup") { //如果是一直新表,则表头改变
-                                Head = ifTable.head;
-                                r_oHead = ifTable.head;
-                            }
-                            r_oData = Data;
-                            dynamicData["r_oHead"] = r_oHead;
-                            dynamicData["r_oData"] = r_oData;
-                            $("#rItemNum").attr("isChange", "false");
-                            $("#rStrategy").attr("isChange", "false");
-                        } else if (fun == 3) { //生产存储
-                            Head = p_oHead;
-                            p_oData = Data;
-                            dynamicData["p_oData"] = p_oData;
-                            $("#pStage").attr("isChange", "false");
+                        if (fun == 1) { //最短路径
+                            Head = mpHead;
+                            mpData = Data;
+                            graphData["mpData"] = mpData;
+                            $("#mpArcNum").attr("isChange", "false");
+                        } else if (fun == 2) {
+                            Head = mtHead;
+                            mtData = Data;
+                            graphData["mtData"] = mtData;
+                            $("#mtArcNum").attr("isChange", "false");
+                        } else if (fun == 3) {
+                            Head = mfHead;
+                            mfData = Data;
+                            graphData["mfData"] = mfData;
+                            $("#mfArcNum").attr("isChange", "false");
+                        } else if(fun == 4){
+                            Head = mcHead;
+                            mcData = Data;
+                            graphData["mcData"] = mcData;
+                            $("#mcArcNum").attr("isChange", "false");
                         }
                         // console.log(Head);
                         // console.log(Data);
+
                         //重新渲染系数表
                         layui.table.render({
                             elem: '#xishu',
@@ -651,9 +581,11 @@ g                                    <option value="1">有向图</option>
                             data: Data
                         });
 
+                        //渲染参数配置数据
+                        renderParam(Data);
                         isUpd = "isup";
-                        //更新dynamicData数据
-                        admin.putTempData('dynamicData', dynamicData);
+                        //更新graphData数据
+                        admin.putTempData('graphData', graphData);
                     }
                 },
                 btn2: function (index, layero) { //取消按钮
@@ -662,69 +594,110 @@ g                                    <option value="1">有向图</option>
             });
         })
 
+
+        /**
+         * 根据表格数据渲染参数配置数据
+         */
+        function renderParam(data){
+            //1.先计算出有多少个顶点数
+            var arr = [];
+            for (var i = 0; i < data.length; i++) {
+                arr.push(data[i].start);
+                arr.push(data[i].end);
+            }
+            var set = new Set(arr);
+            var myArr = Array.from(set);
+            var vex = myArr.length;
+
+            var start = '';
+            var end = '';
+            for (var i = 0; i < vex; i++) {
+                var item = '<option value='+myArr[i]+'>'+myArr[i]+'</option>';
+                if(i == 0){
+                    let itemS = '<option value='+myArr[i]+' selected>'+myArr[i]+'</option>';
+                    start+=itemS;
+                }else{
+                    start+=item;
+                }
+                if(i == vex - 1){
+                    let itemE = '<option value='+myArr[i]+' selected>'+myArr[i]+'</option>';
+                    end+=itemE;
+                }else{
+                    end+=item;
+                }
+            }
+
+            //2.根据选择的方法不同渲染配置参数
+            if(fun == 1){
+                $("#mpNodeNum").val(vex);
+                $("#mpStart").empty();
+                $("#mpStart").append(start);
+                $("#mpEnd").empty();
+                $("#mpEnd").append(end);
+            } else if(fun == 2){
+                $("#mtNodeNum").val(vex);
+                $("#mtStart").empty();
+                $("#mtStart").append(start);
+                $("#mtEnd").empty();
+                $("#mtEnd").append(end);
+            } else if(fun == 3){
+                $("#mfNodeNum").val(vex);
+                $("#mfStart").empty();
+                $("#mfStart").append(start);
+                $("#mfEnd").empty();
+                $("#mfEnd").append(end);
+            } else if(fun == 4){
+                $("#mcNodeNum").val(vex);
+                $("#mcStart").empty();
+                $("#mcStart").append(start);
+                $("#mcEnd").empty();
+                $("#mcEnd").append(end);
+            }
+            form.render('select'); //刷新select选择框渲染
+        }
+
+        /**
+         * 监听select 的选择
+         */
+        form.on('select(gType)', function(data){
+            gType = console.log(data.value);
+        });
+        form.on('select(mpStart)', function(data){
+            mpStart = console.log(data.value);
+        });
+        form.on('select(mpEnd)', function(data){
+            mtEnd = console.log(data.value);
+        });
+        form.on('select(mtStart)', function(data){
+            mtStart = console.log(data.value);
+        });
+        form.on('select(mtEnd)', function(data){
+            mtEnd = console.log(data.value);
+        });
+        form.on('select(mfStart)', function(data){
+            mfStart = console.log(data.value);
+        });
+        form.on('select(mfEnd)', function(data){
+            mfEnd = console.log(data.value);
+        });
+        form.on('select(mcStart)', function(data){
+            mcStart = console.log(data.value);
+        });
+        form.on('select(mcEnd)', function(data){
+            mcEnd = console.log(data.value);
+        });
+
         /**
          * 自定义表单验证规则
          */
         form.verify({
-            kBreedNum: function (value, item) {
-                if (!/^[1-9]\d*$/.test(value)) {
-                    return '物品品种数必须是大于 0 的整数!';
-                } else if (value > 100) {
-                    return '最多添加 100 个行动方案!';
+            arcNum: function (value, item) {
+                if(value < 1){
+                    return '弧个数不能小于1!';
+                }else if (value > 100) {
+                    return '最多添加 100 条弧!';
                 }
-                if ($("#kBreedNum").attr("isChange") == "true") {
-                    return '物品品种数已改变，请重新设置系数!';
-                }
-            },
-            kVolume: function (value, item) {
-                if (!/^[1-9]\d*$/.test(value)) {
-                    return '容器容量必须是大于 0 的整数!';
-                } else if (value > 1000000) {
-                    return '容器容量不能超过 1000000!';
-                }
-            },
-            rItemNum: function (value, item) {
-                if (!/^[1-9]\d*$/.test(value)) {
-                    return '项目数必须是大于 0 的整数!';
-                } else if (value > 100) {
-                    return '最多添加 100 个项目数!';
-                }
-                if ($("#rItemNum").attr("isChange") == "true") {
-                    return '项目数已改变，请重新设置系数!';
-                }
-            },
-            rSumValue: function (value, item) {
-                if (!/^[1-9]\d*$/.test(value)) {
-                    return '资源总数量必须是大于 0 的整数!';
-                } else if (value > 1000000) {
-                    return '资源总数量不能超过 1000000!';
-                }
-            },
-            rStrategy: function (value, item) {
-                if (!/^[1-9]\d*$/.test(value)) {
-                    return '可选择的投资策略必须是大于 0 的整数!';
-                } else if (value > 100) {
-                    return '最多添加 100 个可选择的投资策略!';
-                }
-                if ($("#rStrategy").attr("isChange") == "true") {
-                    return '可选择的投资策略已改变，请重新设置系数!';
-                }
-            },
-            pStage: function (value, item) {
-                if (!/^[1-9]\d*$/.test(value)) {
-                    return '生产时期必须是大于 0 的整数!';
-                } else if (value > 100) {
-                    return '最多添加 100 个生产时期!';
-                }
-                if ($("#pStage").attr("isChange") == "true") {
-                    return '生产时期已改变，请重新设置系数!';
-                }
-            },
-            pStorage: function (value, item) {
-                if (!/^[0-9]\d*$/.test(value)) {
-                    return '期初存储量必须是非负整数!';
-                }
-            },
+            }
         })
 
         // 表单提交事件
@@ -735,16 +708,21 @@ g                                    <option value="1">有向图</option>
                 functions.push($(this).val());
             })
             layer.load(2);
-            $.post('dynamic/calculate', {
+            $.post('graph/calculate', {
                 fun: fun,
-                packFun: packFun,
-                kBreedNum: data.field.kBreedNum,
-                kVolume: data.field.kVolume,
-                rItemNum: data.field.rItemNum,
-                rSumValue: data.field.rSumValue,
-                rStrategy: data.field.rStrategy,
-                pStage: data.field.pStage,
-                pStorage: data.field.pStorage,
+                gType: gType,
+                mpArcNum: data.field.mpArcNum,
+                mpStart: mpStart,
+                mpEnd: mpEnd,
+                mtArcNum: data.field.mtArcNum,
+                mtStart: mtStart,
+                mtEnd: mtEnd,
+                mfArcNum: data.field.mfArcNum,
+                mfStart: mfStart,
+                mfEnd: mfEnd,
+                mcArcNum: data.field.mcArcNum,
+                mcStart: mcStart,
+                mcEnd: mcEnd,
                 ratioTableData: JSON.stringify(table.cache.xishu),
             }, function (data) {
                 layer.closeAll('loading');
