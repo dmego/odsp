@@ -19,6 +19,8 @@ public class GraphVo {
 
     private Integer gType; //选择的图类型
 
+    private Integer vexNum; //顶点数
+
     private Integer arcNum; //边,弧的条数
 
     private String start; //起点

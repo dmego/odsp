@@ -51,10 +51,10 @@
                     <div class="layui-card-body">
                         <div class="layui-form-item" pane="">
                             <div class="layui-input-block">
-                                <input type="radio" name="function" value="1" lay-filter="function" title="最短路径问题">
+                                <input type="radio" name="function" value="1" lay-filter="function" title="最短路径问题" checked="">
                             </div>
                             <div class="layui-input-block">
-                                <input type="radio" name="function" value="2" lay-filter="function" title="最小生成树" checked="">
+                                <input type="radio" name="function" value="2" lay-filter="function" title="最小生成树">
                             </div>
                             <div class="layui-input-block">
                                 <input type="radio" name="function" value="3" lay-filter="function" title="最大流问题">
@@ -77,7 +77,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">图类型</label>
                             <div class="layui-input-block">
-                                <select id="gType" name="gType" lay-filter="gType">
+                                <select id="gMpType" name="gMpType" lay-filter="gMpType">
                                      <option value="1">有向图</option>
                                      <option value="2">无向图</option>
                                 </select>
@@ -92,6 +92,15 @@
                                 <input type="text" id="mtArcNum" name="mtArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|arcNum">
                             </div>
                         </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">图类型</label>
+                            <div class="layui-input-block">
+                                <select id="gMtType" name="gMtType" lay-filter="gMtType">
+                                    <option value="1">有向图</option>
+                                    <option value="2">无向图</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <!--最大流问题参数设置-->
                     <div class="layui-card-body maxFlowParam dis-none">
@@ -101,6 +110,15 @@
                                 <input type="text" id="mfArcNum" name="mfArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|arcNum">
                             </div>
                         </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">图类型</label>
+                            <div class="layui-input-block">
+                                <select id="gMfType" name="gMfType" lay-filter="gMfType">
+                                    <option value="1">有向图</option>
+                                    <option value="2">无向图</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     <!--最小费用最大流问题参数设置-->
                     <div class="layui-card-body minCostMaxFlowParam dis-none">
@@ -108,6 +126,15 @@
                             <label class="layui-form-label">弧个数</label>
                             <div class="layui-input-block">
                                 <input type="text" id="mcArcNum" name="mcArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|arcNum">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">图类型</label>
+                            <div class="layui-input-block">
+                                <select id="gMcType" name="gMcType" lay-filter="gMcType">
+                                    <option value="1">有向图</option>
+                                    <option value="2">无向图</option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -324,7 +351,7 @@
         var admin = layui.admin;
 
         var graphData;
-        var oldRow, oldCol, fun, isUpd;
+        var fun, gType, isUpd;
 
         var mpHead, mpData, mtHead, mtData, mfHead, mfData,mcHead, mcData;
 
@@ -342,6 +369,7 @@
             oldRow = data.oldRow; //初始化原始 行 5 行
             oldCol = data.oldCol; //初始化原始 列 4 列
             fun = data.fun; //初始化选择的方法是 1
+            gType = data.gType; //默认选择无向图
             isUpd = data.isUpd;
 
             vexs = ['A','B','C','D']; //初始化顶点数组
@@ -573,7 +601,6 @@
                         layui.table.render({
                             elem: '#xishu',
                             cellMinWidth: 110,
-                            height: 'full-200',
                             cols: [Head],
                             data: Data,
                             limit: 100 //最多添加100条弧
@@ -669,13 +696,13 @@
          */
         function buildDataByFun(data){
             if(fun == 1){
-                return {fun:fun, gType: data.field.gType, arcNum: data.field.mpArcNum, start: data.field.mpStart, end: data.field.mpEnd,vexsArr: vexs, ratioTableData: JSON.stringify(table.cache.xishu)}
+                return {fun:fun, gType: data.field.gMpType, arcNum: data.field.mpArcNum, start: data.field.mpStart, end: data.field.mpEnd,vexsArr: vexs, ratioTableData: JSON.stringify(table.cache.xishu)}
             }else if(fun == 2){
-                return {fun:fun, arcNum: data.field.mtArcNum, start: data.field.mtStart, end: data.field.mtEnd,vexsArr: vexs, ratioTableData: JSON.stringify(table.cache.xishu)}
+                return {fun:fun, gType: data.field.gMtType, arcNum: data.field.mtArcNum, start: data.field.mtStart, end: data.field.mtEnd,vexsArr: vexs, ratioTableData: JSON.stringify(table.cache.xishu)}
             }else if(fun == 3){
-                return {fun:fun, arcNum: data.field.mfArcNum, start: data.field.mfStart, end: data.field.mfEnd,vexsArr: vexs, ratioTableData: JSON.stringify(table.cache.xishu)}
+                return {fun:fun, gType: data.field.gMfType, arcNum: data.field.mfArcNum, start: data.field.mfStart, end: data.field.mfEnd,vexsArr: vexs, ratioTableData: JSON.stringify(table.cache.xishu)}
             }else if(fun == 4){
-                return {fun:fun, arcNum: data.field.mcArcNum, start: data.field.mcStart, end: data.field.mcEnd,vexsArr: vexs, ratioTableData: JSON.stringify(table.cache.xishu)}
+                return {fun:fun, gType: data.field.gMcType, arcNum: data.field.mcArcNum, start: data.field.mcStart, end: data.field.mcEnd,vexsArr: vexs, ratioTableData: JSON.stringify(table.cache.xishu)}
             }
         }
 
@@ -743,7 +770,7 @@
             //渲染结果表
             table.render({
                 elem: '#resultTable',
-                cellMinWidth: 130,
+                cellMinWidth: 245,
                 cols: [resultHead],
                 data: data.result,
                 limit: 100

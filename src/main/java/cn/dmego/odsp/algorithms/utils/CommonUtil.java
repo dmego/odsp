@@ -148,6 +148,8 @@ public class CommonUtil {
         String jsonStr = graphVo.getRatioTableData();
         //根据调用不同的方法,设置不同的一维数组
         Integer fun = graphVo.getFun();
+        //图的类型
+        Integer gType = graphVo.getGType();
         //将 JSON 字符串转成矩阵数组
         JSONArray array = JSONObject.parseArray(jsonStr);
         EData[] edges = new EData[array.size()];
@@ -162,8 +164,10 @@ public class CommonUtil {
         }else if(fun == 4){
 
         }
-        Graph graph = new Graph(vexsArr,edges);
+
+        Graph graph = new Graph(vexsArr,edges,gType);
         graphVo.setGraph(graph);
+
     }
 
 
