@@ -4,7 +4,6 @@ import cn.dmego.odsp.algorithms.service.DynamicService;
 import cn.dmego.odsp.algorithms.utils.CommonUtil;
 import cn.dmego.odsp.algorithms.vo.DynamicVo;
 import cn.dmego.odsp.common.JsonResult;
-import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -63,7 +62,7 @@ public class DynamicServiceImpl implements DynamicService {
 
             //首先判断出生产能力是否大于需求量
             if(!comparePD(init, p, d)){
-                jsonResult = JsonResult.error(500, "需求超过生产能力!请调整输入数据");
+                jsonResult = JsonResult.error(500, "需求超过生产能力!请调整输入数据!");
                 return jsonResult;
             }else{
                 mapList = product(init,d,p,pc,sc,ms,fc);
@@ -244,19 +243,11 @@ public class DynamicServiceImpl implements DynamicService {
      */
     private static List<Map<String, String>> resource(Integer W,Integer N,Integer[] r,Integer[][] g){
 
-        //1.求可选投资策略数组中的最大值,该值为矩阵数组的列数
-        int maxr = r[0];
-        for (int i = 0; i < r.length; i++) {
-            if (r[i] > maxr) {
-                maxr = r[i];
-            }
-        }
-        //2.构造一个新的数据二维数组
-        int M = maxr > W ? maxr : W; //首先确定数组最大列
-        int[][] gg = new int[N+1][M+1];
+        //1.构造一个新的数据二维数组
+        int[][] gg = new int[N+1][W+1]; //数组最大列为资源总数量
 
         for (int i = 1; i <= N; i++) {
-            for (int j = 1; j <= M; j++) {
+            for (int j = 1; j <= W; j++) {
                 for (int k = 0; k < r.length; k++) {
                     if(j == r[k]){
                         gg[i][j] = g[i-1][k];
@@ -266,14 +257,14 @@ public class DynamicServiceImpl implements DynamicService {
             }
         }
 
-        //3.开始计算
-        int[][] p = new int[N+1][M+1]; //p[i][j] 存储 前 i 个项目 分配 j 资源能获得的最大收益
-        int[][] d = new int[N+1][M+1]; //d[i][j] 存储 第 i 个项目获得最大收益时分配的资源数
+        //2.开始计算
+        int[][] p = new int[N+1][W+1]; //p[i][j] 存储 前 i 个项目 分配 j 资源能获得的最大收益
+        int[][] d = new int[N+1][W+1]; //d[i][j] 存储 第 i 个项目获得最大收益时分配的资源数
 
         for (int i = 0; i <= N; i++) {
             p[i][0] = 0; //初始化 当资源为0时,前i 个项目最大收益为 0
         }
-        for (int i = 0; i <= M; i++) {
+        for (int i = 0; i <= W; i++) {
             p[0][i] = 0; //初始化 当 项目数为0时,所有分配资源的情况,最大收益都为 0
         }
 
@@ -283,7 +274,7 @@ public class DynamicServiceImpl implements DynamicService {
         //从第 1 个项目开始
         for (int i = 1; i <= N; i++) {
             //从分配 1 个资源开始
-            for (int j = 1; j <= M; j++) {
+            for (int j = 1; j <= W; j++) {
                 int max = p[i-1][j]; //初始化最大值为 前 i - 1 项的最大值,也就是第 i 个项目不投资(分配资源为 0),收益为 0 时
                 d[i][j] = 0; //初始化 第 i 项 分配资源为 0
 
@@ -299,11 +290,11 @@ public class DynamicServiceImpl implements DynamicService {
             }
         }
 
-        //4.逆序推出每个项目分配了多少资源
+        //3.逆序推出每个项目分配了多少资源
         int[] input = new int[N+1]; //投入资源数
         int[] income = new int[N+1]; //项目收益
 
-        int i = N,j = M;
+        int i = N,j = W;
         while(i > 0 & j > 0){
             if(d[i][j] == 0){
                 i--;
@@ -315,20 +306,20 @@ public class DynamicServiceImpl implements DynamicService {
             }
         }
 
-        //5.根据总的的资源数,求剩余资源数组
+        //4.根据总的的资源数,求剩余资源数组
         int[] restVolume = new int[N+1]; //剩余资源
         restVolume[0] = W;
         for (int k = 1; k <=N; k++) {
             restVolume[k] = restVolume[k-1] - input[k];
         }
 
-        //6.资源分配问题求得的结果封装成List<Map<String, String>>并返回
+        //5.资源分配问题求得的结果封装成List<Map<String, String>>并返回
         List<Map<String,String>> mapList = new ArrayList<>();
         for (int ii = 1; ii <= N+1; ii++) {
             Map<String,String> map = new HashMap<>();
             if(ii == N+1){
                 map.put("stage", "最大价值"); //项目(阶段)
-                map.put("input", String.valueOf(p[N][M])); //投入资源数
+                map.put("input", String.valueOf(p[N][W])); //投入资源数
                 map.put("income", ""); //项目收益
                 map.put("rest",""); //剩余资源
             }else{

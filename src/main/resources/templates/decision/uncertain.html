@@ -451,7 +451,8 @@
                             elem: '#xishu',
                             cellMinWidth: 110,
                             cols: [ifTable.head],
-                            data: Data
+                            data: Data,
+                            limit: 100
                         });
 
                         //更新原始数据表头和数据
@@ -547,7 +548,8 @@
                 elem: '#incomeTable',
                 cellMinWidth: 110,
                 cols: [originalHead],
-                data: originalData
+                data: originalData,
+                limit: 100
             });
             renderCharts(originalData,incomeCharts,oldAction,oldState);
 
@@ -594,7 +596,8 @@
                 elem: tableId,
                 cellMinWidth: 110,
                 cols: [head],
-                data: tableData
+                data: tableData,
+                limit: 100
             });
         }
 
@@ -828,7 +831,8 @@
             elem: '#xishu',
             cellMinWidth: 110,
             cols: [originalHead],
-            data:originalData
+            data:originalData,
+            limit: 100
         });
 
         //收益矩阵数据表
@@ -836,7 +840,8 @@
             elem: '#incomeTable',
             cellMinWidth: 110,
             cols: [originalHead],
-            data:originalData
+            data:originalData,
+            limit: 100
         });
         renderCharts(originalData,incomeCharts,oldAction,oldState);
 
@@ -852,7 +857,8 @@
                 {field: '3_state', title: '自然状态3'},
                 {field: 'result', title: '悲观决策法',minWidth:156}
             ]],
-            data: maxMinData
+            data: maxMinData,
+            limit: 100
         });
         renderCharts(maxMinData,maxMinCharts,oldAction,oldState,'悲观决策法');
 
@@ -867,7 +873,8 @@
                 {field: '3_state', title: '自然状态3'},
                 {field: 'result', title: '乐观决策法',minWidth:156}
             ]],
-            data: maxMaxData
+            data: maxMaxData,
+            limit: 100
         });
         renderCharts(maxMaxData,maxMaxCharts,oldAction,oldState,'乐观决策法');
 
@@ -882,7 +889,8 @@
                 {field: '3_state', title: '自然状态3'},
                 {field: 'result', title: '折中主义准则 a=0.7',minWidth:156}
             ]],
-            data: eclecticismData
+            data: eclecticismData,
+            limit: 100
         });
         renderCharts(eclecticismData,eclecticismCharts,oldAction,oldState,'折中主义准则');
 

@@ -1,7 +1,10 @@
 package cn.dmego.odsp.algorithms.utils;
 
+import cn.dmego.odsp.algorithms.model.EData;
+import cn.dmego.odsp.algorithms.model.Graph;
 import cn.dmego.odsp.algorithms.vo.DecisionVo;
 import cn.dmego.odsp.algorithms.vo.DynamicVo;
+import cn.dmego.odsp.algorithms.vo.GraphVo;
 import cn.dmego.odsp.common.JsonResult;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -135,6 +138,35 @@ public class CommonUtil {
             dynamicVo.setMaxStorage(maxStorage);
         }
     }
+
+    /**
+     * 图与网络分析
+     * 将从前台传递过来的参数转换为graph对象,用作后面计算使用
+     * @param graphVo
+     */
+    public static void jsonToGraph(String[] vexsArr, GraphVo graphVo) {
+        String jsonStr = graphVo.getRatioTableData();
+        //根据调用不同的方法,设置不同的一维数组
+        Integer fun = graphVo.getFun();
+        //将 JSON 字符串转成矩阵数组
+        JSONArray array = JSONObject.parseArray(jsonStr);
+        EData[] edges = new EData[array.size()];
+        if(fun == 1 || fun == 2){
+            for (int i = 0; i < array.size(); i++) {
+                JSONObject jo = array.getJSONObject(i);
+                EData eData = new EData(jo.getString("start"),jo.getString("end"),jo.getDouble("weight"));
+                edges[i] = eData;
+            }
+        }else if(fun == 3){
+
+        }else if(fun == 4){
+
+        }
+        Graph graph = new Graph(vexsArr,edges);
+        graphVo.setGraph(graph);
+    }
+
+
 
     /**
      * 设置返回json中的 code 参数

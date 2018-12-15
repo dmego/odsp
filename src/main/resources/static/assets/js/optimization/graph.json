@@ -1,0 +1,255 @@
+{
+  "oldRow": 5,
+  "oldCol": 4,
+  "fun": 1,
+  "isUpd": "isup",
+  "mpHead": [
+  {
+    "field": "arc",
+    "title": "弧"
+  },
+  {
+    "field": "start",
+    "title": "起点"
+  },
+  {
+    "field": "end",
+    "title": "终点"
+  },
+  {
+    "field": "weight",
+    "title": "权数"
+  }
+],
+  "mpData": [
+    {
+      "arc": "1",
+      "start": "A",
+      "end": "B",
+      "weight": "2"
+    },
+    {
+      "arc": "2",
+      "start": "A",
+      "end": "C",
+      "weight": "1"
+    },
+    {
+      "arc": "3",
+      "start": "C",
+      "end": "D",
+      "weight": "1"
+    },
+    {
+      "arc": "4",
+      "start": "D",
+      "end": "A",
+      "weight": "3"
+    }
+  ],
+  "mtHead": [
+    {
+      "field": "arc",
+      "title": "弧"
+    },
+    {
+      "field": "start",
+      "title": "起点"
+    },
+    {
+      "field": "end",
+      "title": "终点"
+    },
+    {
+      "field": "weight",
+      "title": "权数"
+    }
+  ],
+  "mtData": [
+    {
+      "arc": "1",
+      "start": "A",
+      "end": "B",
+      "weight": "2"
+    },
+    {
+      "arc": "2",
+      "start": "A",
+      "end": "C",
+      "weight": "1"
+    },
+    {
+      "arc": "3",
+      "start": "C",
+      "end": "D",
+      "weight": "1"
+    },
+    {
+      "arc": "4",
+      "start": "D",
+      "end": "A",
+      "weight": "3"
+    }
+  ],
+  "mfHead": [
+    {
+      "field": "arc",
+      "title": "弧"
+    },
+    {
+      "field": "start",
+      "title": "起点"
+    },
+    {
+      "field": "end",
+      "title": "终点"
+    },
+    {
+      "field": "VU",
+      "title": "容量"
+    }
+  ],
+  "mfData": [
+    {
+      "arc": "1",
+      "start": "A",
+      "end": "B",
+      "VU": "2"
+    },
+    {
+      "arc": "2",
+      "start": "A",
+      "end": "C",
+      "VU": "1"
+    },
+    {
+      "arc": "3",
+      "start": "C",
+      "end": "D",
+      "VU": "1"
+    },
+    {
+      "arc": "4",
+      "start": "D",
+      "end": "A",
+      "VU": "3"
+    }
+  ],
+  "mcHead": [
+    {
+      "field": "arc",
+      "title": "弧"
+    },
+    {
+      "field": "start",
+      "title": "起点"
+    },
+    {
+      "field": "end",
+      "title": "终点"
+    },
+    {
+      "field": "VU",
+      "title": "容量"
+    },
+    {
+      "field": "cost",
+      "title": "费用"
+    }
+  ],
+  "mcData": [
+    {
+      "arc": "1",
+      "start": "A",
+      "end": "B",
+      "VU": "2",
+      "cost": "30"
+    },
+    {
+      "arc": "2",
+      "start": "A",
+      "end": "C",
+      "VU": "1",
+      "cost": "20"
+    },
+    {
+      "arc": "3",
+      "start": "C",
+      "end": "D",
+      "VU": "1",
+      "cost": "14"
+    },
+    {
+      "arc": "4",
+      "start": "D",
+      "end": "A",
+      "VU": "3",
+      "cost": "25"
+    }
+  ],
+  "resultHead": [
+    {
+      "field": "start",
+      "title": "起点"
+    },
+    {
+      "field": "end",
+      "title": "终点",
+      "minWidth": 80
+    },
+    {
+      "field": "distance",
+      "title": "距离",
+      "minWidth": 80
+    }
+  ],
+  "resultData": [
+    {
+      "start": "D",
+      "end": "A",
+      "distance": "3.0"
+    },
+    {
+      "start": "A",
+      "end": "B",
+      "distance": "2.0"
+    },
+    {
+      "start": "从节点D到节点B的最短路径距离",
+      "end": "5.0",
+      "distance": ""
+    }
+  ],
+  "resultMfHead": [
+    {
+      "field": "start",
+      "title": "起点"
+    },
+    {
+      "field": "end",
+      "title": "终点"
+    },
+    {
+      "field": "flow",
+      "title": "流量"
+    }
+  ],
+  "resultMcHead": [
+    {
+      "field": "start",
+      "title": "起点"
+    },
+    {
+      "field": "end",
+      "title": "终点"
+    },
+    {
+      "field": "flow",
+      "title": "流量"
+    },
+    {
+      "field": "cost",
+      "title": "费用"
+    }
+  ]
+}

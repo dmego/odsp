@@ -337,7 +337,8 @@
                 elem: tableId,
                 cellMinWidth: 115,
                 cols: [head],
-                data: data
+                data: data,
+                limit: 100
             });
         }
 
@@ -603,7 +604,6 @@
                             dynamicData["p_oData"] = p_oData;
                             $("#pStage").attr("isChange", "false");
                         }
-
                         // console.log(Head);
                         // console.log(Data);
                         //重新渲染系数表
@@ -611,7 +611,9 @@
                             elem: '#xishu',
                             cellMinWidth: 110,
                             cols: [Head],
-                            data: Data
+                            data: Data,
+                            limit: 100
+
                         });
 
                         isUpd = "isup";
@@ -730,6 +732,8 @@
             var originalHead, originalData;
             //首先确定原始数据表的表头及数据
             if (fun == 1) { // 背包问题
+                //结果表注释
+                $("#resultTitle").text("背包问题分析结果表");
                 if (packFun == 2) {
                     originalHead = k_mHead;
                     originalData = k_mData;
@@ -738,13 +742,18 @@
                     originalData = k_oData;
                 }
                 resultHead = resultKHead;
+
             } else if (fun == 2) { //资源分配问题
+                //结果表注释
+                $("#resultTitle").text("资源分配问题分析结果表");
                 originalHead = r_oHead;
                 originalData = r_oData;
 
                 resultHead = resultRHead;
 
             } else if (fun == 3) { //生产与存储问题
+                //结果表注释
+                $("#resultTitle").text("生产与存储问题分析结果表");
                 originalHead = p_oHead;
                 originalData = p_oData;
 
@@ -758,7 +767,8 @@
                 elem: '#originalTable',
                 cellMinWidth: 115,
                 cols: [originalHead],
-                data: originalData
+                data: originalData,
+                limit: 100
             });
 
             //renderCharts(originalData,incomeCharts,oldAction,oldState);
@@ -768,7 +778,8 @@
                 elem: '#resultTable',
                 cellMinWidth: 130,
                 cols: [resultHead],
-                data: data.result
+                data: data.result,
+                limit: 100
             });
 
         }
@@ -938,7 +949,8 @@
             elem: '#xishu',
             cellMinWidth: 115,
             cols: [k_oHead],
-            data: k_oData
+            data: k_oData,
+            limit: 100
         });
 
         //原始数据表
@@ -946,7 +958,8 @@
             elem: '#originalTable',
             cellMinWidth: 115,
             cols: [k_oHead],
-            data: k_oData
+            data: k_oData,
+            limit: 100
         });
         // renderCharts(originalData,incomeCharts,oldAction,oldState);
 
@@ -955,7 +968,8 @@
             elem: '#resultTable',
             cellMinWidth: 130,
             cols: [resultHead],
-            data: resultData
+            data: resultData,
+            limit: 100
         });
 
     });
