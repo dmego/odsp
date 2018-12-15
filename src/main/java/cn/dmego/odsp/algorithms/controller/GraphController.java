@@ -48,7 +48,7 @@ public class GraphController {
     @ResponseBody
     @RequestMapping("/calculate")
     public JsonResult calculate(@RequestParam("vexsArr[]") String[] vexsArr, GraphVo graphVo){
-
+        graphVo.setVexNum(vexsArr.length); //顶点数
         CommonUtil.jsonToGraph(vexsArr,graphVo);
 
         JsonResult calculate = graphService.calculate(graphVo);
