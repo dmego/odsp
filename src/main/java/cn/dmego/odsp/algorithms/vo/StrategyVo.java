@@ -2,6 +2,8 @@ package cn.dmego.odsp.algorithms.vo;
 
 import lombok.Data;
 
+import java.util.Map;
+
 /**
  * class_name: StrategyVo
  * package: cn.dmego.odsp.algorithms.vo
@@ -21,13 +23,15 @@ public class StrategyVo {
 
     private Integer sType; //目标类型
 
+    private Map<Integer,String> direction; //方向Map
+
     private double[] increments; //允许增量数组
 
-    private double[] extremum; //极值数组
+    private double[] extremums; //极值数组
 
     private String ratioTableData; //json 字符串格式的表格数据
 
-    private Integer[][] matrix; //矩阵数据数组
+    private double[][] matrix; //矩阵数据数组
 
     private Integer bestValue; //最佳结果的值
 

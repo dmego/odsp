@@ -155,6 +155,7 @@ public class LinPlanTest {
                     ++num2;
             }
             m_mXcoefficientBig = new double[this.m_nVariable + m_nSongChiVariable + m_nRenGongVariable];
+
             for (int i = 0; i < this.m_nVariable; ++i)
                 m_mXcoefficientBig[i] = !this.m_sType.equals("极小值") ? this.m_mXcoefficient[i] : this.m_mXcoefficient[i] * -1.0;
             for (int mNVariable2 = this.m_nVariable; mNVariable2 < this.m_nVariable + m_nSongChiVariable; ++mNVariable2)
@@ -162,6 +163,7 @@ public class LinPlanTest {
             for (int i = this.m_nVariable + m_nSongChiVariable; i < this.m_nVariable + m_nSongChiVariable + m_nRenGongVariable; ++i)
                 m_mXcoefficientBig[i] = -1.0 * m_dM;
             m_mCTarget = new double[1][this.m_nConstraint];
+
             for (int i = 0; i < this.m_nConstraint; ++i)
                 m_mCTarget[0][i] = !(this.m_htCcoefficientDirection.get(i).equals("<=")) ? -1.0 * m_dM : 0.0;
             m_htGJColumnAndZSRow = new HashMap<>();

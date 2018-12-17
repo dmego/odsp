@@ -387,7 +387,7 @@
                 if (data.code == 200) {
                     top.layer.msg(data.msg, {icon: 1});
                     //数据返回成功,得到数据,渲染表格
-                    //renderTables(data);
+                    renderTables(data);
                 } else {
                     top.layer.msg(data.msg, {icon: 2});
                 }
@@ -402,26 +402,9 @@
         function renderTables(data) {
             var originalHead, originalData;
             //首先确定原始数据表的表头及数据
-            if (fun == 1) { //最短路径
-                originalHead = mpHead;
-                originalData = mpData;
-                resultHead = resultHead;
-
-            } else if (fun == 2) { //最小生成树
-                originalHead = mtHead;
-                originalData = mtData;
-                resultHead = resultHead;
-
-            } else if (fun == 3) { //最大流
-                originalHead = mfHead;
-                originalData = mfData;
-                resultHead = resultMfHead;
-            } else if (fun == 4) { //最小费用最大流
-                originalHead = mcHead;
-                originalData = mcData;
-                resultHead = resultMcHead;
-            }
-
+            originalHead = Head;
+            originalData = Data;
+            resultHead = resultHead;
             //渲染原始数据表
             table.render({
                 elem: '#originalTable',

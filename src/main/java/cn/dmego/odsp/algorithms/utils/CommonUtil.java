@@ -5,11 +5,14 @@ import cn.dmego.odsp.algorithms.model.Graph;
 import cn.dmego.odsp.algorithms.vo.DecisionVo;
 import cn.dmego.odsp.algorithms.vo.DynamicVo;
 import cn.dmego.odsp.algorithms.vo.GraphVo;
+import cn.dmego.odsp.algorithms.vo.StrategyVo;
 import cn.dmego.odsp.common.JsonResult;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * class_name: CommonUtil
@@ -170,6 +173,45 @@ public class CommonUtil {
 
     }
 
+    /**
+     * 决策规划,对前台的json数据进行处理,方便后面计算
+     * @param strategyVo
+     */
+    public static void jsonToArray(StrategyVo strategyVo) {
+
+        String jsonStr = strategyVo.getRatioTableData(); //json 字符串
+        Integer vari = strategyVo.getVariable(); //决策变量
+        Integer cons = strategyVo.getConstraint(); //约束条件格式
+
+        double[] extremum = new double[vari]; //极值
+        double[] increments = new double[cons]; //允许增量数组
+        double[][] matrix = new double[cons][vari]; //矩阵数据数组[约束][决策]
+        Map<Integer,String> directions = new HashMap<>(); //方向map
+        
+        //将 JSON 字符串转成矩阵数组
+        JSONArray array = JSONObject.parseArray(jsonStr);
+
+        //第一行为极值
+        JSONObject joex = array.getJSONObject(0);
+        for (int i = 1; i <= vari; i++) {
+            extremum[i-1] = joex.getDouble(i+"_x");
+        }
+        //从第二行开始为矩阵数据和方向,允许增量
+        for (int i = 1; i < array.size(); i++) { //约束
+            JSONObject jo = array.getJSONObject(i);
+            for (int j = 1; j <= vari; j++) {//决策
+                matrix[i-1][j-1] = jo.getDouble(j+"_x");
+            }
+            directions.put(i-1,jo.getString("direction"));
+            increments[i-1] = jo.getDouble("increment");
+
+        }
+        //将数据存入Vo对象中
+        strategyVo.setExtremums(extremum);
+        strategyVo.setIncrements(increments);
+        strategyVo.setMatrix(matrix);
+        strategyVo.setDirection(directions);
+    }
 
 
     /**
@@ -230,5 +272,8 @@ public class CommonUtil {
         Double max = max1 >= max2 ? max1 : max2;
         return String.valueOf(max);
     }
+
+
+
 
 }
