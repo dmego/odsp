@@ -36,13 +36,12 @@ public class GraphServiceImpl implements GraphService {
         String end = graphVo.getEnd();
 
         List<Map<String, String>> mapList = new ArrayList<>();
-        System.out.println(graph.DFS());
         if(graph.DFS() != 1){
             jsonResult = JsonResult.error(500, "不能构成连通图!请调整输入数据!");
             return jsonResult;
         }else{
             if(fun == 1){  //最短路径
-                mapList = dijkstra(vexNum,edges,graph,start,end);
+                mapList = dijkstra(vexNum,graph,start,end);
             }else if(fun == 2){ //最小生成树
                 mapList = kruskal(arcNum,edges,graph);
             }else if(fun == 3){ //最大流
@@ -120,13 +119,12 @@ public class GraphServiceImpl implements GraphService {
     /**
      * 迪杰斯特拉求最短路径
      */
-    private static List<Map<String, String>> dijkstra(Integer vexNum, EData[] edges, Graph graph,String start,String end){
+    private static List<Map<String, String>> dijkstra(Integer vexNum, Graph graph,String start,String end){
 
         int[] prev = new int[vexNum]; //前驱顶点数组,prev[i] 是起点到顶点 i 的最短路径中, i 顶点的前一个顶点
         double[] dist = new double[vexNum]; //距离数组, 起点到 i 顶点的最短路径长度
         boolean[] flag = new boolean[vexNum]; //flag[i] = true 表示起点到 i 顶点的最短路径已经成功获取
 
-        EData[] rets = new EData[vexNum]; //结果数组,保存最短路径的边
         double weights = 0.0; //最短距离
 
         //1.先获取起点和终点下标,然后进行初始化
@@ -199,6 +197,8 @@ public class GraphServiceImpl implements GraphService {
         }
         return mapList;
     }
+
+
 
 
 }

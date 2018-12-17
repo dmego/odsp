@@ -110,15 +110,6 @@
                                 <input type="text" id="mfArcNum" name="mfArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|arcNum">
                             </div>
                         </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">图类型</label>
-                            <div class="layui-input-block">
-                                <select id="gMfType" name="gMfType" lay-filter="gMfType">
-                                    <option value="1">有向图</option>
-                                    <option value="2">无向图</option>
-                                </select>
-                            </div>
-                        </div>
                     </div>
                     <!--最小费用最大流问题参数设置-->
                     <div class="layui-card-body minCostMaxFlowParam dis-none">
@@ -126,15 +117,6 @@
                             <label class="layui-form-label">弧个数</label>
                             <div class="layui-input-block">
                                 <input type="text" id="mcArcNum" name="mcArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|arcNum">
-                            </div>
-                        </div>
-                        <div class="layui-form-item">
-                            <label class="layui-form-label">图类型</label>
-                            <div class="layui-input-block">
-                                <select id="gMcType" name="gMcType" lay-filter="gMcType">
-                                    <option value="1">有向图</option>
-                                    <option value="2">无向图</option>
-                                </select>
                             </div>
                         </div>
                     </div>
@@ -700,9 +682,9 @@
             }else if(fun == 2){
                 return {fun:fun, gType: data.field.gMtType, arcNum: data.field.mtArcNum, start: data.field.mtStart, end: data.field.mtEnd,vexsArr: vexs, ratioTableData: JSON.stringify(table.cache.xishu)}
             }else if(fun == 3){
-                return {fun:fun, gType: data.field.gMfType, arcNum: data.field.mfArcNum, start: data.field.mfStart, end: data.field.mfEnd,vexsArr: vexs, ratioTableData: JSON.stringify(table.cache.xishu)}
+                return {fun:fun, arcNum: data.field.mfArcNum, start: data.field.mfStart, end: data.field.mfEnd,vexsArr: vexs, ratioTableData: JSON.stringify(table.cache.xishu)}
             }else if(fun == 4){
-                return {fun:fun, gType: data.field.gMcType, arcNum: data.field.mcArcNum, start: data.field.mcStart, end: data.field.mcEnd,vexsArr: vexs, ratioTableData: JSON.stringify(table.cache.xishu)}
+                return {fun:fun, arcNum: data.field.mcArcNum, start: data.field.mcStart, end: data.field.mcEnd,vexsArr: vexs, ratioTableData: JSON.stringify(table.cache.xishu)}
             }
         }
 
