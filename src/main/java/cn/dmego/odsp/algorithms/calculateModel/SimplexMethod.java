@@ -2,9 +2,7 @@ package cn.dmego.odsp.algorithms.calculateModel;
 
 import lombok.Data;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * class_name: SimplexMethod
@@ -179,7 +177,9 @@ public class SimplexMethod {
             for (int j = 0; j < cons; j++) {
                 b[j][0] = matrixBig[j][i];
             }
-            MatrixMultiply(target, b, c);
+            RefC ref = new RefC(c);
+            MatrixMultiply(target, b, ref);
+            c = ref.c;
             double num3 = c[0][0] - extremumsBig[i];
             if (num3 < 0.0) {
                 flag = false;
@@ -223,9 +223,9 @@ public class SimplexMethod {
             }
             if(ht.containsValue(y)){
                 int key = -1;
-                for (int i = 0; i < ht.size(); i++) {
-                    if(ht.get(i) == y){
-                        key = i;
+                for (Map.Entry<Integer,Integer> entry: ht.entrySet()) {
+                    if(entry.getValue() == y){
+                        key = entry.getKey();
                     }
                 }
                 ht.remove(key);
@@ -289,18 +289,26 @@ public class SimplexMethod {
         zBest = num1;
     }
 
-    private boolean MatrixMultiply(double[][] a, double[][] b, double[][] c) {
-        if (a[0].length != b.length || a.length != c.length || b[0].length != c[0].length) {
+    private boolean MatrixMultiply(double[][] a, double[][] b, RefC ref) {
+        if (a[0].length != b.length || a.length != ref.c.length || b[0].length != ref.c[0].length) {
             return false;
         }
         for (int i = 0; i < a.length; i++) {
             for (int j = 0; j < b[0].length; j++) {
-                c[i][j] = 0.0;
+                ref.c[i][j] = 0.0;
                 for (int k = 0; k < b.length; k++) {
-                    c[i][j] += a[i][k] * b[k][j];
+                    ref.c[i][j] += a[i][k] * b[k][j];
                 }
             }
         }
         return true;
+    }
+
+    @Data
+    private class RefC{
+        public double[][] c;
+        public RefC(double[][] c){
+            this.c = c;
+        }
     }
 }

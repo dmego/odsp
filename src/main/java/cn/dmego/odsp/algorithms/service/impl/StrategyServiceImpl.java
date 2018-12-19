@@ -1,6 +1,7 @@
 package cn.dmego.odsp.algorithms.service.impl;
 
 import cn.dmego.odsp.algorithms.calculateModel.LinearProgram;
+import cn.dmego.odsp.algorithms.calculateModel.ZeroOneProgram;
 import cn.dmego.odsp.algorithms.service.StrategyService;
 import cn.dmego.odsp.algorithms.utils.CommonUtil;
 import cn.dmego.odsp.algorithms.vo.StrategyVo;
@@ -36,7 +37,9 @@ public class StrategyServiceImpl implements StrategyService {
 
         JsonResult jsonResult = new JsonResult();
         List<Map<String, String>> mapList = new ArrayList<>();
+
         LinearProgram linearProgram = new LinearProgram();
+        ZeroOneProgram zeroOneProgram = new ZeroOneProgram();
         if(fun == 1){ //线性规划
             if(linearProgram.linearProgramCalculate(strategyVo)){
                 mapList = linearProgram.resultData;
@@ -46,9 +49,22 @@ public class StrategyServiceImpl implements StrategyService {
             }
 
         }else if(fun == 2){ //整数规划
+            if(linearProgram.IntegerProgramCalculate(strategyVo)){
+                mapList = linearProgram.resultData;
+            }else{
+                jsonResult = JsonResult.error(500, "整数规划问题计算错误!msg="+linearProgram.log);
+                return jsonResult;
+            }
 
         }else if(fun == 3){ //0-1规划
-
+            if(zeroOneProgram.zeroOneProgramCalculate(strategyVo)){
+                mapList = zeroOneProgram.resultData;
+                List<Map<String, String>> calculateResultData = zeroOneProgram.calculateResultData;
+                jsonResult.put("calculateResult",calculateResultData);
+            }else {
+                jsonResult = JsonResult.error(500, "0-1规划问题计算错误!msg="+zeroOneProgram.log);
+                return jsonResult;
+            }
         }
 
         jsonResult.put("result",mapList);

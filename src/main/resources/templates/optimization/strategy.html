@@ -156,6 +156,21 @@
                 </div>
             </div>
 
+            <!--可能取值结果表-->
+            <div class="layui-card dis-none" id="maybeTableDiv">
+                <div class="layui-card-header"><span id="maybeTitle">可能取值结果表</span>
+                    <span id="maybeShow" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="maybeFa"> 打开图表</i>
+                    </span>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="maybeTable"></table>
+                </div>
+                <div class="layui-card-body dis-none" id="maybeEcharts">
+                    <div id="maybeEchartsDiv" class="layui-show echartsDiv"></div>
+                </div>
+            </div>
+
             <!--最终结果表-->
             <div class="layui-card" id="resultTableDiv">
                 <div class="layui-card-header"><span id="resultTitle">最优解结果表</span>
@@ -163,7 +178,6 @@
                         <i class="fa fa-bar-chart" aria-hidden="true" id="resultFa"> 打开图表</i>
                     </span>
                 </div>
-
                 <div class="layui-card-body">
                     <table class="layui-hide" id="resultTable"></table>
                 </div>
@@ -219,6 +233,14 @@
 
             resultHead = data.resultHead;
             resultData = data.resultData;
+        });
+
+        /**单选点击事件
+         * 1.初始化参数设置
+         * 2.初始化系数设置
+         */
+        form.on('radio(function)', function (data) {
+            fun = data.value;
         });
 
         function renderTable(tableId, head, data) {
@@ -291,7 +313,7 @@
                 btn: ['保存', '取消'],
                 yes: function (index, layero) {
                     var ifTable = $("div.layui-layer-content > iframe")[0].contentWindow.layui.table;
-                    console.log(ifTable)
+                    // console.log(ifTable)
                     //在提交数据之前先校验数据
                     var cache = ifTable.cache.ratio;
                     var isNull = false;
@@ -321,7 +343,7 @@
 
                         var xsData = JSON.parse(JSON.stringify(cache));//表格数据
 
-                        console.log(xsData)
+                        // console.log(xsData)
 
                         Data = xsData;
                         strategyData["Data"] = Data;
@@ -377,7 +399,7 @@
             })
             layer.load(2);
             $.post('strategy/calculate', {
-                fun: fun,
+                fun: data.field.function,
                 variable: data.field.variable,
                 constraint: data.field.constraint,
                 sType: data.field.sType,
@@ -413,6 +435,32 @@
                 data: originalData,
                 limit: 100
             });
+            //如果选择的是0-1规划，还需要渲染可能结果表
+            if(fun == 3){
+                $("#maybeTableDiv").removeClass('dis-none');
+                var maybeHead = [];
+                var index = {field: 'index', title: '序号'};
+                maybeHead.push(index);
+                for (var i = 1; i <= $("#variable").val(); i++) {
+                    var x = {field: 'X'+i, title: 'X'+i};
+                    maybeHead.push(x);
+                }
+                var Z = {field: 'Z', title: 'Z'};
+                var meet = {field: 'meet', title: '是否满足约束条件',minWidth: 150};
+                maybeHead.push(Z);
+                maybeHead.push(meet);
+
+                //渲染可能结果表
+                table.render({
+                    elem: '#maybeTable',
+                    cellMinWidth: 50,
+                    cols: [maybeHead],
+                    data: data.calculateResult,
+                    limit: 100
+                });
+            }else {
+                $("#maybeTableDiv").addClass('dis-none');
+            }
 
             //渲染结果表
             table.render({
