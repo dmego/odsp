@@ -13,6 +13,7 @@ import lombok.Data;
 @Data
 public class Graph {
 
+    private static double INF = Double.MAX_VALUE; //权值最大值
     private EData[] edges; //边数组
 
     //邻接表中对应的链表顶点
@@ -31,7 +32,8 @@ public class Graph {
     private int mEdgNum;    // 边的数量
     private VNode[] mVexs;  // 顶点数组
 
-    public Graph(String[] vexs, EData[] edges) {
+
+    public Graph(String[] vexs, EData[] edges,int gType) {
 
         this.edges = edges;
 
@@ -67,15 +69,19 @@ public class Graph {
                 mVexs[p1].firstEdge = node1;
             else
                 linkLast(mVexs[p1].firstEdge, node1);
-            // 初始化node2
-            ENode node2 = new ENode();
-            node2.ivex = p1;
-            node2.weight = weight;
-            // 将node2链接到"p2所在链表的末尾"
-            if(mVexs[p2].firstEdge == null)
-                mVexs[p2].firstEdge = node2;
-            else
-                linkLast(mVexs[p2].firstEdge, node2);
+
+            //如果是无向图,头和尾节点都链接到头节点链表.如果是有向图,只需要将尾节点链接到头节点链表(1:有向图,2:无向图)
+            if(gType == 2){
+                // 初始化node2
+                ENode node2 = new ENode();
+                node2.ivex = p1;
+                node2.weight = weight;
+                // 将node2链接到"p2所在链表的末尾"
+                if(mVexs[p2].firstEdge == null)
+                    mVexs[p2].firstEdge = node2;
+                else
+                    linkLast(mVexs[p2].firstEdge, node2);
+            }
         }
     }
 
@@ -90,7 +96,7 @@ public class Graph {
     }
 
     /*
-     * 返回ch位置
+     * 通过顶点名称返回顶点所在表头节点表中的下标
      */
     public int getPosition(String ch) {
         for(int i=0; i<mVexs.length; i++)
@@ -105,6 +111,26 @@ public class Graph {
         while (vends[i] != 0)
             i = vends[i];
         return i;
+    }
+
+
+    public String getByIndex(int i){
+        return mVexs[i].data;
+    }
+
+    /*
+     * 获取边 (start,end) 的权值,如果不连通,则返回无穷大
+     */
+    public double getWeight(int start, int end){
+        if(start == end)
+            return 0;
+        ENode node = mVexs[start].firstEdge;
+        while (node != null){
+            if(end == node.ivex)
+                return node.weight;
+            node = node.nextEdge;
+        }
+        return INF;
     }
 
     /*

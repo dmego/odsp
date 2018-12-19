@@ -5,11 +5,15 @@ import cn.dmego.odsp.algorithms.model.Graph;
 import cn.dmego.odsp.algorithms.vo.DecisionVo;
 import cn.dmego.odsp.algorithms.vo.DynamicVo;
 import cn.dmego.odsp.algorithms.vo.GraphVo;
+import cn.dmego.odsp.algorithms.vo.StrategyVo;
 import cn.dmego.odsp.common.JsonResult;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 
+import java.lang.reflect.Array;
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * class_name: CommonUtil
@@ -148,6 +152,8 @@ public class CommonUtil {
         String jsonStr = graphVo.getRatioTableData();
         //根据调用不同的方法,设置不同的一维数组
         Integer fun = graphVo.getFun();
+        //图的类型
+        Integer gType = graphVo.getGType();
         //将 JSON 字符串转成矩阵数组
         JSONArray array = JSONObject.parseArray(jsonStr);
         EData[] edges = new EData[array.size()];
@@ -162,10 +168,51 @@ public class CommonUtil {
         }else if(fun == 4){
 
         }
-        Graph graph = new Graph(vexsArr,edges);
+
+        Graph graph = new Graph(vexsArr,edges,gType);
         graphVo.setGraph(graph);
+
     }
 
+    /**
+     * 决策规划,对前台的json数据进行处理,方便后面计算
+     * @param strategyVo
+     */
+    public static void jsonToArray(StrategyVo strategyVo) {
+
+        String jsonStr = strategyVo.getRatioTableData(); //json 字符串
+        Integer vari = strategyVo.getVariable(); //决策变量
+        Integer cons = strategyVo.getConstraint(); //约束条件格式
+
+        double[] extremum = new double[vari]; //极值
+        double[] increments = new double[cons]; //允许增量数组
+        double[][] matrix = new double[cons][vari]; //矩阵数据数组[约束][决策]
+        Map<Integer,String> directions = new HashMap<>(); //方向map
+        
+        //将 JSON 字符串转成矩阵数组
+        JSONArray array = JSONObject.parseArray(jsonStr);
+
+        //第一行为极值
+        JSONObject joex = array.getJSONObject(0);
+        for (int i = 1; i <= vari; i++) {
+            extremum[i-1] = joex.getDouble(i+"_x");
+        }
+        //从第二行开始为矩阵数据和方向,允许增量
+        for (int i = 1; i < array.size(); i++) { //约束
+            JSONObject jo = array.getJSONObject(i);
+            for (int j = 1; j <= vari; j++) {//决策
+                matrix[i-1][j-1] = jo.getDouble(j+"_x");
+            }
+            directions.put(i-1,jo.getString("direction"));
+            increments[i-1] = jo.getDouble("increment");
+
+        }
+        //将数据存入Vo对象中
+        strategyVo.setExtremums(extremum);
+        strategyVo.setIncrements(increments);
+        strategyVo.setMatrix(matrix);
+        strategyVo.setDirection(directions);
+    }
 
 
     /**
@@ -226,5 +273,24 @@ public class CommonUtil {
         Double max = max1 >= max2 ? max1 : max2;
         return String.valueOf(max);
     }
+
+
+    /**
+     * 反转数组
+     */
+    public static <T> T invertArray(T array) {
+        int len = Array.getLength(array);
+        Class<?> classz = array.getClass().getComponentType();
+        Object dest = Array.newInstance(classz, len);
+        System.arraycopy(array, 0, dest, 0, len);
+        Object temp;
+        for (int i = 0; i < (len / 2); i++) {
+            temp = Array.get(dest, i);
+            Array.set(dest, i, Array.get(dest, len - i - 1));
+            Array.set(dest, len - i - 1, temp);
+        }
+        return (T)dest;
+    }
+
 
 }

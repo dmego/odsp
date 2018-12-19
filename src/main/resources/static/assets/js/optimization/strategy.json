@@ -1,0 +1,135 @@
+{
+  "fun": 1,
+  "variable": 4,
+  "constraint": 4,
+  "isUpd": "isup",
+  "Head": [
+    {
+      "field": "restrict",
+      "title": "约束条件/变量",
+      "minWidth": 120
+    },
+    {
+      "field": "1_x",
+      "title": "X1"
+    },
+    {
+      "field": "2_x",
+      "title": "X2"
+    },
+    {
+      "field": "3_x",
+      "title": "X3"
+    },
+    {
+      "field": "4_x",
+      "title": "X4"
+    },
+    {
+      "field": "direction",
+      "title": "方向"
+
+    },
+    {
+      "field": "increment",
+      "title": "允许增量"
+    }
+  ],
+  "Data": [
+    {
+      "restrict": "极值",
+      "1_x": "6",
+      "2_x": "2",
+      "3_x": "3",
+      "4_x": "5",
+      "direction": "",
+      "increment": ""
+    },
+    {
+      "restrict": "C1",
+      "1_x": "4",
+      "2_x": "2",
+      "3_x": "1",
+      "4_x": "3",
+      "direction": "<=",
+      "increment": "10"
+    },
+    {
+      "restrict": "C2",
+      "1_x": "3",
+      "2_x": "-5",
+      "3_x": "1",
+      "4_x": "6",
+      "direction": "=",
+      "increment": "4"
+    },
+    {
+      "restrict": "C3",
+      "1_x": "2",
+      "2_x": "1",
+      "3_x": "1",
+      "4_x": "-1",
+      "direction": "<=",
+      "increment": "3"
+    },
+    {
+      "restrict": "C4",
+      "1_x": "1",
+      "2_x": "2",
+      "3_x": "4",
+      "4_x": "5",
+      "direction": "<=",
+      "increment": "10"
+    }
+  ],
+  "resultHead": [
+    {
+      "field": "variable",
+      "title": "决策变量"
+    },
+    {
+      "field": "best",
+      "title": "最优解",
+      "minWidth": 80
+    },
+    {
+      "field": "ratio",
+      "title": "目标系数",
+      "minWidth": 80
+    },
+    {
+      "field": "de",
+      "title": "贡献",
+      "minWidth": 80
+    }
+  ],
+  "resultData": [
+    {
+      "variable": "X1",
+      "best": "0",
+      "ratio": "6",
+      "de": "0"
+    },{
+      "variable": "X2",
+      "best": "1.452",
+      "ratio": "2",
+      "de": "2.903"
+    },{
+      "variable": "X3",
+      "best": "2.935",
+      "ratio": "3",
+      "de": "8.806"
+    },{
+      "variable": "X4",
+      "best": "1.387",
+      "ratio": "5",
+      "de": "6.935"
+    },
+    {
+      "variable": "[Max.]=",
+      "best": "",
+      "ratio": "",
+      "de": "18.645"
+    }
+  ]
+}
