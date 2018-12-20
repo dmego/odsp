@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html>
+
+<head>
+    <title>ODSP</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+    <link rel="stylesheet" href="/assets/css/site.css"/>
+    <link rel="stylesheet" href="/assets/libs/font-awesome/css/font-awesome.min.css"/>
+    <style>
+        .layui-input-block {
+            margin-left: 150px;
+            min-height: 36px;
+        }
+
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 15px;
+            width: 120px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body class="page-aside-fixed">
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-col-space15">
+
+        <div class="layui-col-md5 page-aside">
+            <span id="fl-btn" class="fl-btn">
+                <i id="fl-btn-icon" class="layui-icon layui-icon-right"></i>
+            </span>
+            <div id="fl-btn-l" class="layui-card scroll">
+                <form class="layui-form" id="graphForm" lay-filter="graphForm">
+                    <!--方法选择-->
+                    <div class="layui-card-header newheader">方法选择</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item" pane="">
+                            <div class="layui-input-block">
+                                <input type="radio" name="function" value="1" lay-filter="function" title="表上作业法" checked="">
+                            </div>
+                        </div>
+                    </div>
+                    <!--参数设置-->
+                    <div class="layui-card-header newheader">参数设置</div>
+                    <!--表上作业法参数设置-->
+                    <div class="layui-card-body">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">产地个数</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="originNum" name="originNum" value="3" isChange="false"
+                                       placeholder="[1,+∞)" class="layui-input" lay-verify="required|originNum">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">销地个数</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="salesNum" name="salesNum" value="4" isChange="false"
+                                       placeholder="[1,+∞)" class="layui-input" lay-verify="required|salesNum">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">目标函数极值</label>
+                            <div class="layui-input-block">
+                                <select id="sType" name="sType" lay-filter="sType">
+                                    <option value="1">极大值</option>
+                                    <option value="2">极小值</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--表格系数设置-->
+                    <hr class="layui-bg-green">
+                    <div class="layui-card">
+                        <div class="layui-card-header">系数设置
+                            <span id="btnUpd" style="float: right; cursor: pointer;">
+                                <i class="fa fa-pencil-square" aria-hidden="true"></i>  编辑</i>
+                            </span>
+                        </div>
+                        <div class="layui-card-body">
+                            <table class="layui-hide" lay-size="sm" id="xishu"></table>
+                        </div>
+                    </div>
+
+                    <!--参数说明-->
+                    <div class="layui-card-header newheader">参数说明</div>
+                    <div class="layui-card-body">
+                        <ul class="layui-timeline">
+                            <li class="timeline-item">
+                                <div class="layui-text">
+                                    <ul>
+                                        <li>系数设置：输入各产地向销地运输单位产品所产生的成本/利润。</li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--底部悬浮操作按钮-->
+                    <div style="height: 5rem;"></div>
+                    <div class="fl-box">
+                        <button class="layui-btn layui-btn-lg layui-btn-radius layui-btn-primary" id="calculate"
+                                lay-filter="calculate" lay-submit>
+                            <i class="fa fa-play-circle" aria-hidden="true"></i> 计算
+                        </button>
+                        <span class="verticalline"></span>
+                        <button class="layui-btn layui-btn-lg  layui-btn-radius layui-btn-primary" id="download">
+                            <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> 下载
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <!--数据表格-->
+        <div id="fl-btn-r" class="layui-col-md7 page-main">
+            <!--原始数据表-->
+            <div class="layui-card" id="originalTableDiv">
+                <div class="layui-card-header">运价或运输利润表
+                    <span id="originalShow" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="originalFa"> 打开图表</i>
+                    </span>
+                </div>
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="originalTable"></table>
+                </div>
+                <div class="layui-card-body dis-none" id="originalEcharts">
+                    <div id="originalEchartsDiv" class="layui-show echartsDiv"></div>
+                </div>
+            </div>
+
+            <!--最终结果表-->
+            <div class="layui-card" id="resultTableDiv">
+                <div class="layui-card-header"><span id="resultTitle">运输方案表</span>
+                    <span id="resultShow" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="resultFa"> 打开图表</i>
+                    </span>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="resultTable"></table>
+                </div>
+                <div class="layui-card-body dis-none" id="resultEcharts">
+                    <div id="resultEchartsDiv" class="layui-show echartsDiv"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/libs/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/assets/libs/slimscroll/jquery.slimscroll.js"></script>
+
+<script type="text/javascript" src="/assets/libs/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echartsTheme.js"></script>
+
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script type="text/javascript" src="/assets/js/utils.js"></script>
+<script type="text/javascript" src="/assets/js/tool.js"></script>
+
+<script>
+    //layui建议所有代码都写在layui.use()里面，相当于jquery的$(function(){})
+    var use = layui.use(['table', 'layer', 'form', 'util', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+
+        var transportData;
+        var fun, originNum, salesNum, isUpd;
+        var Head, Data, resultHead, resultData;
+
+        //首先获取该页面的初始化数据
+        $.ajaxSettings.async = false; //同步获取数据
+        $.getJSON("/assets/js/optimization/transport.json", function (data) {
+            transportData = data;
+            admin.putTempData('transportData', data);
+
+            fun = data.fun;
+            originNum = data.originNum;
+            salesNum = data.salesNum;
+            isUpd = data.isUpd;
+
+            Head = data.Head;
+            Data = data.Data;
+
+            resultHead = data.resultHead;
+            resultData = data.resultData;
+        });
+
+
+        function renderTable(tableId, head, data) {
+            table.render({
+                elem: tableId,
+                cellMinWidth: 115,
+                cols: [head],
+                data: data
+            });
+        }
+
+        // 编辑系数之前先校验数据
+        function checkActAte(originNum, salesNum) {
+            if (originNum < 1) {
+                layer.msg("产地个数必须大于1!");
+                return false;
+            } else if (originNum > 100) {
+                layer.msg("最多添加 100 个产地!");
+                return false;
+            } else if (salesNum < 1) {
+                layer.msg("销地个数必须大于1!");
+                return false;
+            } else if (salesNum > 100) {
+                layer.msg("最多添加 100 个销地!");
+                return false;
+            }
+            return true;
+        }
+
+        //实时监听 input 值变化
+        $(function () {
+            var originNum = $("#originNum").val();
+            var salesNum = $("#salesNum").val();
+
+            $("#originNum").bind("input propertychange", function (event) {
+                if (originNum != $("#originNum").val()) {
+                    $("#originNum").attr("isChange", "true");
+                    isUpd = "noup"; //记录不是更新表格操作
+                } else {
+                    $("#originNum").attr("isChange", "false");
+                }
+            });
+            $("#salesNum").bind("input propertychange", function (event) {
+                if (salesNum != $("#salesNum").val()) {
+                    $("#salesNum").attr("isChange", "true");
+                    isUpd = "noup"; //记录不是更新表格操作
+                } else {
+                    $("#salesNum").attr("isChange", "false");
+                }
+            });
+        })
+
+
+        // 添加编辑按钮点击事件
+        $('#btnUpd').click(function () {
+            var origin = $("#originNum").val();
+            var sales = $("#salesNum").val();
+
+            //校验数据
+            if (!checkActAte(origin, sales)) {
+                return;
+            }
+
+            layer.open({
+                type: 2,
+                title: '系数设置',
+                maxmin: true,
+                area: ['550px', '500px'],
+                content: 'transport/editForm/' + origin + '/' + sales + '/' + isUpd,
+                btn: ['保存', '取消'],
+                yes: function (index, layero) {
+                    var ifTable = $("div.layui-layer-content > iframe")[0].contentWindow.layui.table;
+                    // console.log(ifTable)
+                    //在提交数据之前先校验数据
+                    var cache = ifTable.cache.ratio;
+                    var isNull = false;
+                    var isNoDouble = false; //非负整数或保留3位小数
+                    var rag = /^[+]?\d*\.?\d{0,3}$/; //非负整数或保留3位小数
+                    // //for 循环进行校验
+                    // for (var i = 0; i < cache.length; i++) {
+                    //     var item = cache[i];
+                    //     if(fun == 1 || fun == 2){
+                    //         //先校验非空
+                    //         if (isEmpty(item['start']) || isEmpty(item['end']) || isEmpty(item['weight'])) {
+                    //             isNull = true;
+                    //             break;
+                    //         } else if (!rag.test(item['weight'])) {
+                    //             isNoDouble = true;
+                    //             break;
+                    //         }
+                    //     }
+                    // }
+
+                    if (isNull) {
+                        layer.msg('数据表中存在字段为空!');
+                    } else if (isNoDouble) {
+                        layer.msg('数据表的字段只能为非负整数或保留3位的非负小数!');
+                    } else { //如果校验通过,提交数据到系数设置的表格中
+                        layer.close(index); //如果设定了yes回调，需进行手工关闭
+
+                        var xsData = JSON.parse(JSON.stringify(cache));//表格数据
+
+                        // console.log(xsData)
+
+                        Data = xsData;
+                        transportData["Data"] = Data;
+                        $("#originNum").attr("isChange", "false");
+                        $("#salesNum").attr("isChange", "false");
+
+                        //重新渲染系数表
+                        layui.table.render({
+                            elem: '#xishu',
+                            cellMinWidth: 110,
+                            cols: [Head],
+                            data: Data,
+                            limit: 100
+                        });
+
+                        isUpd = "isup";
+                        //更新 transportData 数据
+                        admin.putTempData('transportData', transportData);
+                    }
+                },
+                btn2: function (index, layero) { //取消按钮
+                    layer.close();
+                }
+            });
+        })
+
+        /**
+         * 自定义表单验证规则
+         */
+        form.verify({
+            originNum: function (value, item) {
+                if (value < 1) {
+                    return '产地个数必须大于1!';
+                } else if (value > 100) {
+                    return '最多添加 100 个产地!';
+                }
+            },
+            salesNum: function (value, item) {
+                if (value < 1) {
+                    return '销地个数必须大于1!';
+                } else if (value > 100) {
+                    return '最多添加 100 个销地!';
+                }
+            }
+        })
+
+        // 表单提交事件
+        form.on('submit(calculate)', function (data) {
+            //将checkbox 封装成一个数组
+            var functions = new Array();
+            $("input[name='function']:checked").each(function () {
+                functions.push($(this).val());
+            })
+            layer.load(2);
+            $.post('transport/calculate', {
+                fun: data.field.function,
+                originNum: data.field.originNum,
+                salesNum: data.field.salesNum,
+                sType: data.field.sType,
+                ratioTableData: JSON.stringify(table.cache.xishu),
+            }, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    top.layer.msg(data.msg, {icon: 1});
+                    //数据返回成功,得到数据,渲染表格
+                    renderTables(data);
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            });
+            return false;
+        });
+
+        /**
+         * 根据不同的 key 渲染出不同的结果表
+         * @param data
+         */
+        function renderTables(data) {
+            var originalHead, originalData;
+            //首先确定原始数据表的表头及数据
+            originalHead = Head;
+            originalData = Data;
+            resultHead = resultHead;
+            //渲染原始数据表
+            table.render({
+                elem: '#originalTable',
+                cellMinWidth: 100,
+                cols: [originalHead],
+                data: originalData,
+                limit: 100
+            });
+
+            //渲染结果表
+            table.render({
+                elem: '#resultTable',
+                cellMinWidth: 100,
+                cols: [resultHead],
+                data: data.result,
+                limit: 100
+            });
+        }
+
+        //----------------初始化操作----------------------
+        //系数设置表
+        table.render({
+            elem: '#xishu',
+            cellMinWidth: 80,
+            cols: [Head],
+            data: Data,
+            limit: 100
+
+        });
+
+        //原始数据表
+        table.render({
+            elem: '#originalTable',
+            cellMinWidth: 100,
+            cols: [Head],
+            data: Data,
+            limit: 100
+        });
+
+        //分析结果表
+        table.render({
+            elem: '#resultTable',
+            cellMinWidth: 100,
+            cols: [resultHead],
+            data: resultData,
+            limit: 100
+        });
+
+    });
+</script>
+</body>
+
+</html>

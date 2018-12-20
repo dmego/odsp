@@ -96,7 +96,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <version>1.18.4</version>
         </dependency>
         <!-- jwt配置 -->
         <dependency>
@@ -148,6 +148,14 @@
             <!--<artifactId>quartz</artifactId>-->
             <!--<version>${quartz.version}</version>-->
         <!--</dependency>-->
+
+        <dependency>
+            <groupId>com.datumbox</groupId>
+            <artifactId>lpsolve</artifactId>
+            <version>5.5.2.0</version>
+        </dependency>
+
+
         <!-- 从request获取设备信息-->
         <dependency>
             <groupId>eu.bitwalker</groupId>

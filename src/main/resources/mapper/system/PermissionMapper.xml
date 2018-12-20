@@ -6,7 +6,7 @@
           select permission_id from sys_role_permission where role_id in(
             select role_id from sys_user_role where user_id = #{userId}
           )
-        )
+        ) order by order_number
     </select>
     
     <select id="listByRoleId" resultType="cn.dmego.odsp.system.model.Permission">

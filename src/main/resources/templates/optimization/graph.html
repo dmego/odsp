@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html>
+
+<head>
+    <title>ODSP</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+    <link rel="stylesheet" href="/assets/css/site.css"/>
+    <link rel="stylesheet" href="/assets/libs/font-awesome/css/font-awesome.min.css"/>
+    <style>
+        .layui-input-block {
+            margin-left: 150px;
+            min-height: 36px;
+        }
+
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 15px;
+            width: 120px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body class="page-aside-fixed">
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-col-space15">
+
+        <div class="layui-col-md5 page-aside">
+            <span id="fl-btn" class="fl-btn">
+                <i id="fl-btn-icon" class="layui-icon layui-icon-right"></i>
+            </span>
+            <div id="fl-btn-l" class="layui-card scroll">
+                <form class="layui-form" id="graphForm" lay-filter="graphForm">
+                    <!--方法选择-->
+                    <div class="layui-card-header newheader">方法选择</div>
+                    <div class="layui-card-body">
+                        <div class="layui-form-item" pane="">
+                            <div class="layui-input-block">
+                                <input type="radio" name="function" value="1" lay-filter="function" title="最短路径问题" checked="">
+                            </div>
+                            <div class="layui-input-block">
+                                <input type="radio" name="function" value="2" lay-filter="function" title="最小生成树">
+                            </div>
+                            <div class="layui-input-block">
+                                <input type="radio" name="function" value="3" lay-filter="function" title="最大流问题">
+                            </div>
+                            <div class="layui-input-block">
+                                <input type="radio" name="function" value="4" lay-filter="function" title="最小费用最大流问题">
+                            </div>
+                        </div>
+                    </div>
+                    <!--参数设置-->
+                    <div class="layui-card-header newheader">参数设置</div>
+                    <!--最短路径问题参数设置-->
+                    <div class="layui-card-body minPathParam">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">弧个数</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="mpArcNum" name="mpArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|arcNum">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">图类型</label>
+                            <div class="layui-input-block">
+                                <select id="gMpType" name="gMpType" lay-filter="gMpType">
+                                     <option value="1">有向图</option>
+                                     <option value="2">无向图</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!--最小生成树参数设置-->
+                    <div class="layui-card-body minTreeParam dis-none">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">弧个数</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="mtArcNum" name="mtArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|arcNum">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">图类型</label>
+                            <div class="layui-input-block">
+                                <select id="gMtType" name="gMtType" lay-filter="gMtType">
+                                    <option value="1">有向图</option>
+                                    <option value="2">无向图</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!--最大流问题参数设置-->
+                    <div class="layui-card-body maxFlowParam dis-none">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">弧个数</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="mfArcNum" name="mfArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|arcNum">
+                            </div>
+                        </div>
+                    </div>
+                    <!--最小费用最大流问题参数设置-->
+                    <div class="layui-card-body minCostMaxFlowParam dis-none">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">弧个数</label>
+                            <div class="layui-input-block">
+                                <input type="text" id="mcArcNum" name="mcArcNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|arcNum">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--表格系数设置-->
+                    <hr class="layui-bg-green">
+                    <div class="layui-card">
+                        <div class="layui-card-header">系数设置
+                            <span id="btnUpd" style="float: right; cursor: pointer;">
+                                <i class="fa fa-pencil-square" aria-hidden="true"></i>  编辑</i>
+                            </span>
+                        </div>
+                        <div class="layui-card-body">
+                            <table class="layui-hide" lay-size="sm" id="xishu"></table>
+                        </div>
+                    </div>
+
+                    <hr class="layui-bg-green">
+                    <!--参数配置-->
+
+                    <!--最短路径问题参数配置-->
+                    <div class="layui-card-body minPathParam">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">节点数</label>
+                            <div class="layui-input-block">
+                                <input type="text" disabled="disabled" id="mpNodeNum" name="mpNodeNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|nodeNum">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">起点</label>
+                            <div class="layui-input-block">
+                                <select id="mpStart" name="mpStart" lay-filter="mpStart">
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D" selected>D</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">终点</label>
+                            <div class="layui-input-block">
+                                <select id="mpEnd" name="mpEnd" lay-filter="mpEnd">
+                                    <option value="A">A</option>
+                                    <option value="B"  selected>B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!--最小生成树参数设置-->
+                    <div class="layui-card-body minTreeParam dis-none">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">节点数</label>
+                            <div class="layui-input-block">
+                                <input type="text" disabled="disabled" id="mtNodeNum" name="mtNodeNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|nodeNum">
+                            </div>
+                        </div>
+                    </div>
+                    <!--最大流问题参数设置-->
+                    <div class="layui-card-body maxFlowParam dis-none">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">节点数</label>
+                            <div class="layui-input-block">
+                                <input type="text" disabled="disabled" id="mfNodeNum" name="mfNodeNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|nodeNum">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">起点</label>
+                            <div class="layui-input-block">
+                                <select id="mfStart" name="mfStart" lay-filter="mfStart">
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D" selected>D</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">终点</label>
+                            <div class="layui-input-block">
+                                <select id="mfEnd" name="mfEnd" lay-filter="mfEnd">
+                                    <option value="A">A</option>
+                                    <option value="B" selected>B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <!--最小费用最大流问题参数设置-->
+                    <div class="layui-card-body minCostMaxFlowParam dis-none">
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">节点数</label>
+                            <div class="layui-input-block">
+                                <input type="text" disabled="disabled" id="mcNodeNum" name="mcNodeNum" value="4" isChange="false" placeholder="[1,+∞)" class="layui-input" lay-verify="required|nodeNum">
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">起点</label>
+                            <div class="layui-input-block">
+                                <select id="mcStart" name="mcStart" lay-filter="mcStart">
+                                    <option value="A">A</option>
+                                    <option value="B">B</option>
+                                    <option value="C">C</option>
+                                    <option value="D" selected>D</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="layui-form-item">
+                            <label class="layui-form-label">终点</label>
+                            <div class="layui-input-block">
+                                <select id="mcEnd" name="mcEnd" lay-filter="mcEnd">
+                                    <option value="A">A</option>
+                                    <option value="B" selected>B</option>
+                                    <option value="C">C</option>
+                                    <option value="D">D</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!--参数说明-->
+                    <div class="layui-card-header newheader">参数说明</div>
+                    <div class="layui-card-body">
+                        <ul class="layui-timeline">
+                            <li class="timeline-item">
+                                <div class="layui-text">
+                                    <ul>
+                                        <li>权数：实际中权可以代表两点之间的距离、费用、利润、时间、容量等。</li>
+                                        <li>容量：单位时间内弧(I,j)的最大通过能力。</li>
+                                    </ul>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                    <!--底部悬浮操作按钮-->
+                    <div style="height: 5rem;"></div>
+                    <div class="fl-box">
+                        <button class="layui-btn layui-btn-lg layui-btn-radius layui-btn-primary" id="calculate"
+                                lay-filter="calculate" lay-submit>
+                            <i class="fa fa-play-circle" aria-hidden="true"></i> 计算
+                        </button>
+                        <span class="verticalline"></span>
+                        <button class="layui-btn layui-btn-lg  layui-btn-radius layui-btn-primary" id="download">
+                            <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> 下载
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+
+        <!--数据表格-->
+        <div id="fl-btn-r" class="layui-col-md7 page-main">
+            <!--原始数据表-->
+            <div class="layui-card" id="originalTableDiv">
+                <div class="layui-card-header">原始数据表
+                    <span id="originalShow" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="originalFa"> 打开图表</i>
+                    </span>
+                </div>
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="originalTable"></table>
+                </div>
+                <div class="layui-card-body dis-none" id="originalEcharts">
+                    <div id="originalEchartsDiv" class="layui-show echartsDiv"></div>
+                </div>
+            </div>
+
+            <!--最终结果表-->
+            <div class="layui-card" id="resultTableDiv">
+                <div class="layui-card-header"><span id="resultTitle">最终结果表</span>
+                    <span id="resultShow" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="resultFa"> 打开图表</i>
+                    </span>
+                </div>
+
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="resultTable"></table>
+                </div>
+                <div class="layui-card-body dis-none" id="resultEcharts">
+                    <div id="resultEchartsDiv" class="layui-show echartsDiv"></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/libs/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/assets/libs/slimscroll/jquery.slimscroll.js"></script>
+
+<script type="text/javascript" src="/assets/libs/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echartsTheme.js"></script>
+
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script type="text/javascript" src="/assets/js/utils.js"></script>
+<script type="text/javascript" src="/assets/js/tool.js"></script>
+
+<script>
+    //layui建议所有代码都写在layui.use()里面，相当于jquery的$(function(){})
+    var use = layui.use(['table', 'layer', 'form', 'util', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+
+        var graphData;
+        var fun, gType, isUpd;
+
+        var mpHead, mpData, mtHead, mtData, mfHead, mfData,mcHead, mcData;
+
+        var resultHead, resultData;
+        var resultMfHead, resultMcHead;
+
+        var vexs;
+
+        //首先获取该页面的初始化数据
+        $.ajaxSettings.async = false; //同步获取数据
+        $.getJSON("/assets/js/optimization/graph.json", function (data) {
+            graphData = data;
+            admin.putTempData('graphData', data);
+
+            oldRow = data.oldRow; //初始化原始 行 5 行
+            oldCol = data.oldCol; //初始化原始 列 4 列
+            fun = data.fun; //初始化选择的方法是 1
+            gType = data.gType; //默认选择无向图
+            isUpd = data.isUpd;
+
+            vexs = ['A','B','C','D']; //初始化顶点数组
+
+            mpHead = data.mpHead; //最小路径
+            mpData = data.mpData;
+            mtHead = data.mtHead; //最小生成树
+            mtData = data.mtData;
+            mfHead = data.mfHead; //最大流
+            mfData = data.mfData;
+            mcHead = data.mcHead; //最大流最小费用
+            mcData = data.mcData;
+
+            resultHead = data.resultHead;
+            resultData = data.resultData;
+
+            resultMfHead = data.resultMfHead; //最大流结果表头
+            resultMcHead = data.resultMcHead; //最大流最小费用表头
+        });
+
+        function renderTable(tableId, head, data) {
+            table.render({
+                elem: tableId,
+                cellMinWidth: 115,
+                cols: [head],
+                data: data
+            });
+        }
+
+        // var incomeCharts = echarts.init(document.getElementById('incomeEchartsDiv'));
+        // var maxMinCharts = echarts.init(document.getElementById('maxMinEchartsDiv'));
+        // var maxMaxCharts = echarts.init(document.getElementById('maxMaxEchartsDiv'));
+        // var savageCharts = echarts.init(document.getElementById('savageEchartsDiv'));
+        // var laplaceCharts = echarts.init(document.getElementById('laplaceEchartsDiv'));
+        // var eclecticismCharts = echarts.init(document.getElementById('eclecticismEchartsDiv'));
+        //
+        // var chartsNames = [incomeCharts,maxMinCharts,maxMaxCharts,savageCharts,laplaceCharts,eclecticismCharts];
+
+
+        /**单选点击事件
+         * 1.初始化参数设置
+         * 2.初始化系数设置
+         * 3.初始化参数配置
+         */
+        form.on('radio(function)', function (data) {
+            fun = data.value;
+            if (data.value == 1) { //最短路径问题
+                $(".minTreeParam").addClass("dis-none");
+                $(".maxFlowParam").addClass("dis-none");
+                $(".minCostMaxFlowParam").addClass("dis-none");
+                $(".minPathParam").removeClass("dis-none");
+                renderTable('#xishu', mpHead, mpData);
+            } else if (data.value == 2) {//最小生成树
+                $(".minPathParam").addClass("dis-none");
+                $(".maxFlowParam").addClass("dis-none");
+                $(".minCostMaxFlowParam").addClass("dis-none");
+                $(".minTreeParam").removeClass("dis-none");
+                renderTable('#xishu', mtHead, mtData);
+            } else if (data.value == 3) { //最大流问题
+                $(".minPathParam").addClass("dis-none");
+                $(".minTreeParam").addClass("dis-none");
+                $(".minCostMaxFlowParam").addClass("dis-none");
+                $(".maxFlowParam").removeClass("dis-none");
+                renderTable('#xishu', mfHead, mfData);
+            } else if (data.value == 4){ //最小费用最大流问题
+                $(".minPathParam").addClass("dis-none");
+                $(".maxFlowParam").addClass("dis-none");
+                $(".minTreeParam").addClass("dis-none");
+                $(".minCostMaxFlowParam").removeClass("dis-none");
+                renderTable('#xishu', mcHead, mcData);
+            }
+        });
+
+        // 编辑系数之前先校验数据
+        function checkActAte(item) {
+                if (item < 1) {
+                    layer.msg("弧个数必须大于1!");
+                    return false;
+                }else if (item > 100) {
+                    layer.msg("最多添加 100 条弧!");
+                    return false;
+                }
+            return true;
+        }
+
+        //实时监听 input 值变化
+        $(function () {
+            var mpArcNum = $("#mpArcNum").val();
+            var mtArcNum = $("#mtArcNum").val();
+            var mfArcNum = $("#mfArcNum").val();
+            var mcArcNum = $("#mcArcNum").val();
+
+            $("#mpArcNum").bind("input propertychange", function (event) {
+                if (mpArcNum != $("#mpArcNum").val()) {
+                    $("#mpArcNum").attr("isChange", "true");
+                    isUpd = "noup"; //记录不是更新表格操作
+                } else {
+                    $("#mpArcNum").attr("isChange", "false");
+                }
+            });
+            $("#mtArcNum").bind("input propertychange", function (event) {
+                if (mtArcNum != $("#mtArcNum").val()) {
+                    $("#mtArcNum").attr("isChange", "true");
+                    isUpd = "noup"; //记录不是更新表格操作
+                } else {
+                    $("#mtArcNum").attr("isChange", "false");
+                }
+            });
+            $("#mfArcNum").bind("input propertychange", function (event) {
+                if (mfArcNum != $("#mfArcNum").val()) {
+                    $("#mfArcNum").attr("isChange", "true");
+                    isUpd = "noup"; //记录不是更新表格操作
+                } else {
+                    $("#mfArcNum").attr("isChange", "false");
+                }
+            });
+            $("#mcArcNum").bind("input propertychange", function (event) {
+                if (mcArcNum != $("#mcArcNum").val()) {
+                    $("#mcArcNum").attr("isChange", "true");
+                    isUpd = "noup"; //记录不是更新表格操作
+                } else {
+                    $("#mcArcNum").attr("isChange", "false");
+                }
+            });
+        })
+
+        // 添加编辑按钮点击事件
+        $('#btnUpd').click(function () {
+            //根据选择的方法不同，传递不同的参数
+            var item = -1; //弧的个数
+            if (fun == 1) { //如果选择的最短路径
+                item = $("#mpArcNum").val();
+            } else if (fun == 2) {
+                item = $("#mtArcNum").val();
+            } else if (fun == 3) {
+                item = $("#mfArcNum").val();
+            }else if(fun == 4){
+                item = $("#mcArcNum").val();
+            }
+
+            //校验数据
+            if (!checkActAte(item)) {
+                return;
+            }
+
+            layer.open({
+                type: 2,
+                title: '系数设置',
+                maxmin: true,
+                area: ['550px', '500px'],
+                content: 'graph/editForm/' + fun + '/' + item + '/' + isUpd,
+                btn: ['保存', '取消'],
+                yes: function (index, layero) {
+                    var ifTable = $("div.layui-layer-content > iframe")[0].contentWindow.layui.table;
+                    //在提交数据之前先校验数据
+                    var cache = ifTable.cache.ratio;
+                    var isNull = false;
+                    var isNoDouble = false; //非负整数或保留3位小数
+                    var rag = /^[+]?\d*\.?\d{0,3}$/; //非负整数或保留3位小数
+                    //for 循环进行校验
+                    for (var i = 0; i < cache.length; i++) {
+                        var item = cache[i];
+                        if(fun == 1 || fun == 2){
+                            //先校验非空
+                            if (isEmpty(item['start']) || isEmpty(item['end']) || isEmpty(item['weight'])) {
+                                isNull = true;
+                                break;
+                            } else if (!rag.test(item['weight'])) {
+                                isNoDouble = true;
+                                break;
+                            }
+                        } else if(fun == 3){
+                            //先校验非空
+                            if (isEmpty(item['start']) || isEmpty(item['end']) || isEmpty(item['VU'])) {
+                                isNull = true;
+                                break;
+                            } else if (!rag.test(item['VU'])) {
+                                isNoDouble = true;
+                                break;
+                            }
+                        } else if(fun == 4){
+                            //先校验非空
+                            if (isEmpty(item['start']) || isEmpty(item['end']) || isEmpty(item['VU']) || isEmpty(item['cost'])) {
+                                isNull = true;
+                                break;
+                            } else if (!rag.test(item['VU']) || !rag.test(item['cost'])) {
+                                isNoDouble = true;
+                                break;
+                            }
+                        }
+                    }
+
+                    if (isNull) {
+                        layer.msg('数据表中存在字段为空!');
+                    } else if (isNoDouble) {
+                        layer.msg('数据表的字段只能为非负整数或保留3位的非负小数!');
+                    } else { //如果校验通过,提交数据到系数设置的表格中
+                        layer.close(index); //如果设定了yes回调，需进行手工关闭
+
+                        var Data = JSON.parse(JSON.stringify(cache));//表格数据
+
+                        console.log(Data)
+
+                        //对于表头而言,只有资源分配问题才改变了表头,其他还是原表头
+                        var Head;
+                        if (fun == 1) { //最短路径
+                            Head = mpHead;
+                            mpData = Data;
+                            graphData["mpData"] = mpData;
+                            $("#mpArcNum").attr("isChange", "false");
+                        } else if (fun == 2) {
+                            Head = mtHead;
+                            mtData = Data;
+                            graphData["mtData"] = mtData;
+                            $("#mtArcNum").attr("isChange", "false");
+                        } else if (fun == 3) {
+                            Head = mfHead;
+                            mfData = Data;
+                            graphData["mfData"] = mfData;
+                            $("#mfArcNum").attr("isChange", "false");
+                        } else if(fun == 4){
+                            Head = mcHead;
+                            mcData = Data;
+                            graphData["mcData"] = mcData;
+                            $("#mcArcNum").attr("isChange", "false");
+                        }
+
+                        //重新渲染系数表
+                        layui.table.render({
+                            elem: '#xishu',
+                            cellMinWidth: 110,
+                            cols: [Head],
+                            data: Data,
+                            limit: 100 //最多添加100条弧
+                        });
+
+                        //渲染参数配置数据
+                        renderParam(Data);
+
+                        isUpd = "isup";
+                        //更新graphData数据
+                        admin.putTempData('graphData', graphData);
+                    }
+                },
+                btn2: function (index, layero) { //取消按钮
+                    layer.close();
+                }
+            });
+        })
+
+
+        /**
+         * 根据表格数据渲染参数配置数据
+         */
+        function renderParam(data){
+            //1.先计算出有多少个顶点数
+            var arr = [];
+            for (var i = 0; i < data.length; i++) {
+                arr.push(data[i].start);
+                arr.push(data[i].end);
+            }
+            var set = new Set(arr);
+            vexs = Array.from(set);
+            var vex = vexs.length;
+
+            var start = '';
+            var end = '';
+            for (var i = 0; i < vex; i++) {
+                var item = '<option value='+vexs[i]+'>'+vexs[i]+'</option>';
+                if(i == 0){
+                    let itemS = '<option value='+vexs[i]+' selected>'+vexs[i]+'</option>';
+                    start+=itemS;
+                }else{
+                    start+=item;
+                }
+                if(i == vex - 1){
+                    let itemE = '<option value='+vexs[i]+' selected>'+vexs[i]+'</option>';
+                    end+=itemE;
+                }else{
+                    end+=item;
+                }
+            }
+
+            //2.根据选择的方法不同渲染配置参数
+            if(fun == 1){
+                $("#mpNodeNum").val(vex);
+                $("#mpStart").empty();
+                $("#mpStart").append(start);
+                $("#mpEnd").empty();
+                $("#mpEnd").append(end);
+            } else if(fun == 2){//最小生成树
+                $("#mtNodeNum").val(vex);
+            } else if(fun == 3){
+                $("#mfNodeNum").val(vex);
+                $("#mfStart").empty();
+                $("#mfStart").append(start);
+                $("#mfEnd").empty();
+                $("#mfEnd").append(end);
+            } else if(fun == 4){
+                $("#mcNodeNum").val(vex);
+                $("#mcStart").empty();
+                $("#mcStart").append(start);
+                $("#mcEnd").empty();
+                $("#mcEnd").append(end);
+            }
+            form.render('select'); //刷新select选择框渲染
+        }
+
+        /**
+         * 自定义表单验证规则
+         */
+        form.verify({
+            arcNum: function (value, item) {
+                if(value < 1){
+                    return '弧个数不能小于1!';
+                }else if (value > 100) {
+                    return '最多添加 100 条弧!';
+                }
+            }
+        })
+
+        /**
+         * 根据不同的方法生成不同的JOSN参数
+         */
+        function buildDataByFun(data){
+            if(fun == 1){
+                return {fun:fun, gType: data.field.gMpType, arcNum: data.field.mpArcNum, start: data.field.mpStart, end: data.field.mpEnd,vexsArr: vexs, ratioTableData: JSON.stringify(table.cache.xishu)}
+            }else if(fun == 2){
+                return {fun:fun, gType: data.field.gMtType, arcNum: data.field.mtArcNum, start: data.field.mtStart, end: data.field.mtEnd,vexsArr: vexs, ratioTableData: JSON.stringify(table.cache.xishu)}
+            }else if(fun == 3){
+                return {fun:fun, arcNum: data.field.mfArcNum, start: data.field.mfStart, end: data.field.mfEnd,vexsArr: vexs, ratioTableData: JSON.stringify(table.cache.xishu)}
+            }else if(fun == 4){
+                return {fun:fun, arcNum: data.field.mcArcNum, start: data.field.mcStart, end: data.field.mcEnd,vexsArr: vexs, ratioTableData: JSON.stringify(table.cache.xishu)}
+            }
+        }
+
+        // 表单提交事件
+        form.on('submit(calculate)', function (data) {
+            //将checkbox 封装成一个数组
+            var functions = new Array();
+            $("input[name='function']:checked").each(function () {
+                functions.push($(this).val());
+            })
+            //根据选择的方法不同,生成不同的方法参数
+           var json = buildDataByFun(data);
+            layer.load(2);
+            $.post('graph/calculate',json, function (data) {
+                layer.closeAll('loading');
+                if (data.code == 200) {
+                    top.layer.msg(data.msg, {icon: 1});
+                    //数据返回成功,得到数据,渲染表格
+                    renderTables(data);
+                } else {
+                    top.layer.msg(data.msg, {icon: 2});
+                }
+            });
+            return false;
+        });
+
+        /**
+         * 根据不同的 key 渲染出不同的结果表
+         * @param data
+         */
+        function renderTables(data) {
+            var originalHead, originalData;
+            //首先确定原始数据表的表头及数据
+            if (fun == 1) { //最短路径
+                originalHead = mpHead;
+                originalData = mpData;
+                resultHead = resultHead;
+
+            } else if (fun == 2) { //最小生成树
+                originalHead = mtHead;
+                originalData = mtData;
+                resultHead = resultHead;
+
+            } else if (fun == 3) { //最大流
+                originalHead = mfHead;
+                originalData = mfData;
+                resultHead = resultMfHead;
+            } else if (fun == 4) { //最小费用最大流
+                originalHead = mcHead;
+                originalData = mcData;
+                resultHead = resultMcHead;
+            }
+
+            //渲染原始数据表
+            table.render({
+                elem: '#originalTable',
+                cellMinWidth: 115,
+                cols: [originalHead],
+                data: originalData,
+                limit: 100
+            });
+
+            //renderCharts(originalData,incomeCharts,oldAction,oldState);
+
+            //渲染结果表
+            table.render({
+                elem: '#resultTable',
+                cellMinWidth: 245,
+                cols: [resultHead],
+                data: data.result,
+                limit: 100
+            });
+
+        }
+
+        function renderCharts(chartsData, chartsName, action, state, CalName) {
+            var visualMapMax = chartsData[0]["max"];
+            if (isEmpty(visualMapMax)) {
+                visualMapMax = 400;
+            }
+            var newX = new Array();
+            for (var i = 1; i <= action; i++) {
+                newX.push("行动方案" + i);
+            }
+            var newY = new Array();
+            for (var i = 1; i <= state; i++) {
+                newY.push("自然状态" + i);
+            }
+            if (isNotEmpty(CalName)) {
+                newY.push(CalName);
+            }
+            var newData = new Array();
+            for (var i = 1; i <= action; i++) {
+                var result = new Array();
+                var resultData;
+
+                for (var j = 1; j <= state; j++) {
+                    var item = new Array();
+                    item.push("行动方案" + i)
+                    item.push("自然状态" + j);
+                    item.push(chartsData[i - 1][j + "_state"]);
+                    resultData = chartsData[i - 1]["result"];
+                    newData.push(item);
+                }
+                if (isNotEmpty(CalName)) {
+                    result.push("行动方案" + i);
+                    result.push(CalName);
+                    var index = resultData.search("(最优方案)");
+                    if (index != -1) {
+                        var newStr = resultData.substring(0, index);
+                        result.push(parseFloat(newStr));
+                    } else {
+                        result.push(parseFloat(resultData));
+                    }
+
+                    newData.push(result);
+                }
+            }
+
+            // console.log(newX)
+            // console.log(newY)
+            // console.log(newData)
+            var option = {
+                tooltip: {},
+                //工具箱组件
+                toolbox: {
+                    show: true, //开启工具箱组件
+                    feature: {  //具体用到的功能配置
+                        dataView: {
+                            show: true   //开启数据视图
+                        },
+                        restore: {
+                            show: true   //还原
+                        },
+                        saveAsImage: {
+                            show: true   //保存图片
+                        }
+                    }
+                },
+
+                visualMap: {
+                    max: visualMapMax,
+                    inRange: {
+                        color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+                    }
+                },
+                xAxis3D: {
+                    name: '',
+                    type: 'category',
+                    data: newX
+                },
+                yAxis3D: {
+                    name: '',
+                    type: 'category',
+                    data: newY
+                },
+                zAxis3D: {
+                    name: '收益值',
+                    type: 'value'
+                },
+                grid: {
+                    top: '20%', bottom: '20%'
+                },
+
+                grid3D: {
+                    boxWidth: 200,
+                    boxDepth: 80,
+                    viewControl: {
+                        distance: 250
+                    },
+                    light: {
+                        main: {
+                            intensity: 1.2,
+                            shadow: true
+                        },
+                        ambient: {
+                            intensity: 0.3
+                        }
+                    }
+                },
+                series: [{
+                    type: 'bar3D',
+
+                    data: newData.map(function (item) {
+                        return {
+                            value: [item[0], item[1], item[2]],
+                        }
+                    }),
+                    shading: 'lambert',
+                    label: {
+                        textStyle: {
+                            fontSize: 16,
+                            borderWidth: 1
+                        }
+                    },
+                    emphasis: {
+                        label: {
+                            textStyle: {
+                                fontSize: 20,
+                                color: '#900'
+                            }
+                        },
+                        itemStyle: {
+                            color: '#900'
+                        }
+                    }
+                }]
+            };
+
+            chartsName.clear();
+            chartsName.setOption(option, true);
+            chartsName.resize();
+        }
+
+        function initChartBut(showName, divName, faName, chartsName) {
+            $(showName).click(function () {
+                var isExapnd = $(divName).hasClass('dis-none');
+                if (isExapnd) { //如果是隐藏的,则打开图表
+                    $(divName).removeClass('dis-none');
+                    $(faName).text(" 关闭图表");
+                    chartsName.resize();
+                } else {
+                    $(divName).addClass('dis-none');
+                    $(faName).text(" 打开图表");
+                }
+            })
+        }
+
+        // initChartBut('#showIncome','#incomeEcharts','#incomeFa',incomeCharts);
+        // initChartBut('#showMaxMin','#maxMinEcharts','#maxMinFa',maxMinCharts);
+        // initChartBut('#showMaxMax','#maxMaxEcharts','#maxMaxFa',maxMaxCharts);
+        // initChartBut('#showSavage','#savageEcharts','#savageFa',savageCharts);
+        // initChartBut('#showLaplace','#laplaceEcharts','#laplaceFa',laplaceCharts);
+        // initChartBut('#showEclecticism','#eclecticismEcharts','#eclecticismFa',eclecticismCharts);
+
+        //系数设置表
+        table.render({
+            elem: '#xishu',
+            cellMinWidth: 115,
+            cols: [mpHead],
+            data: mpData,
+            limit: 100
+
+        });
+
+        //原始数据表
+        table.render({
+            elem: '#originalTable',
+            cellMinWidth: 115,
+            cols: [mpHead],
+            data: mpData,
+            limit: 100
+        });
+        // renderCharts(originalData,incomeCharts,oldAction,oldState);
+
+        //分析结果表
+        table.render({
+            elem: '#resultTable',
+            cellMinWidth: 245,
+            cols: [resultHead],
+            data: resultData,
+            limit: 100
+        });
+
+    });
+</script>
+</body>
+
+</html>

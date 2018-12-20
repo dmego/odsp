@@ -1,0 +1,136 @@
+{
+  "fun": 1,
+  "originNum": 3,
+  "salesNum": 4,
+  "isUpd": "isup",
+  "Head": [
+    {
+      "field": "sales",
+      "title": "场地/销地",
+      "minWidth": 100
+    },
+    {
+      "field": "B1",
+      "title": "B1"
+    },
+    {
+      "field": "B2",
+      "title": "B2"
+    },
+    {
+      "field": "B3",
+      "title": "B3"
+    },
+    {
+      "field": "B4",
+      "title": "B4"
+    },
+    {
+      "field": "output",
+      "title": "产量"
+    }
+  ],
+  "Data": [
+    {
+      "sales": "A1",
+      "B1": "5",
+      "B2": "8",
+      "B3": "9",
+      "B4": "2",
+      "output": "70"
+    },
+    {
+      "sales": "A2",
+      "B1": "3",
+      "B2": "6",
+      "B3": "4",
+      "B4": "7",
+      "output": "80"
+    },
+    {
+      "sales": "A3",
+      "B1": "10",
+      "B2": "12",
+      "B3": "14",
+      "B4": "5",
+      "output": "40"
+    },
+    {
+      "sales": "销量",
+      "B1": "45",
+      "B2": "60",
+      "B3": "50",
+      "B4": "30",
+      "output": ""
+    }
+  ],
+  "resultHead": [
+    {
+      "field": "sales",
+      "title": "场地/销地",
+      "minWidth": 100
+    },
+    {
+      "field": "B1",
+      "title": "B1"
+    },
+    {
+      "field": "B2",
+      "title": "B2"
+    },
+    {
+      "field": "B3",
+      "title": "B3"
+    },
+    {
+      "field": "B4",
+      "title": "B4"
+    },
+    {
+      "field": "surplus",
+      "title": "产量剩余"
+    }
+  ],
+  "resultData": [
+    {
+      "sales": "A1",
+      "B1": "0",
+      "B2": "20",
+      "B3": "50",
+      "B4": "0",
+      "surplus": "0"
+    },
+    {
+      "sales": "A2",
+      "B1": "5",
+      "B2": "45",
+      "B3": "0",
+      "B4": "30",
+      "surplus": "0"
+    },
+    {
+      "sales": "A3",
+      "B1": "40",
+      "B2": "0",
+      "B3": "0",
+      "B4": "0",
+      "surplus": "0"
+    },
+    {
+      "sales": "销量剩余",
+      "B1": "0",
+      "B2": "0",
+      "B3": "0",
+      "B4": "0",
+      "surplus": ""
+    },
+    {
+      "sales": "总运输利润",
+      "B1": "1505",
+      "B2": "",
+      "B3": "",
+      "B4": "",
+      "surplus": ""
+    }
+  ]
+}
