@@ -8,7 +8,7 @@ import java.util.*;
 /**
  * class_name: ZeroOneProgram
  * package: cn.dmego.odsp.algorithms.calculateModel
- * describe: 0-1规划问题
+ * describe: 0-1规划问题计算模型
  * creat_user: Dmego
  * creat_date: 2018/12/17
  * creat_time: 19:49

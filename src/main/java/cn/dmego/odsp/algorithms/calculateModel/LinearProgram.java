@@ -13,7 +13,7 @@ import java.util.Map;
 /**
  * class_name: LinearProgram
  * package: cn.dmego.odsp.algorithms.calculateModel
- * describe: 线性规划问题
+ * describe: 线性规划问题计算模型
  * creat_user: Dmego
  * creat_date: 2018/12/17
  * creat_time: 19:49

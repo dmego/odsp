@@ -2,10 +2,7 @@ package cn.dmego.odsp.algorithms.utils;
 
 import cn.dmego.odsp.algorithms.model.EData;
 import cn.dmego.odsp.algorithms.model.Graph;
-import cn.dmego.odsp.algorithms.vo.DecisionVo;
-import cn.dmego.odsp.algorithms.vo.DynamicVo;
-import cn.dmego.odsp.algorithms.vo.GraphVo;
-import cn.dmego.odsp.algorithms.vo.StrategyVo;
+import cn.dmego.odsp.algorithms.vo.*;
 import cn.dmego.odsp.common.JsonResult;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
@@ -164,9 +161,11 @@ public class CommonUtil {
                 edges[i] = eData;
             }
         }else if(fun == 3){
-
+            //TODO 最大流问题
+            return;
         }else if(fun == 4){
-
+            //TODO 最小费用最大流问题
+            return;
         }
 
         Graph graph = new Graph(vexsArr,edges,gType);
@@ -214,6 +213,46 @@ public class CommonUtil {
         strategyVo.setDirection(directions);
     }
 
+    /**
+     * 运输问题，对前台的json数据进行处理,方便后面计算
+     * @param transportVo
+     */
+    public static void jsonToArray(TransportVo transportVo) {
+        String jsonStr = transportVo.getRatioTableData(); //json 字符串
+        Integer origin = transportVo.getOriginNum(); //A 产地
+        Integer sale = transportVo.getSalesNum(); //B 销地
+
+         double[] output = new double[origin]; //产量
+         double[] sales = new double[sale]; //销量
+         double[][] price = new double[origin][sale];
+         double[][] price2 = new double[origin][sale];
+         double[][] plan = new double[origin][sale];
+
+        //将 JSON 字符串转成矩阵数组
+        JSONArray array = JSONObject.parseArray(jsonStr);
+
+
+        //最后一行是销量
+        JSONObject josa = array.getJSONObject(array.size() - 1);
+        for (int i = 0; i < sale; i++) {
+            sales[i] = josa.getDouble("B"+(i+1));
+        }
+        for (int i = 0; i < array.size() - 1; i++) {
+            JSONObject jo = array.getJSONObject(i);
+            for (int j = 0; j < sale; j++) {
+                price[i][j] = jo.getDouble("B"+(j+1));
+                price2[i][j] = jo.getDouble("B"+(j+1));
+                plan[i][j] = 0.0;
+            }
+            output[i] = jo.getDouble("output");
+        }
+
+        transportVo.setOutput(output);
+        transportVo.setSales(sales);
+        transportVo.setPrice(price);
+        transportVo.setPrice2(price2);
+        transportVo.setPlan(plan);
+    }
 
     /**
      * 设置返回json中的 code 参数
@@ -291,6 +330,5 @@ public class CommonUtil {
         }
         return (T)dest;
     }
-
 
 }

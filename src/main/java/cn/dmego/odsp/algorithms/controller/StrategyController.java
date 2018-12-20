@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * class_name: StrategyController
  * package: cn.dmego.odsp.algorithms.controller
- * describe: TODO
+ * describe: 决策规划 Controller 类
  * creat_user: Dmego
  * creat_date: 2018/12/17
  * creat_time: 3:17
@@ -34,7 +34,7 @@ public class StrategyController {
     }
 
     @RequestMapping("/editForm/{vari}/{cons}/{isUpd}")
-    public String strategyForm( @PathVariable("vari") int vari, @PathVariable("cons") int cons, @PathVariable("isUpd") String isUpd, Model model){
+    public String strategyForm(@PathVariable("vari") int vari, @PathVariable("cons") int cons, @PathVariable("isUpd") String isUpd, Model model){
         model.addAttribute("vari",vari);
         model.addAttribute("cons",cons);
         model.addAttribute("isUpd",isUpd);

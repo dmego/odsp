@@ -6,7 +6,7 @@ import cn.dmego.odsp.common.JsonResult;
 /**
  * class_name: StrategyService
  * package: cn.dmego.odsp.algorithms.service
- * describe: TODO
+ * describe: 决策规划 Service 接口类
  * creat_user: Dmego
  * creat_date: 2018/12/17
  * creat_time: 3:17

@@ -15,7 +15,7 @@ import java.util.Map;
 /**
  * class_name: StrategySericeImpl
  * package: cn.dmego.odsp.algorithms.service.impl
- * describe: TODO
+ * describe: 决策规划 Service 实现类
  * creat_user: Dmego
  * creat_date: 2018/12/17
  * creat_time: 3:16
@@ -26,14 +26,6 @@ public class StrategyServiceImpl implements StrategyService {
     @Override
     public JsonResult calculate(StrategyVo strategyVo) {
         Integer fun = strategyVo.getFun();
-
-//        Integer vari = strategyVo.getVariable();
-//        Integer cons = strategyVo.getConstraint();
-//        Integer sType = strategyVo.getSType(); //目标类型(1:极大,2:极小)
-//        Map<Integer, String> direction = strategyVo.getDirection();
-//        double[] extremums = strategyVo.getExtremums();
-//        double[] increments = strategyVo.getIncrements();
-//        double[][] matrix = strategyVo.getMatrix();
 
         JsonResult jsonResult = new JsonResult();
         List<Map<String, String>> mapList = new ArrayList<>();

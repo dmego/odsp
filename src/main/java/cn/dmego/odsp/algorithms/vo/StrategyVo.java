@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * class_name: StrategyVo
  * package: cn.dmego.odsp.algorithms.vo
- * describe: TODO
+ * describe: 决策规划 Vo 对象
  * creat_user: Dmego
  * creat_date: 2018/12/17
  * creat_time: 3:23
