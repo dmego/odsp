@@ -37,8 +37,8 @@
         var util = layui.util;
         var admin = layui.admin;
 
-        var origin = "${origin}"; //产地个数 A
-        var sales = "${sales}"; //销地个数 B
+        var originNum = "${origin}"; //产地个数 A
+        var salesNum = "${sales}"; //销地个数 B
         var isUpd = "${isUpd}"; //是否是更新数据表
 
         function renderTable(tableId, head, data) {
@@ -59,64 +59,39 @@
         }
 
         //初始化新的空表格
-        function newTable(tableId, head, col) {
+        function newTable() {
             var data = [];
-            if (fun == 1) {//背包
-                for (var i = 1; i < col; i++) {
-                    head[i].edit = 'text';
+            //先生成Head
+            var returnHead = [];
+            var head = [];
+            var sales = {field: 'sales', title: '场地/销地'};
+            head.push(sales);
+            returnHead.push(sales);
+            for (var i = 1; i <= salesNum; i++) {
+                var col = {field: 'B'+i, title: 'B'+i, edit: 'text'};
+                var col2 = {field: 'B'+i, title: 'B'+i,};
+                head.push(col);
+                returnHead.push(col2);
+            }
+            var output = {field: 'output', title: '产量', edit: 'text'};
+            var output2 = {field: 'output', title: '产量'};
+            head.push(output);
+            returnHead.push(output2);
+            // var returnHead = JSON.parse(JSON.stringify(head));
+            table.head = returnHead;
+            //再初始化数据
+            for (var i = 1; i <= parseInt(originNum) + 1; i++) {
+                var row = {};
+                if(i ==  parseInt(originNum) + 1){
+                    row['sales'] = '销量';
+                }else{
+                    row['sales'] = 'A'+i;
                 }
-                for (var i = 1; i <= item2; i++) {
-                    var row = {};
-                    row['stage'] = i;
-                    row['name'] = 'A' + i;
-                    if (item1 == 2) {//多重背包
-                        row['limit'] = 15;
-                    }
-                    row['weight'] = 100;
-                    row['value'] = 40;
-                    data.push(row);
+                for (var j = 1; j <= salesNum; j++) {
+                    row['B'+i] = '';
                 }
-
-            } else if (fun == 2) {//资源分配
-                //先生成Head
-                var returnHead = [];
-                head = [];
-                var income = {field: 'income', title: '投入资源/项目/收益', edit: 'text'};
-                var income2 = {field: 'income', title: '投入资源/项目/收益'};
-                returnHead.push(income2);
-                head.push(income);
-                for (var i = 1; i <= item1; i++) {
-                    var col = {field: i + '_project', title: '项目' + i, edit: 'text'};
-                    var col2 = {field: i + '_project', title: '项目' + i};
-                    returnHead.push(col2);
-                    head.push(col);
-                }
-                // var returnHead = JSON.parse(JSON.stringify(head));
-                table.head = returnHead;
-                for (var i = 1; i <= item2; i++) {
-                    var row = {};
-                    row['income'] = i;
-                    for (var j = 1; j <= item1; j++) {
-                        row[j + '_project'] = j;
-                    }
-                    data.push(row);
-                }
-
-            } else if (fun == 3) {//生产存储
-                for (var i = 1; i < col; i++) {
-                    head[i].edit = 'text';
-                }
-                for (var i = 1; i <= item1; i++) {
-                    var row = {};
-                    row['stage'] = i;
-                    row['need'] = 2;
-                    row['ability'] = 4;
-                    row['proCost'] = 1;
-                    row['stoCost'] = 0.5;
-                    row['storage'] = 3;
-                    row['fixedPCost'] = 3;
-                    data.push(row);
-                }
+                row['output'] = '';
+                data.push(row);
             }
 
             table.render({
@@ -139,20 +114,9 @@
             if (isUpd == "isup") {
                 renderTable('#ratio', Head, Data);
             }
-
             //如果是初始化一张空表
             else if (isUpd == "noup") {
-                if (fun == 1) {//如果背包问题,
-                    if (item1 == 2) {//如果是多重背包
-                        newTable('#ratio', k_mHead, 4);
-                    } else {
-                        newTable('#ratio', k_oHead, 4);
-                    }
-                } else if (fun == 2) {
-                    newTable('#ratio', r_oHead, item1);
-                } else if (fun == 3) {
-                    newTable('#ratio', p_oHead, 7);
-                }
+                newTable();
             }
 
             var rag2 = /^[+]?\d*\.?\d{0,3}$/;

@@ -285,21 +285,28 @@
                     var cache = ifTable.cache.ratio;
                     var isNull = false;
                     var isNoDouble = false; //非负整数或保留3位小数
-                    var rag = /^[+]?\d*\.?\d{0,3}$/; //非负整数或保留3位小数
-                    // //for 循环进行校验
-                    // for (var i = 0; i < cache.length; i++) {
-                    //     var item = cache[i];
-                    //     if(fun == 1 || fun == 2){
-                    //         //先校验非空
-                    //         if (isEmpty(item['start']) || isEmpty(item['end']) || isEmpty(item['weight'])) {
-                    //             isNull = true;
-                    //             break;
-                    //         } else if (!rag.test(item['weight'])) {
-                    //             isNoDouble = true;
-                    //             break;
-                    //         }
-                    //     }
-                    // }
+                    var rag = /^[+]?\d*\.?\d{0,3}$/; //非负整数或保留非负3位小数
+                    //for 循环进行校验
+                    for (var i = 0; i < cache.length; i++) {
+                        var item = cache[i];
+                        //先校验非空
+                        for (var j = 1; j <= sales; j++) {
+                            if (isEmpty(item['B'+i])) {
+                                isNull = true;
+                                break;
+                            } else if (!rag.test(item['B'+i])) {
+                                isNoDouble = true;
+                                break;
+                            }
+                        }
+                        if (isEmpty(item['output'])) {
+                            isNull = true;
+                            break;
+                        } else if (!rag.test(item['output'])) {
+                            isNoDouble = true;
+                            break;
+                        }
+                    }
 
                     if (isNull) {
                         layer.msg('数据表中存在字段为空!');
@@ -310,7 +317,7 @@
 
                         var xsData = JSON.parse(JSON.stringify(cache));//表格数据
 
-                        // console.log(xsData)
+                        console.log(xsData)
 
                         Data = xsData;
                         transportData["Data"] = Data;
