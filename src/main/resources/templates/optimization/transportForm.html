@@ -41,21 +41,61 @@
         var salesNum = "${sales}"; //销地个数 B
         var isUpd = "${isUpd}"; //是否是更新数据表
 
-        function renderTable(tableId, head, data) {
-            for (var i = 1; i < head.length; i++) {
-                if (head[i].field != 'sales') {
-                    head[i].edit = 'text';
+        var Head, Data;
+
+        var data = admin.getTempData('transportData');
+        if (isNotEmpty(data)) {
+            Head = data.Head;
+            Data = data.Data;
+        }
+        //如果是更新数据表
+        if (isUpd == "isup") {
+            renderTable();
+        }
+        //如果是初始化一张空表
+        else if (isUpd == "noup") {
+            newTable();
+        }
+
+        table.render({
+            id: 'ratio',
+            elem: '#ratio',
+            limit: 100,
+            height: 'full-110',
+            cellMinWidth: 110,
+            cols: [Head],
+            data: Data,
+            //渲染完成后设置最后一行最后一列不可修改
+            done: function (res, curr, count) {
+                var dataTemp = table.cache[this.id]; //当前页面缓存数据
+                var tableElem = this.elem.next(); //控件渲染出来的table
+                layui.each(dataTemp, function (index,data) {
+                    if(index == dataTemp.length - 1){
+                        tableElem.find('tr[data-index="'+index+'"]').find('td[data-field="output"]').removeAttr('data-edit');
+                    }
+                })
+            }
+        });
+
+        var rag2 = /^[+]?\d*\.?\d{0,3}$/;
+
+        //监听单元格编辑
+        table.on('edit(ratio)', function (obj) {
+            var value = obj.value; //得到修改后的值
+            if (value.trim().length == 0) {
+                layer.msg('字段不能为空');
+            } else if (!rag2.test(value)) {
+                layer.msg('字段只能为非负整数或保留3位的非负小数');
+            }
+        });
+
+
+        function renderTable() {
+            for (var i = 1; i < Head.length; i++) {
+                if (Head[i].field != 'sales') {
+                    Head[i].edit = 'text';
                 }
             }
-            table.render({
-                id: 'ratio',
-                elem: tableId,
-                limit: 100,
-                height: 'full-110',
-                cellMinWidth: 110,
-                cols: [head],
-                data: data
-            });
         }
 
         //初始化新的空表格
@@ -68,8 +108,8 @@
             head.push(sales);
             returnHead.push(sales);
             for (var i = 1; i <= salesNum; i++) {
-                var col = {field: 'B'+i, title: 'B'+i, edit: 'text'};
-                var col2 = {field: 'B'+i, title: 'B'+i,};
+                var col = {field: 'B' + i, title: 'B' + i, edit: 'text'};
+                var col2 = {field: 'B' + i, title: 'B' + i,};
                 head.push(col);
                 returnHead.push(col2);
             }
@@ -82,55 +122,21 @@
             //再初始化数据
             for (var i = 1; i <= parseInt(originNum) + 1; i++) {
                 var row = {};
-                if(i ==  parseInt(originNum) + 1){
+                if (i == parseInt(originNum) + 1) {
                     row['sales'] = '销量';
-                }else{
-                    row['sales'] = 'A'+i;
+                } else {
+                    row['sales'] = 'A' + i;
                 }
                 for (var j = 1; j <= salesNum; j++) {
-                    row['B'+i] = '';
+                    row['B' + i] = '';
                 }
                 row['output'] = '';
                 data.push(row);
             }
 
-            table.render({
-                elem: '#ratio',
-                limit: 100,
-                height: 'full-20',
-                cellMinWidth: 110,
-                cols: [head],
-                data: data
-            });
-        };
-
-        $(function () {
-            var data = admin.getTempData('transportData');
-            if (isNotEmpty(data)) {
-                var Head = data.Head;
-                var Data = data.Data;
-            }
-            //如果是更新数据表
-            if (isUpd == "isup") {
-                renderTable('#ratio', Head, Data);
-            }
-            //如果是初始化一张空表
-            else if (isUpd == "noup") {
-                newTable();
-            }
-
-            var rag2 = /^[+]?\d*\.?\d{0,3}$/;
-
-            //监听单元格编辑
-            table.on('edit(ratio)', function (obj) {
-                var value = obj.value; //得到修改后的值
-                if (value.trim().length == 0) {
-                    layer.msg('字段不能为空');
-                }else if (!rag2.test(value)) {
-                    layer.msg('字段只能为非负整数或保留3位的非负小数');
-                }
-            })
-        });
+            Head = head;
+            Data = data;
+        }
     });
 </script>
 </body>

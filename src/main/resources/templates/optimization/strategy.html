@@ -64,7 +64,7 @@
                     </div>
                     <!--参数设置-->
                     <div class="layui-card-header newheader">参数设置</div>
-                    <!--最短路径问题参数设置-->
+                    <!--决策规划参数设置-->
                     <div class="layui-card-body minPathParam">
                         <div class="layui-form-item">
                             <label class="layui-form-label">变量个数</label>
@@ -317,27 +317,36 @@
                     //在提交数据之前先校验数据
                     var cache = ifTable.cache.ratio;
                     var isNull = false;
-                    var isNoDouble = false; //非负整数或保留3位小数
-                    var rag = /^[+]?\d*\.?\d{0,3}$/; //非负整数或保留3位小数
-                    // //for 循环进行校验
-                    // for (var i = 0; i < cache.length; i++) {
-                    //     var item = cache[i];
-                    //     if(fun == 1 || fun == 2){
-                    //         //先校验非空
-                    //         if (isEmpty(item['start']) || isEmpty(item['end']) || isEmpty(item['weight'])) {
-                    //             isNull = true;
-                    //             break;
-                    //         } else if (!rag.test(item['weight'])) {
-                    //             isNoDouble = true;
-                    //             break;
-                    //         }
-                    //     }
-                    // }
+                    var isNoDouble = false; //整数或保留3位小数
+                    var rag = /^[+-]?\d*\.?\d{0,3}$/; //整数或保留3位小数
+                    //for 循环进行校验
+                    for (var i = 0; i < cache.length; i++) {
+                        var item = cache[i];
+                        //先校验非空
+                        for (var j = 1; j <= vari; j++) {
+                            if (isEmpty(item[j+"_x"])) {
+                                isNull = true;
+                                break;
+                            } else if (!rag.test(item[j+'_x'])) {
+                                isNoDouble = true;
+                                break;
+                            }
+                        }
+                        if (i != 0) {
+                            if (isEmpty(item['increment'])) {
+                                isNull = true;
+                                break;
+                            } else if (!rag.test(item['increment'])) {
+                                isNoDouble = true;
+                                break;
+                            }
+                        }
+                    }
 
                     if (isNull) {
                         layer.msg('数据表中存在字段为空!');
                     } else if (isNoDouble) {
-                        layer.msg('数据表的字段只能为非负整数或保留3位的非负小数!');
+                        layer.msg('数据表的字段只能为整数或保留3位的小数!');
                     } else { //如果校验通过,提交数据到系数设置的表格中
                         layer.close(index); //如果设定了yes回调，需进行手工关闭
 
@@ -375,6 +384,9 @@
          */
         form.verify({
             variable: function (value, item) {
+                if ($("#variable").attr("isChange") == "true") {
+                    return '变量个数已改变，请重新设置系数!';
+                }
                 if (value < 1) {
                     return '变量个数必须大于1!';
                 } else if (value > 100) {
@@ -382,6 +394,9 @@
                 }
             },
             constraint: function (value, item) {
+                if ($("#constraint").attr("isChange") == "true") {
+                    return '约束条件个数已改变，请重新设置系数!';
+                }
                 if (value < 1) {
                     return '约束条件个数必须大于1!';
                 } else if (value > 100) {
@@ -436,17 +451,17 @@
                 limit: 100
             });
             //如果选择的是0-1规划，还需要渲染可能结果表
-            if(fun == 3){
+            if (fun == 3) {
                 $("#maybeTableDiv").removeClass('dis-none');
                 var maybeHead = [];
                 var index = {field: 'index', title: '序号'};
                 maybeHead.push(index);
                 for (var i = 1; i <= $("#variable").val(); i++) {
-                    var x = {field: 'X'+i, title: 'X'+i};
+                    var x = {field: 'X' + i, title: 'X' + i};
                     maybeHead.push(x);
                 }
                 var Z = {field: 'Z', title: 'Z'};
-                var meet = {field: 'meet', title: '是否满足约束条件',minWidth: 150};
+                var meet = {field: 'meet', title: '是否满足约束条件', minWidth: 150};
                 maybeHead.push(Z);
                 maybeHead.push(meet);
 
@@ -458,7 +473,7 @@
                     data: data.calculateResult,
                     limit: 100
                 });
-            }else {
+            } else {
                 $("#maybeTableDiv").addClass('dis-none');
             }
 

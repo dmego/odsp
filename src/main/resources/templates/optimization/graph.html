@@ -665,6 +665,23 @@
          */
         form.verify({
             arcNum: function (value, item) {
+                if(fun == 1){
+                    if ($("#mpArcNum").attr("isChange") == "true") {
+                        return '弧个数已改变，请重新设置系数!';
+                    }
+                }else if(fun == 2){
+                    if ($("#mtArcNum").attr("isChange") == "true") {
+                        return '弧个数已改变，请重新设置系数!';
+                    }
+                }else if(fun == 3){
+                    if ($("#mfArcNum").attr("isChange") == "true") {
+                        return '弧个数已改变，请重新设置系数!';
+                    }
+                }else if(fun == 4){
+                    if ($("#mcArcNum").attr("isChange") == "true") {
+                        return '弧个数已改变，请重新设置系数!';
+                    }
+                }
                 if(value < 1){
                     return '弧个数不能小于1!';
                 }else if (value > 100) {
