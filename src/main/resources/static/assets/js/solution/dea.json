@@ -1,0 +1,100 @@
+{
+  "fun": 1,
+  "originNum": 3,
+  "salesNum": 4,
+  "isUpd": "isup",
+  "Head": [
+    {
+      "field": "province",
+      "title": "省域"
+    },
+    {
+      "field": "crste",
+      "title": "综合效率"
+    },
+    {
+      "field": "vrste",
+      "title": "纯技术效率"
+    },
+    {
+      "field": "scale",
+      "title": "规模效率"
+    },
+    {
+      "field": "income",
+      "title": "规模收益"
+    }
+  ],
+  "Data": [
+    {
+      "province": "北京市",
+      "crste": "0.7774",
+      "vrste": "0.8037",
+      "scale": "0.9673",
+      "income": "递增"
+    },
+    {
+      "province": "天津市",
+      "crste": "1.0000",
+      "vrste": "1.0000",
+      "scale": "1.0000",
+      "income": "不变"
+    },
+    {
+      "province": "河北省",
+      "crste": "0.5354",
+      "vrste": "0.5358",
+      "scale": "0.9993",
+      "income": "递增"
+    },
+    {
+      "province": "上海市",
+      "crste": "1.0000",
+      "vrste": "1.0000",
+      "scale": "1.0000",
+      "income": "不变"
+    },
+    {
+      "province": "江苏省",
+      "crste": "0.8661",
+      "vrste": "1.0000",
+      "scale": "0.8661",
+      "income": "递减"
+    },
+    {
+      "province": "浙江省",
+      "crste": "1.0000",
+      "vrste": "1.0000",
+      "scale": "1.0000",
+      "income": "不变"
+    },
+    {
+      "province": "福建省",
+      "crste": "0.9669",
+      "vrste": "0.9788",
+      "scale": "0.9878",
+      "income": "递减"
+    },
+    {
+      "province": "山东省",
+      "crste": "0.7708",
+      "vrste": "0.9188",
+      "scale": "0.8388",
+      "income": "递减"
+    },
+    {
+      "province": "广东省",
+      "crste": "0.8936",
+      "vrste": "1.0000",
+      "scale": "0.8936",
+      "income": "递减"
+    },
+    {
+      "province": "海南省",
+      "crste": "0.7042",
+      "vrste": "1.0000",
+      "scale": "0.7042",
+      "income": "递增"
+    }
+  ]
+}

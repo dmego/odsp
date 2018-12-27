@@ -18,6 +18,7 @@ $('#fl-btn').click(function () {
     } else {
         //否则折叠
         $('#fl-btn-l').addClass('fl-btn-mini');
+        $('#fl-btn-r').addClass('fl-btn-block');
         $('#fl-btn-r').removeClass('layui-col-md7 page-main');
 
         $('#fl-btn-icon').removeClass('layui-icon-right');
