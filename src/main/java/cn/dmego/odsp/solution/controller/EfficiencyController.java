@@ -16,8 +16,28 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/solution/efficiency")
 public class EfficiencyController {
 
-    @RequestMapping
-    public String efficiency(Model model){
-        return "solution/efficiency.html";
+    /**
+     * 跳转到数据采集页面
+     */
+    @RequestMapping("/efCollect")
+    public String efCollect(Model model){
+        return "solution/efficiency/efCollect.html";
     }
+
+    /**
+     * 跳转到数据处理页面
+     */
+    @RequestMapping("/efProcess")
+    public String efProcess(Model model){
+        return "solution/efficiency/efProcess.html";
+    }
+
+    /**
+     * 跳转到结果分析页面
+     */
+    @RequestMapping("/efAnalysis")
+    public String efAnalysis(Model model){
+        return "solution/efficiency/efAnalysis.html";
+    }
+
 }

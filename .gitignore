@@ -23,8 +23,4 @@
 /dist/
 /nbdist/
 /.nb-gradle/
-src/main/java/cn/dmego/odsp/algorithms/dao/
-src/main/java/cn/dmego/odsp/solution/dao/
-src/main/java/cn/dmego/odsp/solution/model/
-src/main/java/cn/dmego/odsp/solution/service/
-src/main/java/cn/dmego/odsp/solution/vo/
+
