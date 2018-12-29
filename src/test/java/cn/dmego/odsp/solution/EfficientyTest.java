@@ -6,7 +6,7 @@ import java.util.Arrays;
 import org.opensourcedea.dea.*;
 
 @SuppressWarnings("unused")
-public class Demo {
+public class EfficientyTest {
 
     static String[] testDMUNames = new String[10];
     static String[] testVariableNames = new String [5];
@@ -111,11 +111,11 @@ public class Demo {
         testDMUNames[9] = "海南省";
 
         //Set up the Variable Names
-        testVariableNames[0] = "从业人员数 ";
+        testVariableNames[0] = "从业人员数";
         testVariableNames[1] = "固定资产投资额";
-        testVariableNames[2] = "环境污染治理投资额 ";
+        testVariableNames[2] = "环境污染治理投资额";
         testVariableNames[3] = "GDP";
-        testVariableNames[4] = "三废综合利用产品产值  ";
+        testVariableNames[4] = "三废综合利用产品产值";
 
         //Set up the Data Matrix
         testDataMatrix [0] [0] = 1317.7;

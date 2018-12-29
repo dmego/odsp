@@ -16,8 +16,6 @@ import java.util.List;
 /**
  方法选择数组 不确定型决策法:{1:悲观,2:乐观,3:最小机会,4:等概率,5:折中}
 */
-
-
 @Data
 public class DecisionVo {
 
