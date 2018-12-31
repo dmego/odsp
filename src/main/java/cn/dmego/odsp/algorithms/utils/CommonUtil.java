@@ -272,6 +272,23 @@ public class CommonUtil {
     }
 
     /**
+     * 设置返回json中的 code 参数
+     *
+     * @param calculate
+     * @return
+     */
+    public static JsonResult retState(JsonResult calculate, String msg, int code) {
+        if (code == 200 && calculate.size() > 0 && calculate != null) {
+            calculate.setCode(200);
+            calculate.setMessage(msg+"成功!");
+        } else{
+            calculate.setCode(500);
+            calculate.setMessage(msg+"失败!");
+        }
+        return calculate;
+    }
+
+    /**
      * Double 类型保留 scale 位小数
      *
      * @param value
@@ -329,6 +346,24 @@ public class CommonUtil {
             Array.set(dest, len - i - 1, temp);
         }
         return (T)dest;
+    }
+
+    /**
+     * 返回二维数组中每一行得最大值
+     */
+    public static double[] getMax(double[][] arr){
+        double[] maxcol = new double[arr.length];
+
+        for (int i = 0; i < arr.length; i++) {
+            double max = arr[i][0];
+            for (int j = 0; j < arr[0].length; j++) {
+                if(arr[i][j] > max){
+                    max = arr[i][j];
+                }
+            }
+            maxcol[i] = max;
+        }
+        return maxcol;
     }
 
 }

@@ -21,7 +21,9 @@ public class DEAVo {
 
     private String[] dmuNames; //DMU 决策单元数组
 
-    private String[] variableNames; //变量指标数组
+    private String[] variableNames; //变量指标简写数组
+
+    private String[] varCHNames; //变量指标中文数组
 
     private String[] input; //投入指标集合
 
@@ -31,10 +33,11 @@ public class DEAVo {
 
     public DEAVo(){ }
 
-    public DEAVo(String[] functions,String fileName,String[] dmuNames, String[] variableNames, String[] input,String[] output){
+    public DEAVo(String[] functions,String fileName,String[] dmuNames, String[] varCHNames, String[] variableNames, String[] input,String[] output){
         this.functions = functions;
         this.fileName = fileName;
         this.dmuNames = dmuNames;
+        this.varCHNames = varCHNames;
         this.variableNames = variableNames;
         this.input = input;
         this.output = output;

@@ -134,10 +134,10 @@
 				}
 
 				//修改之后的描述
-				let i = 0;
-				let endi = opt.discription.length;
+				var i = 0;
+				var endi = opt.discription.length;
 				var interval = setInterval(function () {
-					let j = i-1;
+					var j = i-1;
 					//console.log("第" + (i + 1) + "条会执行" + opt.timeSpan[i] + "秒");
 					if (i == 0) {
 						_this.loading_discription = $('<div id="' + i + '" class="loading-discription txt-textOneRow"></div>').css({
@@ -151,12 +151,6 @@
 						
 						//隐藏前面几个描述
 						$("#" + j).remove();
-						// if (i == 1) {
-						// 	$("#" + (i - 1)).remove();
-						// }
-						// if (i == 4) {
-						// 	$("#" + (i - 1)).remove();
-						// }
 					}
 					i++;
 					if (i === endi) {

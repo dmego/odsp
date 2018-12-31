@@ -86,7 +86,7 @@ public class EfficientyTest {
              * Conversely, a DENSE RankingType will have given the following (3rd) DMU the ranking of second.
              * The precision is the int value (between 0 and 16) used to round the score values before ranking
              * the objectives.*/
-            int[] ranks = tester.getRanks(true, RankingType.STANDARD, 5);
+            int[] ranks = tester.getRanks(false, RankingType.DENSE, 10);
             for (int i = 0; i < ranks.length; i++) {
                 System.out.print(ranks[i]+",");
             }
@@ -118,11 +118,11 @@ public class EfficientyTest {
         testVariableNames[4] = "三废综合利用产品产值";
 
         //Set up the Data Matrix
-        testDataMatrix [0] [0] = 1317.7;
-        testDataMatrix [0] [1] = 5403.0;
-        testDataMatrix [0] [2] = 231.4;
-        testDataMatrix [0] [3] = 14113.58;
-        testDataMatrix [0] [4] = 3.4366;
+        testDataMatrix [0] [0] = 13342117.7;
+        testDataMatrix [0] [1] = 13342117;
+        testDataMatrix [0] [2] = 13342117;
+        testDataMatrix [0] [3] = 13342117;
+        testDataMatrix [0] [4] = 13342117.4366;
 
         testDataMatrix [1] [0] = 520.8;
         testDataMatrix [1] [1] = 6278.1;

@@ -92,6 +92,8 @@
                         <input type="checkbox" name="function" value="IRS" lay-skin="primary" title="IRS模型">
                         <input type="checkbox" name="function" value="GRS" lay-skin="primary" title="GRS模型">
                         <input type="checkbox" name="function" value="SBM" lay-skin="primary" title="SBM模型">
+                        <input type="checkbox" name="function" value="NC" lay-skin="primary" title="NCN模型">
+                        <input type="checkbox" name="function" value="ND" lay-skin="primary" title="NDSC模型">
                     </div>
                 </fieldset>
                 <div class="layui-card-body" align="center">
@@ -234,8 +236,11 @@
             })
             //获取投入与产出指标
             var input = transfer.get(tb1,'r1','logogram').split(",");
+            var inputCH = transfer.get(tb1,'r1','name').split(",");
             var output = transfer.get(tb1,'r2','logogram').split(",");
+            var outputCH = transfer.get(tb1,'r2','name').split(",");
             var variableNames = input.concat(output);
+            var varCHNames = inputCH.concat(outputCH);
             var dmuNames = data.field.DMUSelect.split(",");
 
             // console.log(functions)
@@ -243,20 +248,25 @@
             // console.log(output)
             // console.log(DMUNames)
 
-            layer.load(2);
+            //layer.load();
+            parent.loadIndex();
             $.post('calculate', {
                 fileName: data.field.dataTable, //数据表名称
                 funs: functions, //方法选择数组
                 input: input, //投入
                 output: output, //产出
-                variableNames:variableNames,
+                varCHNames:varCHNames, //指标中文
+                variableNames:variableNames, //指标简写
                 dmuNames: dmuNames, //决策变量数据
             }, function (data) {
+                parent.closeLoad();
                 layer.closeAll('loading');
                 if (data.code == 200) {
                     top.layer.msg(data.msg, {icon: 1});
                     //数据返回成功,得到数据,渲染表格
-
+                    admin.putTempData("effCalData",data);
+                    //模拟点击结果分析
+                    $("#efficiency:analysis").click();
                 } else {
                     top.layer.msg(data.msg, {icon: 2});
                 }
@@ -264,38 +274,6 @@
             return false;
         });
 
-
-        /**
-         * 加载条
-         */
-        function loading() {
-            loadingTime = 0;
-            $('body').loading({
-                loadingWidth: 300,
-                title: '请稍等!',
-                name: 'test',
-                discription: [
-                    '正在上传文件 . . .',
-                    '上传文件成功 . . .',
-                    '正在解析数据 . . .',
-                    '数据解析成功 . . .'
-                ],
-                timeSpan: [1, 1, 1, 1], //每条描述显示的时间
-                direction: 'column',
-                type: 'origin',
-                //originBg:'#71EA71',
-                originDivWidth: 40,
-                originDivHeight: 40,
-                originWidth: 6,
-                originHeight: 6,
-                smallLoading: false,
-                loadingMaskBg: 'rgba(0,0,0,0.2)'
-            });
-
-            setTimeout(function () {
-                removeLoading('test');
-            }, 4500);
-        }
     });
 </script>
 </body>

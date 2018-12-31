@@ -172,7 +172,7 @@ public class EfficiencyController {
             }
         }
 
-        CommonUtil.retState(jsonResult,200);
+        CommonUtil.retState(jsonResult,"上传并解析",200);
         return jsonResult;
     }
 
@@ -316,15 +316,17 @@ public class EfficiencyController {
 
 
     /**
-     * 计算效率值
+     * 计算
      */
     @ResponseBody
     @RequestMapping("/calculate")
     public JsonResult calculate(String fileName, @RequestParam("funs[]") String[] funs,
-                                @RequestParam("input[]") String[] input, @RequestParam("output[]") String[] output,
-                                @RequestParam("dmuNames[]") String[] dmuNames,@RequestParam("variableNames[]") String[] variableNames){
+                                @RequestParam("input[]") String[] input, @RequestParam("output[]") String[] output, @RequestParam("dmuNames[]") String[] dmuNames,
+                                @RequestParam("varCHNames[]") String[] varCHNames,@RequestParam("variableNames[]") String[] variableNames){
 
-        DEAVo deaVo = new DEAVo(funs,fileName,dmuNames,variableNames,input,output);
+        JsonResult jsonResult = new JsonResult();
+
+        DEAVo deaVo = new DEAVo(funs,fileName,dmuNames,varCHNames,variableNames,input,output);
 
         //根据文件名,获取数据表文件
         String filePath = "src/main/resources/static/upload/temp/efficiency/"+getLoginUser().getUserName()+"/";
@@ -364,7 +366,7 @@ public class EfficiencyController {
                 deaVo.setMatrix(matrix);
 
                 //调用DEA求解器求解结果
-                JsonResult jsonResult = deaService.calFromSo(deaVo);
+                jsonResult = deaService.calFromSo(deaVo);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -378,12 +380,7 @@ public class EfficiencyController {
             }
         }
 
-        //
-
-
-
-
-        return null;
+        return jsonResult;
     }
 
 

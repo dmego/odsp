@@ -39,7 +39,6 @@
 <!-- 正文开始 -->
 <div class="layui-fluid">
     <div class="layui-col-space15">
-
         <div class="layui-col-md5 page-aside">
             <span id="fl-btn" class="fl-btn">
                 <i id="fl-btn-icon" class="layui-icon layui-icon-right"></i>
@@ -446,6 +445,7 @@
         //原始数据表
         table.render({
             elem: '#originalTable',
+            id: 'originalTable',
             cellMinWidth: 100,
             cols: [Head],
             data: Data,
@@ -455,11 +455,18 @@
         //分析结果表
         table.render({
             elem: '#resultTable',
+            id: 'resultTable',
             cellMinWidth: 100,
             cols: [resultHead],
             data: resultData,
             limit: 100
         });
+
+        // 窗口大小改变事件
+        $("#l-btn-r").onresize = function () {
+            table.reload('originalTable',null);
+            table.reload('resultTable',null);
+        };
 
     });
 </script>

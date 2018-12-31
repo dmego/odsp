@@ -153,6 +153,7 @@
                     layer.closeAll('loading');
                     if (data.code == 200) {
                         //数据返回成功,得到数据,渲染表格
+                        top.layer.msg(data.msg, {icon: 1});
                         renderTables(data);
                     } else {
                         console.log(data.msg)
