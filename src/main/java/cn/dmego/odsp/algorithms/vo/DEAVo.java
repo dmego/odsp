@@ -2,8 +2,6 @@ package cn.dmego.odsp.algorithms.vo;
 
 import lombok.Data;
 
-import java.util.List;
-
 /**
  * class_name: DEAVo
  * package: cn.dmego.odsp.algorithms.vo

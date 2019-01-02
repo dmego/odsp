@@ -348,6 +348,22 @@ public class CommonUtil {
         return (T)dest;
     }
 
+
+    /**
+     * 矩阵转置
+     */
+    public static double[][] transpose(double[][] matrix){
+        int line = matrix.length;
+        int list = matrix[0].length;
+        double[][] trans = new double[list][line];
+        for (int i = 0; i < line; i++) {
+            for (int j = 0; j < list; j++) {
+                trans[j][i] = matrix[i][j];
+            }
+        }
+        return trans;
+    }
+
     /**
      * 返回二维数组中每一行得最大值
      */
@@ -366,4 +382,36 @@ public class CommonUtil {
         return maxcol;
     }
 
+    /**
+     * 返回二维数组中每一行或列得最大值
+     *  0 行
+     *  1 列
+     */
+    public static double[] getMax(double[][] arr, int a) {
+        double[] maxcol = null;
+        if(a == 0){
+            maxcol = new double[arr.length];
+            for (int i = 0; i < arr.length; i++) {
+                double max = arr[i][0];
+                for (int j = 0; j < arr[0].length; j++) {
+                    if(arr[i][j] > max){
+                        max = arr[i][j];
+                    }
+                }
+                maxcol[i] = max;
+            }
+        }else if(a == 1){
+            maxcol = new double[arr[0].length];
+            for (int i = 0; i < arr[0].length; i++) {
+                double max = arr[0][i];
+                for (int j = 0; j < arr.length; j++) {
+                    if(arr[j][i] > max){
+                        max = arr[j][i];
+                    }
+                }
+                maxcol[i] = max;
+            }
+        }
+        return maxcol;
+    }
 }
