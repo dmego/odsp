@@ -149,11 +149,31 @@
             <!--<version>${quartz.version}</version>-->
         <!--</dependency>-->
 
+        <!--lpsolve求解器-->
         <dependency>
             <groupId>com.datumbox</groupId>
             <artifactId>lpsolve</artifactId>
             <version>5.5.2.0</version>
         </dependency>
+        <!--开源DEA求解器-->
+        <dependency>
+            <groupId>com.github.dmego</groupId>
+            <artifactId>opensourcedea-lib</artifactId>
+            <version>1.0.0</version>
+        </dependency>
+        <!--easyexcel解析Excel文件-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+            <version>1.1.2-beta5</version>
+        </dependency>
+        <!--CVS处理-->
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>4.4</version>
+        </dependency>
+
 
 
         <!-- 从request获取设备信息-->
@@ -176,6 +196,13 @@
         </dependency>
     </dependencies>
 
+    <!-- github上的一些开源项目都是有用的这个仓库 -->
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+    </repositories>
     <build>
         <plugins>
             <plugin>
@@ -226,10 +253,7 @@
                     </resources>
                 </configuration>
             </plugin>
-
-
         </plugins>
     </build>
-
 
 </project>

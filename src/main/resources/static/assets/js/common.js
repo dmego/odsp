@@ -5,6 +5,7 @@ layui.config({
     formSelects: 'formSelects/formSelects-v4',
     treetable: 'treetable-lay/treetable',
     authtree: 'authtree-lay/authtree',
+    transfer: 'layui-transfer/transfer',
     step: 'step-lay/step'
 }).use(['layer'], function () {
     var $ = layui.jquery;

@@ -16,6 +16,14 @@ import java.util.Date;
  **/
 public class DateUtil {
 
+    /**
+     * 获取当前时间戳(精确到秒)
+     * @return
+     */
+    public static String getStamp(){
+        return String.valueOf(new Date().getTime() / 1000);
+    }
+
 
     /**
      * 获取当前时间:String类型 (yyyy-MM-dd HH:mm:ss) 格式

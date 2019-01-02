@@ -39,7 +39,6 @@
 <!-- 正文开始 -->
 <div class="layui-fluid">
     <div class="layui-col-space15">
-
         <div class="layui-col-md5 page-aside">
             <span id="fl-btn" class="fl-btn">
                 <i id="fl-btn-icon" class="layui-icon layui-icon-right"></i>
@@ -285,21 +284,34 @@
                     var cache = ifTable.cache.ratio;
                     var isNull = false;
                     var isNoDouble = false; //非负整数或保留3位小数
-                    var rag = /^[+]?\d*\.?\d{0,3}$/; //非负整数或保留3位小数
-                    // //for 循环进行校验
-                    // for (var i = 0; i < cache.length; i++) {
-                    //     var item = cache[i];
-                    //     if(fun == 1 || fun == 2){
-                    //         //先校验非空
-                    //         if (isEmpty(item['start']) || isEmpty(item['end']) || isEmpty(item['weight'])) {
-                    //             isNull = true;
-                    //             break;
-                    //         } else if (!rag.test(item['weight'])) {
-                    //             isNoDouble = true;
-                    //             break;
-                    //         }
-                    //     }
-                    // }
+                    var rag = /^[+]?\d*\.?\d{0,3}$/; //非负整数或保留非负3位小数
+
+                    console.log(cache)
+
+                    //for 循环进行校验
+                    for (var i = 0; i < cache.length; i++) {
+                        // debugger
+                        var item = cache[i];
+                        //先校验非空
+                        for (var j = 1; j <= sales; j++) {
+                            if (isEmpty(item["B"+j])) {
+                                isNull = true;
+                                break;
+                            } else if (!rag.test(item['B'+j])) {
+                                isNoDouble = true;
+                                break;
+                            }
+                        }
+                        if(i != cache.length - 1){
+                            if (isEmpty(item['output'])) {
+                                isNull = true;
+                                break;
+                            } else if (!rag.test(item['output'])) {
+                                isNoDouble = true;
+                                break;
+                            }
+                        }
+                    }
 
                     if (isNull) {
                         layer.msg('数据表中存在字段为空!');
@@ -342,6 +354,9 @@
          */
         form.verify({
             originNum: function (value, item) {
+                if($("#originNum").attr("isChange") == "true"){
+                    return '产地个数已改变，请重新设置系数!';
+                }
                 if (value < 1) {
                     return '产地个数必须大于1!';
                 } else if (value > 100) {
@@ -349,6 +364,9 @@
                 }
             },
             salesNum: function (value, item) {
+                if($("#salesNum").attr("isChange") == "true"){
+                    return '销地个数已改变，请重新设置系数!';
+                }
                 if (value < 1) {
                     return '销地个数必须大于1!';
                 } else if (value > 100) {
@@ -427,6 +445,7 @@
         //原始数据表
         table.render({
             elem: '#originalTable',
+            id: 'originalTable',
             cellMinWidth: 100,
             cols: [Head],
             data: Data,
@@ -436,11 +455,18 @@
         //分析结果表
         table.render({
             elem: '#resultTable',
+            id: 'resultTable',
             cellMinWidth: 100,
             cols: [resultHead],
             data: resultData,
             limit: 100
         });
+
+        // 窗口大小改变事件
+        $("#l-btn-r").onresize = function () {
+            table.reload('originalTable',null);
+            table.reload('resultTable',null);
+        };
 
     });
 </script>

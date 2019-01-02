@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html>
+
+<head>
+    <title>ODSP</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+    <link rel="stylesheet" href="/assets/css/site.css"/>
+    <link rel="stylesheet" href="/assets/libs/font-awesome/css/font-awesome.min.css"/>
+    <style>
+        .layui-input-block {
+            margin-left: 100px;
+            min-height: 36px;
+        }
+
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 15px;
+            width: 50px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body class="page-aside-fixed">
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" style="padding-top: 40px;">
+            <div align="center">
+                <h1>我国各地区高技术产业投入产出效率综合评价</h1>
+            </div>
+            <hr>
+
+            <fieldset class="layui-elem-field">
+                <legend>简介</legend>
+                <div class="layui-field-box">
+                    根据我国 30 个省(市/区)的高技术产业的相关投入产出数据指标，基于因子分析和数据包络分析(DEA)方法，对比分析各个地区的高技术产业的投入产出技术效率、投入产出比例。
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field">
+                <legend>DEA模型介绍</legend>
+                <div class="layui-field-box">
+                    DEA 方法是一种非参数、对多投入多产出决策单元进 行相对效率评价的计量经济方法。它根据一组输入输出观测值来估计有效生产的前沿面，并以此为基础进行多目标综合效果评价。
+                    技术效率(Technical Efficiency，TE)衡量技术在稳定使用 (即没有技术创新)过程中，生产者获得最大产出的能力表
+                    示生产者的生产活动接近其生产边界(最大产出)的程度，即反映了生产者利用现有技术的有效程度。</br></br>
+                    <div align="center">
+                        <img src="/assets/images/solution/dea.png" style="width: 400px">
+                    </div>
+                    DEA 使用数学规划（包括线性规划、多目标规划、具有锥结构的广义最优化、半无限规划、随机规划等等）模型对具有多个输入、特别是具有多个输出的“部门”或“单位” （称为决策单元（decision
+                    making unit），简记为 DMU ）间的相对有效性（称为 DEA 有效）进行评价。根据对各 DMU 观察的数据判断 DMU 是否为 DEA 有效，本质上是判断 DMU
+                    是否位于生产可能集的“生产前沿面”上（生产前沿面是经济学中生产函数向多产出情况的 一种推广）。已经证明，DEA 有效性与相应的多目标规划问题的有效解是等价的。</br></br>
+                    具体说，DEA 的建模就是通过对各 DMU（下面各种投入和产出变量）的输入、输出量进行比较分析后，建立一个由全部 DMU 按照一定方式组合所构成的新的“有效
+                    DMU”，将其作为评价的标准，把要评价的每一个 DMU 与该“有效 DMU”进行对比分析：设定“有效 DMU”的输出量不小于某一拟评 DMU 的输出量， 那么它的输入量与该 DMU
+                    输入量的比较则可以反映被评机构的效率情况。如果“有效 DMU” 用较小的输入量即可获得比拟评价的 DMU 同样或者较多的输出，则可认定该被评机构是低效的。
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field">
+                <legend>投入、产出指标选择</legend>
+                <div class="layui-field-box">
+                    对于评价高科技产业的效率而言，影响因素众多，关系错综复杂，评价指标的选择非常重要。
+                    从高技术产业的生产来看，首先，要素投入中劳动力 投入对任何一个产业的生产都是很重要的，
+                    对于高技术产业而言，劳动力的素质显得尤其重要。劳动力的素质越高，掌握的技术能力和技术创新能力就越强，
+                    对生产的促进作用就越大，故而 R&D 人员全时当量可以作为一个评价指标。 其次，R&D 经费投入反映了一个产业或者一个企业对技术创新的重视程度，是技术进步的基础。
+                    技术进步本身对高技术产业的发展有着很大的影响，也是影响高技术产业效率的一个因素。新产品的销售收入与主营业务的比例反映了研发活动带来的创新效应，高新技术科技项目数的增加也是产业技术效益的表现。
+                    从企业到产业，科技项目的一次次成功必将推动新项目的发展，使整个产业的研发项目总数持续增加，并且其上升的快慢程度能反映出技术效益的大小。
+                    拥有发明专利数和专利申请数作为间接效益指标，可以反映企业获得并持续获得垄断利润的能力。</br></br>
+                    经上述继续分析可得各地区高技术产业效率进行评价的指标如下表所示</br>
+                    <hr>
+                    <div align="center">
+                        <h3>投入产出评价指标表</h3>
+                    </div>
+
+                    <table class="layui-table" lay-skin="line">
+                        <thead>
+                        <tr>
+                            <th>投入指标</th>
+                            <th>产出指标</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>科技机构经费(万元)</td>
+                            <td>科技项目数</td>
+                        </tr>
+                        <tr>
+                            <td>企业科技机构数(个)</td>
+                            <td>新产品开发项目数</td>
+                        </tr>
+                        <tr>
+                            <td>有科技活动的企业数</td>
+                            <td>专利申请</td>
+                        </tr>
+                        <tr>
+                            <td>R&D人员全时当量(人年)</td>
+                            <td>拥有发明专利数</td>
+                        </tr>
+                        <tr>
+                            <td>R&D经费(万元)</td>
+                            <td>新产品产值占工业总产值的比例</td>
+                        </tr>
+                        <tr>
+                            <td>R&D项目经费(万元)</td>
+                            <td>新产品销售收入占主营业务收入比例</td>
+                        </tr>
+                        <tr>
+                            <td>引进购买与改造消化吸收经费比值</td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>开发新产品经费占科技活动经费支出比例</td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field">
+                <legend>样本选择及数据来源</legend>
+                <div class="layui-field-box">
+                    由于高技术产业高收益、高带动性等特点，现阶段我国各个省、市、自治区都在加大力度发展高技术产业，并将其作为经济发展的增长点。
+                    为了便于对各个地区的发展情况及高技术产业的资源利用效率进行比较、分析，将我国 30 个省、市、自治区看作同类型的决策单元。
+                    从 《中国科技统计年鉴》中选取各个符合上述高技术产业产出效益综合效率评价指标体系的原始数据进行 DEA 效率评价。
+                </div>
+            </fieldset>
+
+            <fieldset class="layui-elem-field">
+                <legend>模型计算</legend>
+                <div class="layui-field-box">
+                    <!--参数设置-->
+                    <div class="layui-card-header newheader">参数设置
+                        <span id="btnUpd" style="float: right; cursor: pointer;">
+                            <i class="fa fa-play-circle" aria-hidden="true"></i>  计算</i>
+                        </span>
+                    </div>
+                    <form class="layui-form" action="">
+                        <div class="layui-row layui-col-space15">
+                            <div class="layui-col-md6">
+                                <div class="layui-card">
+                                    <div class="layui-card-header">投入指标选择</div>
+                                    <div class="layui-card-body">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">
+                                                <a href="" style="cursor:pointer"><i class="fa fa-plus-square"
+                                                                                     aria-hidden="true"
+                                                                                     id="resultFa"></i></a>
+                                                &nbsp;&nbsp;&nbsp;
+                                                <a href="" style="cursor:pointer"><i class="fa fa-minus-square"
+                                                                                     aria-hidden="true"
+                                                                                     id="resultFa"></i></a>
+                                            </label>
+                                            <div class="layui-input-block">
+                                                <select id="sType" name="sType" lay-filter="sType">
+                                                    <option value="1" selected>科技机构经费(万元)</option>
+                                                    <option value="2">企业科技机构数(个)</option>
+                                                    <option value="3">有科技活动的企业数</option>
+                                                    <option value="4">R&D人员全时当量(人年)</option>
+                                                    <option value="5">R&D经费(万元)</option>
+                                                    <option value="6">R&D项目经费(万元)</option>
+                                                    <option value="7">引进购买与改造消化吸收经费比值</option>
+                                                    <option value="8">开发新产品经费占科技活动经费支出比例</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-block">
+                                                <select id="sType" name="sType" lay-filter="sType">
+                                                    <option value="1">科技机构经费(万元)</option>
+                                                    <option value="2" selected>企业科技机构数(个)</option>
+                                                    <option value="3">有科技活动的企业数</option>
+                                                    <option value="4">R&D人员全时当量(人年)</option>
+                                                    <option value="5">R&D经费(万元)</option>
+                                                    <option value="6">R&D项目经费(万元)</option>
+                                                    <option value="7">引进购买与改造消化吸收经费比值</option>
+                                                    <option value="8">开发新产品经费占科技活动经费支出比例</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-block">
+                                                <select id="sType" name="sType" lay-filter="sType">
+                                                    <option value="1">科技机构经费(万元)</option>
+                                                    <option value="2">企业科技机构数(个)</option>
+                                                    <option value="3" selected>有科技活动的企业数</option>
+                                                    <option value="4">R&D人员全时当量(人年)</option>
+                                                    <option value="5">R&D经费(万元)</option>
+                                                    <option value="6">R&D项目经费(万元)</option>
+                                                    <option value="7">引进购买与改造消化吸收经费比值</option>
+                                                    <option value="8">开发新产品经费占科技活动经费支出比例</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-block">
+                                                <select id="sType" name="sType" lay-filter="sType">
+                                                    <option value="1">科技机构经费(万元)</option>
+                                                    <option value="2">企业科技机构数(个)</option>
+                                                    <option value="3">有科技活动的企业数</option>
+                                                    <option value="4" selected>R&D人员全时当量(人年)</option>
+                                                    <option value="5">R&D经费(万元)</option>
+                                                    <option value="6">R&D项目经费(万元)</option>
+                                                    <option value="7">引进购买与改造消化吸收经费比值</option>
+                                                    <option value="8">开发新产品经费占科技活动经费支出比例</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="layui-col-md6">
+                                <div class="layui-card">
+                                    <div class="layui-card-header">产出指标选择</div>
+                                    <div class="layui-card-body">
+                                        <div class="layui-form-item">
+                                            <label class="layui-form-label">
+                                                <a href="" style="cursor:pointer"><i class="fa fa-plus-square"
+                                                                                     aria-hidden="true"
+                                                                                     id="resultFa"></i></a>
+                                                &nbsp;&nbsp;&nbsp;
+                                                <a href="" style="cursor:pointer"><i class="fa fa-minus-square"
+                                                                                     aria-hidden="true"
+                                                                                     id="resultFa"></i></a>
+                                            </label>
+                                            <div class="layui-input-block">
+                                                <select id="sType" name="sType" lay-filter="sType">
+                                                    <option value="1" selected>科技项目数</option>
+                                                    <option value="2">新产品开发项目数</option>
+                                                    <option value="3">专利申请</option>
+                                                    <option value="4">拥有发明专利数</option>
+                                                    <option value="5">新产品产值占工业总产值的比例</option>
+                                                    <option value="6">新产品销售收入占主营业务收入比例</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-block">
+                                                <select id="sType" name="sType" lay-filter="sType">
+                                                    <option value="1">科技项目数</option>
+                                                    <option value="2" selected>新产品开发项目数</option>
+                                                    <option value="3">专利申请</option>
+                                                    <option value="4">拥有发明专利数</option>
+                                                    <option value="5">新产品产值占工业总产值的比例</option>
+                                                    <option value="6">新产品销售收入占主营业务收入比例</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="layui-form-item">
+                                            <div class="layui-input-block">
+                                                <select id="sType" name="sType" lay-filter="sType">
+                                                    <option value="1">科技项目数</option>
+                                                    <option value="2">新产品开发项目数</option>
+                                                    <option value="3" selected>专利申请</option>
+                                                    <option value="4">拥有发明专利数</option>
+                                                    <option value="5">新产品产值占工业总产值的比例</option>
+                                                    <option value="6">新产品销售收入占主营业务收入比例</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                    <hr>
+                    <!--DEA输出结果表-->
+                    <div class="layui-card-header newheader">DEA输出结果表</div>
+                    <div class="layui-field-box">
+                        <table class="layui-hide" id="deaTable"></table>
+                    </div>
+                    <!--可视化展示-->
+                    <div class="layui-card-header newheader">可视化展示</div>
+                    <hr>
+                    <br>
+                    <div class="layui-field-box">
+                        <div id="echartsDiv" class="layui-show echartsDiv"></div>
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset class="layui-elem-field">
+                <legend>结论</legend>
+                <div class="layui-field-box">
+                    从可视化图表中可以看出，我国高科技产业的发展，存在着显著的地区差异，我国东部地区在经济快速发展过程中，
+                    其高科技产业的效率相对较高，十个省市除河北偏低之外，其他省市均处于可以接受的水平，
+                    但东部地区内部高科技产业效率还是存在一定的差异，这与各个地区的区域管理及其技术条件存在一定的关联。
+                    再进一步分析，可以看出：关于高科技产业的投入， 东部沿海地区较高，西北部地区最低，中部省份、西南地区以及东北地 区处于中间状态。
+                    这种高科技产业的聚集分布， 与我国各个地区的经济发展水平是非常匹配的，这说明经济发展水平对高科技产业的带动作用是最主要的。
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/libs/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/assets/libs/slimscroll/jquery.slimscroll.js"></script>
+
+<script type="text/javascript" src="/assets/libs/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echartsTheme.js"></script>
+
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script type="text/javascript" src="/assets/js/utils.js"></script>
+<script type="text/javascript" src="/assets/js/tool.js"></script>
+
+<script>
+    layui.use(['table', 'layer', 'form', 'util', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+
+        var deaData;
+        var fun, originNum, salesNum, isUpd;
+        var Head, Data, resultHead, resultData;
+
+        //首先获取该页面的初始化数据
+        $.ajaxSettings.async = false; //同步获取数据
+        $.getJSON("/assets/js/solution/dea.json", function (data) {
+            deaData = data;
+            admin.putTempData('deaData', data);
+
+            fun = data.fun;
+            originNum = data.originNum;
+            salesNum = data.salesNum;
+            isUpd = data.isUpd;
+
+            Head = data.Head;
+            Data = data.Data;
+
+        });
+
+        //DEA数据表
+        table.render({
+            elem: '#deaTable',
+            cellMinWidth: 100,
+            cols: [Head],
+            data: Data,
+            limit: 100
+        });
+
+
+        var myChart = echarts.init(document.getElementById('echartsDiv'));
+        var app = {};
+        option = null;
+        app.title = '效率评价';
+
+        option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        color: '#999'
+                    }
+                }
+            },
+            toolbox: {
+                feature: {
+                    dataView: {show: true, readOnly: false},
+                    magicType: {show: true, type: ['line', 'bar']},
+                    restore: {show: true},
+                    saveAsImage: {show: true}
+                }
+            },
+            legend: {
+                data: ['综合效率', '纯技术效率', '规模效率']
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['北京市', '天津市', '河北省', '上海市', '江苏省', '浙江省', '福建省', '山东省', '广东省', '海南省'],
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value',
+                    name: '效率值',
+                    min: 0,
+                    max: 1,
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: '综合效率',
+                    type: 'bar',
+                    data: [0.7774, 1.0000, 0.5354, 1.0000, 0.8661, 1.0000, 0.9669, 0.7708, 0.8936, 0.7042]
+                },
+                {
+                    name: '纯技术效率',
+                    type: 'bar',
+                    data: [0.8037, 1.0000, 0.5358, 1.0000, 1.0000, 1.0000, 0.9788, 0.9188, 1.0000, 1.0000]
+                },
+                {
+                    name: '规模效率',
+                    type: 'line',
+                    data: [0.9673, 1.0000, 0.9993, 1.0000, 0.8661, 1.0000, 0.9878, 0.8388, 0.8936, 0.7042]
+                }
+            ]
+        };
+        if (option && typeof option === "object") {
+            myChart.setOption(option, true);
+        }
+    });
+</script>
+</body>
+
+</html>

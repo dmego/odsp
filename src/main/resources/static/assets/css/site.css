@@ -4,7 +4,8 @@
 }
 
 .page-main {
-    margin-left: 41.66666667%
+    margin-left: 41.66666667%;
+    display: block;
 }
 
 .page-aside {
@@ -29,6 +30,10 @@
 
 .fl-btn-mini {
     display: none;
+}
+
+.fl-btn-block {
+    display: block;
 }
 
 .dis-none{

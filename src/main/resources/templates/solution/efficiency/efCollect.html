@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html>
+
+<head>
+    <title>ODSP</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+    <link rel="stylesheet" href="/assets/css/site.css"/>
+    <link rel="stylesheet" href="/assets/libs/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/assets/libs/dropify/css/dropify.css"/>
+    <link rel="stylesheet" href="/assets/libs/loading/loading.css"/>
+    <style>
+        .layui-input-block {
+            margin-left: 150px;
+            min-height: 36px;
+        }
+
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 15px;
+            width: 120px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+        }
+
+        .layui-table-cell {
+            height: 20px;
+            line-height: 20px;
+        }
+    </style>
+</head>
+
+<body class="page-aside-fixed">
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" style="padding-top: 40px;">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                <legend class="" id="title1">数据采集</legend>
+                <legend class="dis-none" id="title2">采集数据显示 / <span id="fileName"></span></legend>
+            </fieldset>
+
+            <div class="layui-row layui-col-space15">
+                <div class="layui-col-md12">
+                    <div class="layui-card" id="dataAcqu">
+                        <div class="layui-card-body">
+                            <input name="file" id="file" type="file" class="dropify" data-height="300"
+                                   data-allowed-file-extensions="xlsx xls cvs"/>
+                        </div>
+
+                        <div class="layui-card-body" align="center">
+                            <button class="layui-btn layui-btn-lg  layui-btn-radius layui-btn-primary" id="upload">
+                                <i class="fa fa-cloud-upload" aria-hidden="true"></i> 点击上传
+                            </button>
+                            <span class="verticalline"></span>
+                            <a class="layui-btn layui-btn-lg  layui-btn-radius layui-btn-primary"
+                               id="download" href="download">
+                                <i class="fa fa-arrow-circle-down" aria-hidden="true"></i> 模板下载
+                            </a>
+                        </div>
+                    </div>
+                    <div class="layui-card dis-none" id="dataShow">
+                        <div class="layui-card-body">
+                            <table class="layui-hide" id="efDataTable" lay-size="sm"></table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <!--可视化展示-->
+            <div class="dis-none" id="echartShow">
+                <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
+                    <legend>可视化展示</legend>
+                </fieldset>
+                <hr>
+                <br>
+                <div class="layui-field-box">
+                    <div id="echartsDiv" class="layui-show echartsDiv"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/libs/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/assets/libs/slimscroll/jquery.slimscroll.js"></script>
+<script type="text/javascript" src="/assets/libs/dropify/js/dropify.js"></script>
+<script type="text/javascript" src="/assets/libs/loading/loading.js"></script>
+
+
+<script type="text/javascript" src="/assets/libs/echarts/echarts.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.js"></script>
+
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script type="text/javascript" src="/assets/js/utils.js"></script>
+<script type="text/javascript" src="/assets/js/tool.js"></script>
+
+<script>
+    //layui建议所有代码都写在layui.use()里面，相当于jquery的$(function(){})
+    var use = layui.use(['table', 'layer', 'form', 'util', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+
+        $('.dropify').dropify({
+            messages: {
+                'default': '单击或直接拖动需要上传的文件到此处',
+                'replace': '将文件拖放到此处或单击此处替换',
+                'remove': '移除',
+                'error': '哎呀，出错了!'
+            },
+            error: {
+                'fileExtension': '只允许上传以 ({{ value }} ) 结尾的文件.'
+            },
+        });
+
+        // 点击上传事件
+        $('#upload').click(function () {
+            var formData = new FormData();
+            if (isEmpty($("#file")[0].files[0])) {
+                layer.msg("请选择要上传的文件");
+                return;
+            } else {
+                formData.append("file", $("#file")[0].files[0]);
+            }
+            layer.load(2);
+            $.ajax({
+                type: "POST",           //因为是传输文件，所以必须是post
+                url: 'upload',         //对应的后台处理类的地址
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    layer.closeAll('loading');
+                    if (data.code == 200) {
+                        //数据返回成功,得到数据,渲染表格
+                        top.layer.msg(data.msg, {icon: 1});
+                        renderTables(data);
+                    } else {
+                        console.log(data.msg)
+                        top.layer.msg(data.msg, {icon: 2});
+                    }
+                }
+            });
+        });
+
+        function renderTables(res) {
+            $("#title1").addClass("dis-none");
+            $("#title2").removeClass("dis-none");
+            $("#fileName").html("("+res.fileName+")");
+
+            $("#dataAcqu").addClass("dis-none");
+            $("#dataShow").removeClass("dis-none");
+
+            table.render({
+                elem: "#efDataTable",
+                cellMinWidth: 190,
+                height: 'full-110',
+                cols: [res.head],
+                data: res.data,
+                limit: 100
+            });
+
+            $("#echartShow").removeClass("dis-none");
+            var myChart = echarts.init(document.getElementById('echartsDiv'));
+            var app = {};
+            option = null;
+            app.title = '采集数据展示';
+
+            option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer : {
+                        type : 'shadow'
+                    }
+                },
+                legend: {
+                    data: res.legend
+                },
+                grid: {
+                    left: '3%',
+                    right: '4%',
+                    bottom: '3%',
+                    containLabel: true
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: res.xAxis,
+                        axisPointer: {
+                            type: 'shadow'
+                        },
+                        axisLabel: {
+                            interval: 0,
+                            formatter: function (value) {
+                                return value.split("").join("\n");
+                            }
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                    }
+                ],
+                series: res.series
+            };
+            if (option && typeof option === "object") {
+                myChart.setOption(option, true);
+            }
+        }
+
+
+        function loading() {
+            loadingTime = 0;
+            $('body').loading({
+                loadingWidth: 300,
+                title: '请稍等!',
+                name: 'test',
+                discription: [
+                    '正在上传文件 . . .',
+                    '上传文件成功 . . .',
+                    '正在解析数据 . . .',
+                    '数据解析成功 . . .'
+                ],
+                timeSpan: [1, 1, 1, 1], //每条描述显示的时间
+                direction: 'column',
+                type: 'origin',
+                //originBg:'#71EA71',
+                originDivWidth: 40,
+                originDivHeight: 40,
+                originWidth: 6,
+                originHeight: 6,
+                smallLoading: false,
+                loadingMaskBg: 'rgba(0,0,0,0.2)'
+            });
+
+            setTimeout(function () {
+                removeLoading('test');
+            }, 4500);
+        }
+    });
+</script>
+</body>
+
+</html>

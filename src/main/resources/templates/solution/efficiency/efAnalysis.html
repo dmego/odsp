@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html>
+
+<head>
+    <title>ODSP</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+    <link rel="stylesheet" href="/assets/css/site.css"/>
+    <link rel="stylesheet" href="/assets/libs/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/assets/libs/dropify/css/dropify.css"/>
+    <style>
+        .numberInfoSubTitle {
+            color: rgba(0, 0, 0, .45);
+            font-size: 14px;
+            height: 22px;
+            line-height: 22px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            word-break: break-all;
+        }
+
+        .numberInfoValue {
+            color: rgba(0, 0, 0, .85);
+            font-size: 24px;
+            margin-top: 10px;
+            height: 32px;
+            line-height: 32px;
+        }
+
+        .numberInfoSuffix {
+            color: rgba(0, 0, 0, .65);
+            font-size: 16px;
+            font-style: normal;
+            margin-left: 4px;
+            line-height: 32px;
+        }
+        .layui-input-block {
+            margin-left: 150px;
+            min-height: 36px;
+        }
+
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 15px;
+            width: 120px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+        }
+
+        .layui-table-cell {
+            height: 20px;
+            line-height: 20px;
+        }
+    </style>
+</head>
+
+
+<body class="page-aside-fixed">
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-xs12 layui-col-md8">
+            <div class="layui-card">
+                <div class="layui-card-header">效率分析
+                    <span id="effShow" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="effFa"> 打开图表</i>
+                    </span>
+                </div>
+                <div class="layui-card-body dis-none" id="efAnTableDiv" style="height: 500px;">
+                    <table class="layui-hide" id="efAnTable" lay-size="sm"></table>
+                </div>
+                <div class="layui-card-body" id="efAnEchartsDiv">
+                    <div id="efAnEcharts" style="height: 500px;overflow: hidden;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-xs12 layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">有效性分析</div>
+                <div class="layui-card-body">
+                    <div id="validEcharts" style="width: 100%;height: 200px;"></div>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">DEA有效性排名分析</div>
+                <div class="layui-card-body" style="height: 220px; overflow: hidden;">
+                    <table id="ranksTables" class="layui-hide" lay-size="sm" ></table>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-xs12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-tab layui-tab-brief" lay-filter="tabZZT">
+                        <ul class="layui-tab-title">
+                            <li lay-id="0">松弛(剩余)变量分析</li>
+                            <li lay-id="1">权系数分析</li>
+                            <li lay-id="2">投影分析</li>
+                            <li lay-id="3">投入冗余产出不足分析</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <!--松弛变量分析-->
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-card">
+                                    <div class="layui-card-header" align="center">
+                                        <span id="slackNameShow">可视化展示</span>
+                                        <span id="slackShow" style="float: right; cursor: pointer;">
+                                            <i class="fa fa-bar-chart" aria-hidden="true" id="slackFa"> 打开图表</i>
+                                        </span>
+                                    </div>
+                                    <div class="layui-card-body dis-none" id="slackTablesDiv" style="height: 600px;">
+                                        <table id="slackTables" class="layui-hide" lay-size="sm" ></table>
+                                    </div>
+                                    <div class="layui-card-body" id="slackEchartsDiv">
+                                        <div id="slackEcharts" style="height: 600px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--权值分析-->
+                            <div class="layui-tab-item">
+                                <div class="layui-card-header" align="center">
+                                    <span id="weightNameShow">可视化展示</span>
+                                    <span id="weightShow" style="float: right; cursor: pointer;">
+                                        <i class="fa fa-bar-chart" aria-hidden="true" id="weightFa"> 打开图表</i>
+                                    </span>
+                                </div>
+                                <div class="layui-card-body dis-none" id="weightTablesDiv" style="height: 600px;">
+                                    <table id="weightTables" class="layui-hide" lay-size="sm" ></table>
+                                </div>
+                                <div class="layui-card-body" id="weightEchartsDiv">
+                                    <div id="weightEcharts" style="height: 600px;"></div>
+                                </div>
+                            </div>
+                            <!--投影分析-->
+                            <div class="layui-tab-item">
+                                <div class="layui-card-header" align="center">
+                                    <span id="projectNameShow">可视化展示</span>
+                                    <span id="projectShow" style="float: right; cursor: pointer;">
+                                        <i class="fa fa-bar-chart" aria-hidden="true" id="projectFa"> 打开图表</i>
+                                    </span>
+                                </div>
+                                <div class="layui-card-body dis-none" id="projectTablesDiv" style="height: 600px;">
+                                    <table id="projectTables" class="layui-hide" lay-size="sm" ></table>
+                                </div>
+                                <div class="layui-card-body" id="projectEchartsDiv">
+                                    <div id="projectEcharts" style="height: 600px;"></div>
+                                </div>
+                            </div>
+                            <!--投入冗余产出不足分析-->
+                            <div class="layui-tab-item">
+                                <div class="layui-card-header" align="center">
+                                    <span id="inoutNameShow">可视化展示</span>
+                                    <span id="inoutShow" style="float: right; cursor: pointer;">
+                                        <i class="fa fa-bar-chart" aria-hidden="true" id="inoutFa"> 打开图表</i>
+                                    </span>
+                                </div>
+                                <div class="layui-card-body dis-none" id="inoutTablesDiv" style="height: 600px;">
+                                    <table id="inoutTables" class="layui-hide" lay-size="sm" ></table>
+                                </div>
+                                <div class="layui-card-body" id="inoutEchartsDiv">
+                                    <div id="inoutEcharts" style="height: 600px;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/libs/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/assets/libs/slimscroll/jquery.slimscroll.js"></script>
+<script type="text/javascript" src="/assets/libs/dropify/js/dropify.js"></script>
+<script type="text/javascript" src="/assets/libs/loading/loading.js"></script>
+
+<script type="text/javascript" src="/assets/libs/echarts/echarts.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.js"></script>
+
+
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script type="text/javascript" src="/assets/js/utils.js"></script>
+<script type="text/javascript" src="/assets/js/tool.js"></script>
+<script type="text/html" id="rankTpl">
+    {{#  if(d.rank <= 3){ }}
+    <span class="layui-badge layui-bg-cyan">{{d.rank}}</span>
+    {{#  } else { }}
+    <span class="layui-badge layui-bg-gray">{{d.rank}}</span>
+    {{#  } }}
+</script>
+<script>
+    //layui建议所有代码都写在layui.use()里面，相当于jquery的$(function(){})
+    var use = layui.use(['table', 'layer', 'form', 'util', 'admin','element'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var element = layui.element;
+
+        var calData = admin.getTempData("effCalData");
+
+        // 渲染效率分析预测
+        table.render({
+            elem: "#efAnTable",
+            cellMinWidth: 105,
+            height: 'full-110',
+            cols: [calData.effHead],
+            data: calData.objectives,
+            limit: 100,
+        });
+
+        var myCharts = echarts.init(document.getElementById('efAnEcharts'));
+        var option = {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer : {
+                        type : 'shadow'
+                    }
+                },
+                legend: {
+                    data:calData.effGraph.legend
+                },
+                toolbox: {
+                    show : true,
+                    feature : {
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                xAxis: [{
+                    type: "category",
+                    data: calData.effGraph.xAxis,
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    axisLabel: {
+                        interval: 0,
+                        formatter: function (value) {
+                            return value.split("").join("\n");
+                        }
+                    }
+                }],
+                yAxis: [{
+                    type: "value",
+                    name: '效率值',
+                    min: 0,
+                    max: 1.2,
+                    axisLabel: {
+                        formatter: '{value}'
+                    }
+                }],
+                series: calData.effGraph.series
+        };
+        myCharts.setOption(option);
+
+        //点击打开关闭图表
+        $("#effShow").click(function () {
+            var isExapnd = $("#efAnTableDiv").hasClass('dis-none');
+            if(isExapnd){ //如果是隐藏的,则打开图表
+                $("#efAnTableDiv").removeClass('dis-none');
+                $("#efAnEchartsDiv").addClass('dis-none');
+                $("#effFa").text(" 打开图表");
+
+            }else {
+                $("#efAnTableDiv").addClass('dis-none');
+                $("#efAnEchartsDiv").removeClass('dis-none');
+                $("#effFa").text(" 关闭图表");
+
+                myCharts.resize();
+            }
+        })
+
+        // 渲染有效性分析图表
+        var myCharts2 = echarts.init(document.getElementById('validEcharts'));
+        var option2 = {
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b}: {c} ({d}%)"
+                },
+                legend: {
+                    data: calData.validGraph.legend
+                },
+                series: [
+                    {
+                        name: 'DEA有效性',
+                        type: 'pie',
+                        radius : '55%',
+                        center: ['50%', '60%'],
+                        data:calData.validGraph.series,
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+        };
+        myCharts2.setOption(option2);
+
+        //动态生成排名表格
+        //渲染排名表格
+        //先生成表头
+        var rankHead = [];
+        var rank = {field:'rank',align:'center', title:'排名',templet:'#rankTpl'};
+        var rankName = {field:'name',align:'center', title:'评价单元'};
+        rankHead.push(rank);
+        rankHead.push(rankName);
+        table.render({
+            elem: '#ranksTables',
+            cellMinWidth: 100,
+            height: 'full-420',
+            cols: [rankHead],
+            data: calData.deaRanks,
+            limit: 100,
+            skin: 'nob'
+        });
+
+        element.on('tab(tabZZT)', function (data) {
+            if ($(this).attr('render')) {
+                // 不需要渲染
+                return;
+            }
+            $(this).attr('render', 'done');
+            var index = data.index;
+            if(index === 0){
+                ////////////////////////////////
+                // 渲染松弛变量分析图表       //
+                ////////////////////////////////
+                var myCharts3 = echarts.init(document.getElementById('slackEcharts'));
+                var option3 = {
+                    title: {
+                        text: '该DEA问题中松弛变量(S)情况',
+                        x: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer : {
+                            type : 'shadow'
+                        }
+                    },
+                    legend: {
+                        bottom : '0%',
+                        data: calData.slackData.legend,
+                    },
+                    grid:{
+                        left:'5%',
+                        right:'5%'
+                    },
+                    toolbox: {
+                        feature: {
+                            magicType: {
+                                type: ['line','bar','stack', 'tiled']
+                            },
+                            mark : {show: true},
+                            dataZoom : {show: true},
+                            dataView:{show: true, readOnly: false},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    xAxis: {
+                        data: calData.slackData.xAxis,
+                        name: '决策单元',
+                        axisPointer: {
+                            type: 'shadow'
+                        },
+                        axisLabel: {
+                            interval: 0,
+                            formatter: function (value) {
+                                return value.split("").join("\n");
+                            }
+                        }
+                    },
+                    yAxis: {
+                        name: '松弛变量(S)',
+                        nameLocation: 'end',
+                    },
+                    series:calData.slackData.series
+                };
+                myCharts3.setOption(option3);
+
+                table.render({
+                    elem: "#slackTables",
+                    cellMinWidth: 170,
+                    height: 'full-30',
+                    cols: [calData.slackData.head],
+                    data: calData.slackData.data,
+                    limit: 100,
+                });
+            }else if(index == 1){
+                //渲染权系数分析图表
+                var myCharts4 = echarts.init(document.getElementById('weightEcharts'));
+                var option4 = {
+                    title: {
+                        text: '各指标最佳权系数取值情况',
+                        x: 'center'
+                    },
+                    tooltip: {},
+                    legend: {
+                        bottom : '0%',
+                        data: calData.weightData.legend,
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    radar: {
+                        shape: 'circle',
+                        name: {
+                            textStyle: {
+                                color: '#fff',
+                                backgroundColor: '#999',
+                                borderRadius: 3,
+                                padding: [3, 5]
+                            }
+                        },
+                        indicator: calData.weightData.indicator
+                    },
+                    series: [{
+                        name: '权系数比对',
+                        type: 'radar',
+                        itemStyle: {normal: {areaStyle: {type: 'default'}}},
+                        data : calData.weightData.seriesData,
+                    }]
+                };
+                myCharts4.setOption(option4);
+
+                //数据表渲染
+                table.render({
+                    elem: "#weightTables",
+                    cellMinWidth: 170,
+                    height: 'full-30',
+                    cols: [calData.weightData.head],
+                    data: calData.weightData.data,
+                    limit: 100,
+                });
+            }else if(index == 2){
+                ////////////////////////////////
+                //渲染投影分析数据               //
+                ////////////////////////////////
+                var firstdmu = calData.projectData.source.firstdmu;
+                var sourceData = calData.projectData.source.sourceData;
+                var seriesData = calData.projectData.series;
+                var seriesMore = {
+                    type: 'pie',
+                    id: 'pie',
+                    radius: [30, 100],
+                    roseType: 'area',
+                    center: ['50%', '20%'],
+                    label: {
+                        formatter: '{b}: ({@'+firstdmu+'}%)'
+                    },
+                    encode: {
+                        itemName: 'dmu',
+                        value: firstdmu,
+                        tooltip: firstdmu
+                    }
+                }
+
+                seriesData.push(seriesMore);
+
+                var myCharts5 = echarts.init(document.getElementById('projectEcharts'));
+                var option5 = {
+                    title : {
+                        text: '各指标目标值（达到DEA有效的值）',
+                        subtext: '各指标比率',
+                        x:'lift'
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        axisPointer : {
+                            type : 'shadow'
+                        }
+                    },
+                    legend: {
+                        bottom : '0%',
+                        data:calData.projectData.legend
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            magicType: {
+                                type: ['line','bar','stack', 'tiled']
+                            },
+                            mark : {show: true},
+                            dataZoom : {show: true},
+                            dataView:{show: true, readOnly: false},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    dataset: {
+                        source: sourceData
+                    },
+                    xAxis: [{
+                        type: "category",
+                        data: calData.projectData.xAxis,
+                        axisPointer: {
+                            type: 'shadow'
+                        },
+                        axisLabel: {
+                            interval: 0,
+                            formatter: function (value) {
+                                return value.split("").join("\n");
+                            }
+                        }
+                    }],
+                    yAxis:{gridIndex: 0},
+                    grid: {top: '40%'},
+                    series: seriesData
+                };
+
+                myCharts5.on('updateAxisPointer', function (event) {
+                    var xAxisInfo = event.axesInfo[0];
+                    if (xAxisInfo) {
+                        var dimension = xAxisInfo.value + 1;
+                        myCharts5.setOption({
+                            series: {
+                                id: 'pie',
+                                label: {
+                                    formatter: '{b}: ({@[' + dimension + ']}%)'
+                                },
+                                encode: {
+                                    value: dimension,
+                                    tooltip: dimension
+                                }
+                            }
+                        });
+                    }
+                });
+
+                myCharts5.setOption(option5);
+
+                //数据表渲染
+                table.render({
+                    elem: "#projectTables",
+                    cellMinWidth: 170,
+                    height: 'full-30',
+                    cols: [calData.projectData.head],
+                    data: calData.projectData.data,
+                    limit: 100,
+                });
+            }else if(index == 3){
+                ////////////////////////////////
+                //投入冗余与产出不足数据          //
+                ////////////////////////////////
+                var dmuName = calData.inoutData.dmuName;
+                var inoutData  = calData.inoutData.optionData;
+                var categories = new Array();
+                for (var key in inoutData) {
+                    var item = {name:key};
+                    categories.push(item);
+                }
+                var myCharts6 = echarts.init(document.getElementById('inoutEcharts'));
+                var nodedata = []
+
+                for (var key in inoutData) {
+                    var key2 = inoutData[key][2];
+                    var aver = (key2[0]+key2[1])/2;
+                    if (key == dmuName) {
+                        nodedata.push({
+                                name: key,
+                                data: key2,
+                                symbolSize: Math.max(aver, 10),
+                                category: key,
+                                value: aver,
+                                label: {
+                                    color: 'rgba(193,56,52,1)',
+                                    normal: {
+                                        show: true,
+                                        position: 'inside',
+                                        formatter: '{b}',
+                                        fontSize: 16,
+                                        fontStyle: '600',
+                                    }
+                                },
+                            }
+                        )
+                    } else {
+                        nodedata.push({
+                                name: key,
+                                data: key2,
+                                symbolSize: Math.max(aver, 10),
+                                category: key,
+                                value: aver,
+                                label: {color: 'black'},
+
+                            }
+                        )
+                    }
+                }
+
+                var option6 = {
+                    title: {
+                        text: '投入冗余与产出不足情况',
+                        subtext: dmuName,
+                        x: 'center'
+                    },
+                    tooltip : {
+                    },
+                    legend: {
+                        data:['投入冗余', '产出不足'],
+                        align: 'left',
+                        left: 10
+                    },
+                    toolbox: {
+                        show : true,
+                        feature : {
+                            dataView : {show: true, readOnly: false},
+                            restore : {show: true},
+                            saveAsImage : {show: true}
+                        }
+                    },
+                    yAxis: {
+                        type: 'category',
+                        data: calData.inoutData.yAxis,
+                        name: '指标',
+                        axisLabel:{
+                            interval:0,
+                            rotate:-60,//倾斜度 -90 至 90 默认为0
+                        },
+                    },
+                    xAxis:  {
+                        type: 'value'
+                    },
+                    grid: [{
+                        left: 100,
+                        height: '80%',
+                        width: '30%',
+
+                    }],
+                    series: [{
+                        name: '投入冗余',
+                        type: 'bar',
+                        stack: 'one',
+                        data: inoutData[dmuName][0],
+
+                    }, {
+                        name: '产出不足',
+                        type: 'bar',
+                        stack: 'one',
+                        data: inoutData[dmuName][1],
+                    }, {
+                        type: 'graph',
+                        tooltip: {},
+                        layout: 'force',
+                        left:'40%',
+                        right:'0%',
+                        top:'10%',
+                        bottom:'10%',
+                        focusNodeAdjacency: true,
+                        roam: true,
+                        data: nodedata,
+                        categories:categories,
+                        force: {
+                            repulsion: 120,
+                        },
+                        label: {
+                            normal: {
+                                position: 'top',
+                                show: true
+                            }
+                        },
+                        links: [],
+                        tooltip: {
+                            formatter: function(d) {
+                                return d.name + '\t投入冗余平均率：(' + d.data.data[0]+'%)\t产出不足平均率：(' + d.data.data[1]+'%)';
+                            }
+                        }
+                    }]
+                };
+                myCharts6.on('click', function (p) {
+                    if (p.seriesType == 'graph') {
+                        var dmuName = p.name
+                        var nodedata = []
+                        for (var key in inoutData) {
+                            var aver = (inoutData[key][2][0]+inoutData[key][2][1])/2;
+                            if (key == dmuName) {
+                                nodedata.push({
+                                        name: key,
+                                        data: inoutData[key][2],
+                                        symbolSize: Math.max(aver, 10),
+                                        value: aver,
+                                        category: key,
+                                        label: {
+                                            color: 'rgba(193,56,52,1)',
+                                            normal: {
+                                                show: true,
+                                                position: 'inside',
+                                                formatter: '{b}',
+                                                fontSize: 16,
+                                                fontStyle: '600',
+                                            }
+                                        },
+
+                                    }
+                                )
+                            } else {
+                                nodedata.push({
+                                        name: key,
+                                        data: inoutData[key][2],
+                                        symbolSize: Math.max(aver, 10),
+                                        value: aver,
+                                        category: key,
+                                        label: {color: 'black'},
+
+                                    }
+                                )
+                            }
+                        }
+                        myCharts6.setOption({
+                            title: {
+                                subtext: dmuName
+                            },
+                            series: [{
+                                data: inoutData[dmuName][0]
+                            }, {
+                                data: inoutData[dmuName][1]
+                            }, {
+                                data: nodedata
+                            }]
+                        })
+                    }
+                });
+
+                myCharts6.setOption(option6);
+
+                //数据表渲染
+                table.render({
+                    elem: "#inoutTables",
+                    cellMinWidth: 170,
+                    height: 'full-30',
+                    cols: [calData.inoutData.head1,calData.inoutData.head2],
+                    data: calData.inoutData.tableData,
+                    limit: 100,
+                });
+            }
+        });
+
+        element.tabChange('tabZZT', 0); //初始选择第一个tab
+
+        //点击打开关闭图表
+        $("#slackShow").click(function () {
+            var isExapnd = $("#slackTablesDiv").hasClass('dis-none');
+            if(isExapnd){ //如果是隐藏的,则打开图表
+                $("#slackTablesDiv").removeClass('dis-none');
+                $("#slackEchartsDiv").addClass('dis-none');
+                $("#slackFa").text(" 打开图表");
+                $("#slackNameShow").text("数据表展示")
+
+            }else {
+                $("#slackTablesDiv").addClass('dis-none');
+                $("#slackEchartsDiv").removeClass('dis-none');
+                $("#slackFa").text(" 关闭图表");
+                $("#slackNameShow").text("可视化展示")
+            }
+        })
+
+        //点击打开关闭权值图表
+        $("#weightShow").click(function () {
+            var isExapnd = $("#weightTablesDiv").hasClass('dis-none');
+            if(isExapnd){ //如果是隐藏的,则打开图表
+                $("#weightTablesDiv").removeClass('dis-none');
+                $("#weightEchartsDiv").addClass('dis-none');
+                $("#weightFa").text(" 打开图表");
+                $("#weightNameShow").text("数据表展示")
+
+            }else {
+                $("#weightTablesDiv").addClass('dis-none');
+                $("#weightEchartsDiv").removeClass('dis-none');
+                $("#weightFa").text(" 关闭图表");
+                $("#weightNameShow").text("可视化展示")
+            }
+        })
+
+        //点击打开关闭图表
+        $("#projectShow").click(function () {
+            var isExapnd = $("#projectTablesDiv").hasClass('dis-none');
+            if(isExapnd){ //如果是隐藏的,则打开图表
+                $("#projectTablesDiv").removeClass('dis-none');
+                $("#projectEchartsDiv").addClass('dis-none');
+                $("#projectFa").text(" 打开图表");
+
+            }else {
+                $("#projectTablesDiv").addClass('dis-none');
+                $("#projectEchartsDiv").removeClass('dis-none');
+                $("#projectFa").text(" 关闭图表");
+            }
+        })
+
+        //点击打开关闭图表
+        $("#inoutShow").click(function () {
+            var isExapnd = $("#inoutTablesDiv").hasClass('dis-none');
+            if(isExapnd){ //如果是隐藏的,则打开图表
+                $("#inoutTablesDiv").removeClass('dis-none');
+                $("#inoutEchartsDiv").addClass('dis-none');
+                $("#inoutFa").text(" 打开图表");
+
+            }else {
+                $("#inoutTablesDiv").addClass('dis-none');
+                $("#inoutEchartsDiv").removeClass('dis-none');
+                $("#inoutFa").text(" 关闭图表");;
+            }
+        })
+
+
+        // 窗口大小改变事件
+        window.onresize = function () {
+            myCharts.resize();
+            myCharts2.resize();
+            myCharts3.resize();
+            myCharts4.resize();
+            myCharts5.resize();
+            myCharts6.resize();
+        };
+
+    });
+</script>
+</body>
+
+</html>

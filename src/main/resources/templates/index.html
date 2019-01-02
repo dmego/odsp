@@ -9,6 +9,7 @@
     <base href="${ctxPath}">
     <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
     <link rel="stylesheet" href="/assets/css/admin.css"/>
+    <link rel="stylesheet" href="/assets/libs/loading/loading.css"/>
 </head>
 
 <body class="layui-layout-body">
@@ -51,6 +52,45 @@
 <script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
 <script type="text/javascript" src="/assets/js/common.js"></script>
 <script type="text/javascript" src="/assets/js/main.js"></script>
+<script type="text/javascript" src="/assets/libs/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/assets/libs/loading/loading.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.js"></script>
+<script>
+
+    /**
+     * 加载条
+     */
+    function loadIndex() {
+        loadingTime = 0;
+        $("body").loading({
+            loadingWidth: 300,
+            title: '请稍等!',
+            name: 'test',
+            discription: [
+                '正在解析数据 . . .',
+                '数据解析成功 . . .',
+                '正在求解 . . .'
+            ],
+            timeSpan: [3, 1, 1], //每条描述显示的时间
+            direction: 'column',
+            type: 'origin',
+            //originBg:'#71EA71',
+            originDivWidth: 40,
+            originDivHeight: 40,
+            originWidth: 6,
+            originHeight: 6,
+            smallLoading: false,
+            loadingMaskBg: 'rgba(0,0,0,0.2)'
+        });
+    }
+
+    function closeLoad() {
+        removeLoading('test');
+    }
+
+
+</script>
 </body>
 
 </html>

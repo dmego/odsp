@@ -45,9 +45,13 @@ public class GraphServiceImpl implements GraphService {
             }else if(fun == 2){ //最小生成树
                 mapList = kruskal(arcNum,edges,graph);
             }else if(fun == 3){ //最大流
-
+                //TODO
+                jsonResult = JsonResult.error(500, "算法出现问题!");
+                return jsonResult;
             }else if(fun == 4){ //最小费用最大流
-
+                //TODO
+                jsonResult = JsonResult.error(500, "算法出现问题!");
+                return jsonResult;
             }
         }
 

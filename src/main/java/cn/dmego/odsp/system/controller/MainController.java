@@ -123,6 +123,7 @@ public class MainController extends BaseController implements ErrorController {
             Permission permission = permissions.get(i);
             if(permission.getIsMenu() == 0 && parentId == permission.getParentId()){
                 Map<String,Object> map = new HashMap<>();
+                map.put("mark",permission.getMark());
                 map.put("menuName",permission.getPermissionName());
                 map.put("menuIcon",permission.getMenuIcon());
                 map.put("menuUrl",permission.getMenuUrl());
