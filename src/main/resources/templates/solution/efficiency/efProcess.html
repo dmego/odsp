@@ -75,7 +75,7 @@
                 </fieldset>
 
                 <fieldset class="layui-elem-field">
-                    <legend>决策单元选择</legend>
+                    <legend>评价单元选择</legend>
                     <div class="layui-field-box">
                         <select id="DMUSelect" name="DMUSelect" xm-select="DMUSelect" xm-select-search=""></select>
                     </div>
@@ -234,29 +234,42 @@
                 functions.push($(this).val());
             })
             //获取投入与产出指标
-            var input = transfer.get(tb1,'r1','logogram').split(",");
-            var inputCH = transfer.get(tb1,'r1','name').split(",");
-            var output = transfer.get(tb1,'r2','logogram').split(",");
-            var outputCH = transfer.get(tb1,'r2','name').split(",");
-            var variableNames = input.concat(output);
-            var varCHNames = inputCH.concat(outputCH);
-            var dmuNames = data.field.DMUSelect.split(",");
+            var input = transfer.get(tb1,'r1','logogram');
+            var output = transfer.get(tb1,'r2','logogram');
+            var dmuNames = data.field.DMUSelect;
 
             // console.log(functions)
             // console.log(input)
             // console.log(output)
             // console.log(DMUNames)
 
+            //检查数据
+            if(isEmpty(input)){
+                layer.msg("投入指标不能为空!");
+                return false;
+            }else if(isEmpty(output)){
+                layer.msg("产出指标不能为空!");
+                return false;
+            } else if(isEmpty(dmuNames)){
+                layer.msg("评价单元不能为空!");
+                return false;
+            }
+
+            var inputCH = transfer.get(tb1,'r1','name').split(",");
+            var outputCH = transfer.get(tb1,'r2','name').split(",");
+            var variableNames = input.split(",").concat(output.split(","));
+            var varCHNames = inputCH.concat(outputCH);
+
             //layer.load();
             parent.loadIndex();
             $.post('calculate', {
                 fileName: data.field.dataTable, //数据表名称
                 funs: functions, //方法选择数组
-                input: input, //投入
-                output: output, //产出
+                input: input.split(","), //投入
+                output: output.split(","), //产出
                 varCHNames:varCHNames, //指标中文
                 variableNames:variableNames, //指标简写
-                dmuNames: dmuNames, //决策变量数据
+                dmuNames: dmuNames.split(","), //决策变量数据
             }, function (data) {
                 parent.closeLoad();
                 layer.closeAll('loading');
