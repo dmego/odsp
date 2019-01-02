@@ -1,7 +1,5 @@
 package cn.dmego.odsp.common.exception;
 
-import lombok.Data;
-
 /**
  * class_name: BusinessException
  * package: cn.dmego.odsp.common.exception
@@ -10,7 +8,7 @@ import lombok.Data;
  * creat_date: 2018/10/23
  * creat_time: 16:56
  **/
-@Data
+
 public class BusinessException extends IException{
 
     public BusinessException(){

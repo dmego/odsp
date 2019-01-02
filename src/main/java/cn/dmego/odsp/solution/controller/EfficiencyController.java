@@ -3,6 +3,7 @@ package cn.dmego.odsp.solution.controller;
 import cn.dmego.odsp.algorithms.service.DEAService;
 import cn.dmego.odsp.algorithms.utils.CommonUtil;
 import cn.dmego.odsp.algorithms.vo.DEAVo;
+import cn.dmego.odsp.common.BaseController;
 import cn.dmego.odsp.common.JsonResult;
 import cn.dmego.odsp.common.utils.DateUtil;
 import cn.dmego.odsp.system.model.User;
@@ -11,8 +12,8 @@ import com.alibaba.excel.metadata.Sheet;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,7 +34,7 @@ import java.util.*;
  **/
 @Controller
 @RequestMapping("/solution/efficiency")
-public class EfficiencyController {
+public class EfficiencyController extends BaseController implements ErrorController {
 
     @Autowired
     private DEAService deaService;
@@ -407,18 +408,8 @@ public class EfficiencyController {
 
 
 
-
-    /**
-     * 获取当前登陆的用户
-     * @return
-     */
-    private User getLoginUser(){
-        Subject subject = SecurityUtils.getSubject();
-        if(subject != null && subject.getPrincipal() != null){
-            return (User) subject.getPrincipal();
-        }
-        return null;
+    @Override
+    public String getErrorPath() {
+        return "/error";
     }
-
-
 }
