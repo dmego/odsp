@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 import org.opensourcedea.dea.*;
 
-@SuppressWarnings("unused")
 public class EfficientyTest {
 
     static String[] testDMUNames = new String[10];
