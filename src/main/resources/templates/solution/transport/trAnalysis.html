@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html>
+
+<head>
+    <title>ODSP</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+    <link rel="stylesheet" href="/assets/css/site.css"/>
+    <link rel="stylesheet" href="/assets/libs/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/assets/libs/dropify/css/dropify.css"/>
+    <style>
+        .numberInfoSubTitle {
+            color: rgba(0, 0, 0, .45);
+            font-size: 14px;
+            height: 22px;
+            line-height: 22px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            word-break: break-all;
+        }
+
+        .numberInfoValue {
+            color: rgba(0, 0, 0, .85);
+            font-size: 24px;
+            margin-top: 10px;
+            height: 32px;
+            line-height: 32px;
+        }
+
+        .numberInfoSuffix {
+            color: rgba(0, 0, 0, .65);
+            font-size: 16px;
+            font-style: normal;
+            margin-left: 4px;
+            line-height: 32px;
+        }
+
+        .layui-input-block {
+            margin-left: 150px;
+            min-height: 36px;
+        }
+
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 15px;
+            width: 120px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+        }
+
+        .layui-table-cell {
+            height: 20px;
+            line-height: 20px;
+        }
+    </style>
+</head>
+
+
+<body class="page-aside-fixed">
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-xs12 layui-col-md8">
+            <div class="layui-card">
+                <div class="layui-card-header">地图可视化
+                    <span id="trsMapTips" style="cursor: pointer;">
+                        <i class="fa fa-info-circle" aria-hidden="true" id="trsMapTipsI"></i>
+                    </span>
+                    <span id="trsMapShow" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="trsMapFa"> 打开图表</i>
+                    </span>
+                </div>
+                <div class="layui-card-body dis-none" id="trsTableDiv" style="height: 500px;">
+                    <table class="layui-hide" id="trsMapTable" lay-size="sm"></table>
+                </div>
+                <div class="layui-card-body" id="trsMapEchartsDiv">
+                    <div id="trsMapEcharts" style="height: 500px; overflow: hidden;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-xs12 layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">散点可视化
+                    <span id="trsPointTips" style="cursor: pointer;">
+                        <i class="fa fa-info-circle" aria-hidden="true" id="trsPointTipsI"></i>
+                    </span>
+                </div>
+                <div class="layui-card-body">
+                    <div id="trsPointEcharts" style="width: 100%; height: 500px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-xs12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-tab layui-tab-brief" lay-filter="tabZZT">
+                        <ul class="layui-tab-title">
+                            <li lay-id="0">产销具体分析</li>
+                            <li lay-id="1">最小成本分析</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <!--产销具体分析-->
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-card">
+                                    <div class="layui-card-body" id="slackEchartsDiv">
+                                        <div id="slackEcharts" style="height: 600px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--最小成本分析-->
+                            <div class="layui-tab-item">
+                                <div class="layui-card">
+                                    <div class="layui-card-body" id="weightEchartsDiv">
+                                        <div id="weightEcharts" style="height: 600px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-xs12">
+            <div class="layui-card">
+                <div class="layui-card-header">结果说明</div>
+                <div class="layui-card-body" style="height: 200px;overflow: hidden;">
+                    <blockquote class="layui-elem-quote layui-quote-nm">
+                        如果评价单元的纯技术效率为 1，而规模效率小于 1 时，这说明<span
+                            style="color: chocolate">评价单元本身的技术效率而言没有投入需要减少、没有产出需要增加;</span></li><br>
+                        样本单元的综合效率没有达到有效(即1)，是因为其规模和投入、产出不相匹配，<span style="color: chocolate">需要增加规模或减少规模</span></li><br>
+                        此外，纯技术效率 = 1，表示在目前的技术水平上，其投入资源的使用是有效率的，未能达到综合有效的根本原因在于其规模无效，因此其改革的<span
+                            style="color: chocolate">重点在于如何更好地发挥其规模效益</span></li>
+                        </ul>
+                    </blockquote>
+                    <blockquote class="layui-elem-quote layui-quote-nm">
+                        如果评价单元的纯技术效率为1，而规模效率小于1时，这说明评价单元本身的技术效率而言<span style="color: chocolate">没有投入需要减少、没有产出需要增加</span><br>
+                        评价单元的综合效率没有达到有效(即1)，是因为其规模和投入、产出不相匹配，<span style="color: chocolate">需要增加规模或减少规模</span>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/libs/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/assets/libs/slimscroll/jquery.slimscroll.js"></script>
+<script type="text/javascript" src="/assets/libs/dropify/js/dropify.js"></script>
+<script type="text/javascript" src="/assets/libs/loading/loading.js"></script>
+
+<script type="text/javascript" src="/assets/libs/echarts/echarts.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/bmap.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/china.js"></script>
+
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script type="text/javascript" src="/assets/js/utils.js"></script>
+<script type="text/javascript" src="/assets/js/tool.js"></script>
+
+<script>
+    //layui建议所有代码都写在layui.use()里面，相当于jquery的$(function(){})
+    var use = layui.use(['table', 'layer', 'form', 'util', 'admin', 'element'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var element = layui.element;
+
+        var calData = admin.getTempData("effCalData");
+
+        // 渲染效率分析预测
+        table.render({
+            elem: "#efAnTable",
+            cellMinWidth: 105,
+            height: 'full-110',
+            cols: [calData.effHead],
+            data: calData.objectives,
+            limit: 100,
+        });
+
+        var myCharts = echarts.init(document.getElementById('trsMapEcharts'));
+        var geoCoordMap = {
+            '上海': [121.4648, 31.2891],
+            '新疆': [87.9236, 43.5883],
+            '甘肃': [103.5901, 36.3043],
+            '北京': [116.4551, 40.2539],
+            '江苏': [118.8062, 31.9208],
+            '广西': [108.479, 23.1152],
+            '江西': [116.0046, 28.6633],
+            '安徽': [117.29, 32.0581],
+            '内蒙古': [111.4124, 40.4901],
+            '黑龙江': [127.9688, 45.368],
+            '天津': [117.4219, 39.4189],
+            '山西': [112.3352, 37.9413],
+            '广东': [113.5107, 23.2196],
+            '四川': [103.9526, 30.7617],
+            '西藏': [91.1865, 30.1465],
+            '云南': [102.9199, 25.4663],
+            '浙江': [119.5313, 29.8773],
+            '湖北': [114.3896, 30.6628],
+            '辽宁': [123.1238, 42.1216],
+            '山东': [117.1582, 36.8701],
+            '海南': [110.3893, 19.8516],
+            '河北': [114.4995, 38.1006],
+            '福建': [119.4543, 25.9222],
+            '青海': [101.4038, 36.8207],
+            '陕西': [109.1162, 34.2004],
+            '贵州': [106.6992, 26.7682],
+            '河南': [113.4668, 34.6234],
+            '重庆': [107.7539, 30.1904],
+            '宁夏': [106.3586, 38.1775],
+            '吉林': [125.8154, 44.2584],
+            '湖南': [113.0823, 28.2568]
+        };
+
+        var BJData = [
+            [{name: '北京'}, {name: '上海', value: 20}],
+            [{name: '北京'}, {name: '广东', value: 9}],
+            [{name: '北京'}, {name: '西藏', value: 8}],
+            [{name: '北京'}, {name: '广西', value: 7}]
+        ];
+
+        var SHData = [
+            [{name: '上海'}, {name: '甘肃', value: 5}],
+            [{name: '上海'}, {name: '云南', value: 5}],
+            [{name: '上海'}, {name: '广东', value: 5}],
+            [{name: '上海'}, {name: '河南', value: 7}],
+            [{name: '上海'}, {name: '吉林', value: 6}]
+        ];
+
+        var GZData = [
+            [{name: '广东'}, {name: '福建', value: 5}],
+            [{name: '广东'}, {name: '山西', value: 5}],
+            [{name: '广东'}, {name: '吉林', value: 5}],
+            [{name: '广东'}, {name: '重庆', value: 5}],
+            [{name: '广东'}, {name: '陕西', value: 5}]
+        ];
+
+        var planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
+
+        var convertData = function (data) {
+            console.log(data);
+            var res = [];
+            for (var i = 0; i < data.length; i++) {
+                var dataItem = data[i];
+                var fromCoord = geoCoordMap[dataItem[0].name];
+                var toCoord = geoCoordMap[dataItem[1].name];
+                if (fromCoord && toCoord) {
+                    res.push({
+                        fromName: dataItem[0].name,
+                        toName: dataItem[1].name,
+                        coords: [fromCoord, toCoord],
+                        value: dataItem[1].value
+                    });
+                }
+            }
+            return res;
+        };
+
+        var color = ['#a6c84c', '#ffa022', '#46bee9'];
+        var series = [];
+        [['北京', BJData], ['上海', SHData], ['广东', GZData]].forEach(function (item, i) {
+            //console.log(item,i);
+            series.push({
+                    name: item[0],
+                    type: 'lines',
+
+                    lineStyle: {
+                        normal: {
+                            color: color[i],
+                            width: 0,
+                            curveness: 0.2
+                        }
+                    },
+                    data: convertData(item[1])
+                },
+                {
+                    name: item[0],
+                    type: 'lines',
+                    zlevel: 2,
+                    symbol: ['none', 'arrow'],
+                    symbolSize: 10,
+                    effect: {
+                        show: true,
+                        period: 6,
+                        trailLength: 0,
+                        symbol: planePath,
+                        symbolSize: 15
+                    },
+
+                    lineStyle: {
+                        normal: {
+                            color: color[i],
+                            width: 1,
+                            opacity: 0.6,
+                            curveness: 0.2
+                        }
+                    },
+                    data: convertData(item[1])
+                },
+                {
+                    name: item[0],
+                    type: 'effectScatter',
+                    coordinateSystem: 'geo',
+                    symbolSize: function (val) {
+                        return val[2] / 8;
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: color[i]
+                        }
+                    },
+                    data: item[1].map(function (dataItem) {
+                        return {
+                            name: dataItem[1].name,
+                            value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
+                        };
+                    })
+                });
+        });
+        console.log(series)
+
+        option = {
+            backgroundColor: '#404a59',
+            title: {
+                text: '产销可视化',
+                subtext: '数据纯属虚构',
+                left: 'center',
+                textStyle: {
+                    color: '#fff'
+                }
+            },
+            tooltip: {
+                trigger: 'item',
+                formatter: function (params, ticket, callback) {
+                    console.log(params);
+                    if (params.seriesType == "effectScatter") {
+                        return "线路：" + params.data.name + "" + params.data.value[2];
+                    } else if (params.seriesType == "lines") {
+                        return params.data.fromName + "销往" + params.data.toName + ": " + params.data.value + " (万台)";
+                    } else {
+                        return params.name;
+                    }
+                }
+            },
+            legend: {
+                orient: 'vertical',
+                top: 'bottom',
+                left: 'right',
+                data: ['北京', '上海', '广东'],
+                textStyle: {
+                    color: '#fff'
+                },
+                selectedMode: 'multiple'
+            },
+            geo: {
+                map: 'china',
+                label: {
+                    normal: {
+                        show: true,
+                        color: '#fff'
+                    },
+                    emphasis: {
+                        show: true
+                    }
+                },
+                roam: true,
+                itemStyle: {
+                    normal: {
+                        areaColor: '#323c48',
+                        borderColor: '#404a59'
+                    },
+                    emphasis: {
+                        areaColor: '#2a333d'
+                    }
+                }
+            },
+            series: series
+        };
+
+        myCharts.setOption(option);
+
+        //点击打开关闭图表
+        $("#effShow").click(function () {
+            var isExapnd = $("#efAnTableDiv").hasClass('dis-none');
+            if (isExapnd) { //如果是隐藏的,则打开图表
+                $("#efAnTableDiv").removeClass('dis-none');
+                $("#efAnEchartsDiv").addClass('dis-none');
+                $("#effFa").text(" 打开图表");
+
+            } else {
+                $("#efAnTableDiv").addClass('dis-none');
+                $("#efAnEchartsDiv").removeClass('dis-none');
+                $("#effFa").text(" 关闭图表");
+
+                myCharts.resize();
+            }
+        })
+
+        // 渲染有效性分析图表
+        var myCharts2 = echarts.init(document.getElementById('trsPointEcharts'));
+        var option2 = {
+            title: {
+                text: "虚拟数据",
+                subtext: "ZBH",
+                top: "top",
+                left: "left"
+            },
+            tooltip: {},
+            legend: [{
+                tooltip: {
+                    show: true
+                },
+                selectedMode: 'false',
+                bottom: 20,
+                data: ['北京', '上海', '天津', '浙江', '江苏', '广东']
+            }],
+            toolbox: {
+                show: true,
+                feature: {
+                    dataView: {
+                        show: true,
+                        readOnly: true
+                    },
+                    restore: {
+                        show: true
+                    },
+                    saveAsImage: {
+                        show: true
+                    }
+                }
+            },
+            animationDuration: 3000,
+            animationEasingUpdate: 'quinticInOut',
+            series: [{
+                name: '产销联系',
+                type: 'graph',
+                //layout: 'force',
+                layout: 'circular',
+                circular: {
+                    rotateLabel: true
+                },
+                force: {
+                    repulsion: 350
+                },
+                data: [
+                    {
+                        "name": "北京",
+                        "symbolSize": 35,
+                        "category": "北京",
+                        "draggable": "true"
+                    },
+                    {
+                        "name": "上海",
+                        "symbolSize": 15,
+                        "category": "上海",
+                        "draggable": "true"
+                    },
+                    {
+                        "name": "天津",
+                        "symbolSize": 15,
+                        "category": "天津",
+                        "draggable": "true"
+                    },
+                    {
+                        "name": "浙江",
+                        "symbolSize": 15,
+                        "category": "浙江",
+                        "draggable": "true"
+                    },
+                    {
+                        "name": "江苏",
+                        "symbolSize": 30,
+                        "category": "江苏",
+                        "draggable": "true"
+                    },
+                    {
+                        "name": "广东",
+                        "symbolSize": 15,
+                        "category": "广东",
+                        "draggable": "true"
+                    },
+                    {
+                        "name": "河南",
+                        "symbolSize": 15,
+                        "draggable": "true"
+                    },
+                    {
+                        "name": "广西",
+                        "symbolSize": 15,
+                        "draggable": "true"
+                    },
+                    {
+                        "name": "西藏",
+                        "symbolSize": 15,
+                        "draggable": "true"
+                    }
+                ],
+                links: [
+                    {
+                        "source": "北京",
+                        "target": "西藏",
+
+
+                    },
+                    {
+                        "source": "北京",
+                        "target": "广西",
+
+                    },
+                    {
+                        "source": "广东",
+                        "target": "河南",
+
+                    },
+                    {
+                        "source": "北京",
+                        "target": "上海",
+
+                    },
+                    {
+                        "source": "广东",
+                        "target": "江苏",
+
+                    },
+                    {
+                        "source": "浙江",
+                        "target": "天津",
+
+                    },
+                    {
+                        "source": "浙江",
+                        "target": "广东",
+
+
+                    }
+                ],
+                categories: [
+                    {
+                        'name': '北京'
+                    },
+                    {
+                        'name': '广东'
+                    },
+                    {
+                        'name': '上海'
+                    },
+                    {
+                        'name': '江苏'
+                    },
+                    {
+                        'name': '浙江'
+                    },
+                    {
+                        'name': '天津'
+                    }
+                ],
+                focusNodeAdjacency: true,
+                roam: true,
+                label: {
+                    normal: {
+                        show: true,
+                        position: 'top'
+                    }
+                },
+                lineStyle: {
+                    normal: {
+                        color: 'source',
+                        curveness: 0,
+                        type: "solid"
+                    }
+                }
+            }]
+        };
+
+        myCharts2.setOption(option2);
+
+
+        //点击打开关闭图表
+        $("#slackShow").click(function () {
+            var isExapnd = $("#slackTablesDiv").hasClass('dis-none');
+            if (isExapnd) { //如果是隐藏的,则打开图表
+                $("#slackTablesDiv").removeClass('dis-none');
+                $("#slackEchartsDiv").addClass('dis-none');
+                $("#slackFa").text(" 打开图表");
+                $("#slackNameShow").text("数据表展示")
+
+            } else {
+                $("#slackTablesDiv").addClass('dis-none');
+                $("#slackEchartsDiv").removeClass('dis-none');
+                $("#slackFa").text(" 关闭图表");
+                $("#slackNameShow").text("可视化展示")
+            }
+        })
+
+    });
+</script>
+</body>
+
+</html>

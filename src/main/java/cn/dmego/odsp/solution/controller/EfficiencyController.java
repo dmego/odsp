@@ -6,11 +6,8 @@ import cn.dmego.odsp.algorithms.vo.DEAVo;
 import cn.dmego.odsp.common.BaseController;
 import cn.dmego.odsp.common.JsonResult;
 import cn.dmego.odsp.common.utils.DateUtil;
-import cn.dmego.odsp.system.model.User;
 import com.alibaba.excel.EasyExcelFactory;
 import com.alibaba.excel.metadata.Sheet;
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.stereotype.Controller;
@@ -40,6 +37,14 @@ public class EfficiencyController extends BaseController implements ErrorControl
     private DEAService deaService;
 
     /**
+     * 跳转到案例简介页面
+     */
+    @RequestMapping("/efIntro")
+    public String efIntro(){
+        return "solution/efficiency/efIntro.html";
+    }
+
+    /**
      * 跳转到数据采集页面
      */
     @RequestMapping("/efCollect")
@@ -63,6 +68,7 @@ public class EfficiencyController extends BaseController implements ErrorControl
         return "solution/efficiency/efAnalysis.html";
     }
 
+
     /**
      * 上传文件,解析文件并返回
      */
@@ -72,103 +78,80 @@ public class EfficiencyController extends BaseController implements ErrorControl
         String filePath = "src/main/resources/static/upload/temp/efficiency/"+getLoginUser().getUserName()+"/";
         JsonResult jsonResult = new JsonResult();
         //1.先将文件保存
-        //获取文件名
-        String fileName = file.getOriginalFilename();
-        //获取文件后缀名
-        String suffixName = fileName.substring(fileName.lastIndexOf("."));
-        //获取文件名
-        String prefixName = fileName.substring(0,fileName.lastIndexOf("."));
-        //获取时间戳
-        String stamp = DateUtil.getStamp();
-        //重新生成文件名
-        fileName = prefixName+"_"+stamp+suffixName;
+        String fileName = CommonUtil.saveFile(filePath, file);
+        if(fileName != null){
+            //2.使用Alibaba的easyExecl解析execl文件
+            InputStream inputStream = null;
+            List<Map<String,String>> headMapList = new ArrayList<>(); //表头
+            List<Map<String,String>> dataMapList = new ArrayList<>(); //表数据
 
-        File targetFile = new File(filePath);
-        if(!targetFile.exists()){
-            targetFile.mkdirs();
-        }
-        FileOutputStream out = null;
-        try {
-            out = new FileOutputStream(filePath+fileName);
-            out.write(file.getBytes());
-            out.flush();
-            out.close();
-        }catch (Exception e){
-            e.printStackTrace();
-            return JsonResult.error("文件上传失败!");
-        }
+            List<String> legendList = new ArrayList<>();
+            List<String> xAxisList = new ArrayList<>();
+            List<Map<String,Object>> seriesMapList = new ArrayList<>(); //可视化展示数据
+            try {
+                inputStream = new FileInputStream(filePath+fileName);
+                List<Object> data = EasyExcelFactory.read(inputStream, new Sheet(1, 0));
 
-        //2.使用Alibaba的easyExecl解析execl文件
-        InputStream inputStream = null;
-        List<Map<String,String>> headMapList = new ArrayList<>(); //表头
-        List<Map<String,String>> dataMapList = new ArrayList<>(); //表数据
-
-        List<String> legendList = new ArrayList<>();
-        List<String> xAxisList = new ArrayList<>();
-        List<Map<String,Object>> seriesMapList = new ArrayList<>(); //可视化展示数据
-        try {
-            inputStream = new FileInputStream(filePath+fileName);
-            List<Object> data = EasyExcelFactory.read(inputStream, new Sheet(1, 0));
-
-            //生成表头数据
-            List<String> list1 = (List<String>) data.get(0);
-            List<String> list2 = (List<String>) data.get(1);
-            for (int i = 0; i < list1.size(); i++) {
-                Map<String,String> headMap = new HashMap<>();
-                headMap.put("field",list2.get(i));
-                headMap.put("title",list1.get(i));
-                if(i > 0){
-                    legendList.add(list1.get(i));
-                }
-                headMapList.add(headMap);
-            }
-
-            //生成表数据
-            for (int i = 2; i < data.size(); i++) {
-                Map<String,String> dataMap = new HashMap<>();
-                List<String> nameList = (List<String>) data.get(1);
-                List<String> dataList = (List<String>) data.get(i);
-                for (int j = 0; j < dataList.size(); j++) {
-                    dataMap.put(nameList.get(j),dataList.get(j));
-                    if(nameList.get(j).equals("AREA")){ //区域
-                        xAxisList.add(dataList.get(j));
+                //生成表头数据
+                List<String> list1 = (List<String>) data.get(0);
+                List<String> list2 = (List<String>) data.get(1);
+                for (int i = 0; i < list1.size(); i++) {
+                    Map<String,String> headMap = new HashMap<>();
+                    headMap.put("field",list2.get(i));
+                    headMap.put("title",list1.get(i));
+                    if(i > 0){
+                        legendList.add(list1.get(i));
                     }
+                    headMapList.add(headMap);
                 }
-                dataMapList.add(dataMap);
-            }
 
-            //3.构造可视化展示数据
-            List<String> nameList = (List<String>) data.get(0);
-            for (int i = 1; i < nameList.size(); i++) {
-                Map<String,Object> seriesMap = new HashMap<>();
-                List<String> list = new ArrayList<>();
-                seriesMap.put("name",nameList.get(i));
-                seriesMap.put("type","bar");
-                seriesMap.put("stack","yearbook");
-                for (int j = 2; j < data.size(); j++) {
-                    List<String> dataList = (List<String>) data.get(j);
-                    list.add(dataList.get(i));
+                //生成表数据
+                for (int i = 2; i < data.size(); i++) {
+                    Map<String,String> dataMap = new HashMap<>();
+                    List<String> nameList = (List<String>) data.get(1);
+                    List<String> dataList = (List<String>) data.get(i);
+                    for (int j = 0; j < dataList.size(); j++) {
+                        dataMap.put(nameList.get(j),dataList.get(j));
+                        if(nameList.get(j).equals("AREA")){ //区域
+                            xAxisList.add(dataList.get(j));
+                        }
+                    }
+                    dataMapList.add(dataMap);
                 }
-                seriesMap.put("data",list);
-                seriesMapList.add(seriesMap);
-            }
 
-            jsonResult.put("head",headMapList);
-            jsonResult.put("data",dataMapList);
-            jsonResult.put("legend",legendList);
-            jsonResult.put("xAxis",xAxisList);
-            jsonResult.put("series",seriesMapList);
+                //3.构造可视化展示数据
+                List<String> nameList = (List<String>) data.get(0);
+                for (int i = 1; i < nameList.size(); i++) {
+                    Map<String,Object> seriesMap = new HashMap<>();
+                    List<String> list = new ArrayList<>();
+                    seriesMap.put("name",nameList.get(i));
+                    seriesMap.put("type","bar");
+                    seriesMap.put("stack","yearbook");
+                    for (int j = 2; j < data.size(); j++) {
+                        List<String> dataList = (List<String>) data.get(j);
+                        list.add(dataList.get(i));
+                    }
+                    seriesMap.put("data",list);
+                    seriesMapList.add(seriesMap);
+                }
 
-            jsonResult.put("fileName",fileName);
+                jsonResult.put("head",headMapList);
+                jsonResult.put("data",dataMapList);
+                jsonResult.put("legend",legendList);
+                jsonResult.put("xAxis",xAxisList);
+                jsonResult.put("series",seriesMapList);
 
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } finally {
-            if(inputStream != null){
-                try {
-                    inputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                jsonResult.put("fileName",fileName);
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } finally {
+                if(inputStream != null){
+                    try {
+                        inputStream.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
         }
@@ -182,41 +165,9 @@ public class EfficiencyController extends BaseController implements ErrorControl
      */
     @RequestMapping("/download")
     public String download(HttpServletRequest request, HttpServletResponse response){
-        File file = new File("src/main/resources/static/upload/mould/Efficienty_Template_Data.xlsx");
-        if(file.exists()){
-            response.setContentType("application/force-download");// 设置强制下载不打开
-            response.addHeader("Content-Disposition", "attachment;fileName=Efficienty_Template_Data.xlsx");// 设置文件名
-            byte[] buffer = new byte[1024];
-            FileInputStream fis = null;
-            BufferedInputStream bis = null;
-            try {
-                fis = new FileInputStream(file);
-                bis = new BufferedInputStream(fis);
-                OutputStream os = response.getOutputStream();
-                int i = bis.read(buffer);
-                while (i != -1){
-                    os.write(buffer,0,i);
-                    i = bis.read(buffer);
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }finally {
-                if(bis != null){
-                    try {
-                        bis.close();
-                    }catch (IOException e){
-                        e.printStackTrace();
-                    }
-                }
-                if(fis != null){
-                    try {
-                        fis.close();
-                    }catch (IOException e){
-                        e.printStackTrace();
-                    }
-                }
-            }
-        }
+        String filePath = "src/main/resources/static/upload/mould/效率评价模板.xlsx";
+        String fileName = "效率评价模板";
+        CommonUtil.downLoadTempFile(filePath,fileName,response);
         return null;
     }
 

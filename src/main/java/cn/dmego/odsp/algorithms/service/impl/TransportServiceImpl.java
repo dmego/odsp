@@ -31,7 +31,6 @@ public class TransportServiceImpl implements TransportService {
 
         if(transportProblem.TransportationProblemCalculate(transportVo)){
             mapList = transportProblem.resultData;
-
         }else {
             jsonResult = JsonResult.error(500, "运输问题计算错误!"+transportProblem.log);
             return jsonResult;
