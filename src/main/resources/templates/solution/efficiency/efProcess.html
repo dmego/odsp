@@ -118,8 +118,8 @@
 <script type="text/javascript" src="/assets/libs/loading/loading.js"></script>
 
 
-<script type="text/javascript" src="/assets/libs/echarts/echarts.js"></script>
-<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.min.js"></script>
 
 <script type="text/javascript" src="/assets/js/common.js"></script>
 <script type="text/javascript" src="/assets/js/utils.js"></script>
@@ -260,8 +260,7 @@
             var variableNames = input.split(",").concat(output.split(","));
             var varCHNames = inputCH.concat(outputCH);
 
-            //layer.load();
-            parent.loadIndex();
+            parent.loadEfficency();
             $.post('calculate', {
                 fileName: data.field.dataTable, //数据表名称
                 funs: functions, //方法选择数组
@@ -274,11 +273,14 @@
                 parent.closeLoad();
                 layer.closeAll('loading');
                 if (data.code == 200) {
-                    top.layer.msg(data.msg, {icon: 1});
                     //数据返回成功,得到数据,渲染表格
                     admin.putTempData("effCalData",data);
-                    //模拟点击结果分析
-                    $("#efficiency:analysis").click();
+                    //跳转到结果分析页面
+                    top.layui.index.openTab({
+                        url: 'solution/efficiency/efAnalysis',
+                        title: '结果分析'
+                    });
+
                 } else {
                     top.layer.msg(data.msg, {icon: 2});
                 }

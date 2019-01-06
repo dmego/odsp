@@ -38,6 +38,7 @@ layui.define(['layer', 'admin', 'element'], function (exports) {
                 admin.flexible(true);
             }
         },
+
         // 打开新页面
         openTab: function (param) {
             var url = param.url;
@@ -48,6 +49,7 @@ layui.define(['layer', 'admin', 'element'], function (exports) {
                 menuName: title
             });
         },
+
         // 关闭选项卡
         closeTab: function (url) {
             element.tabDelete('admin-pagetabs', url);

@@ -1,5 +1,6 @@
 package cn.dmego.odsp.algorithms.service;
 
+import cn.dmego.odsp.algorithms.calculateModel.TransportProblem;
 import cn.dmego.odsp.algorithms.vo.TransportVo;
 import cn.dmego.odsp.common.JsonResult;
 
@@ -14,4 +15,6 @@ import cn.dmego.odsp.common.JsonResult;
 public interface TransportService {
 
     JsonResult calculate(TransportVo transportVo);
+
+    TransportProblem calculateSolution(TransportVo transportVo);
 }

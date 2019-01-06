@@ -40,4 +40,19 @@ public class TransportServiceImpl implements TransportService {
         CommonUtil.retState(jsonResult,200);
         return jsonResult;
     }
+
+
+    /**
+     * 计算解决方案中的运输优化问题
+     * @param transportVo
+     */
+    @Override
+    public TransportProblem calculateSolution(TransportVo transportVo) {
+        TransportProblem transportProblem = new TransportProblem();
+        if(transportProblem.TransportationProblemCalculate(transportVo)){
+            return transportProblem;
+        }else {
+            return null;
+        }
+    }
 }

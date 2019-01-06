@@ -372,6 +372,21 @@ public class CommonUtil {
     }
 
     /**
+     * 矩阵转置 String
+     */
+    public static String[][] transpose(String[][] matrix){
+        int line = matrix.length;
+        int list = matrix[0].length;
+        String[][] trans = new String[list][line];
+        for (int i = 0; i < line; i++) {
+            for (int j = 0; j < list; j++) {
+                trans[j][i] = matrix[i][j];
+            }
+        }
+        return trans;
+    }
+
+    /**
      * 返回二维数组中每一行得最大值
      */
     public static double[] getMax(double[][] arr){

@@ -84,7 +84,7 @@
                     </span>
                 </div>
                 <div class="layui-card-body dis-none" id="trsTableDiv" style="height: 500px;">
-                    <table class="layui-hide" id="trsMapTable" lay-size="sm"></table>
+                    <table class="layui-hide" id="trsTable" lay-size="sm"></table>
                 </div>
                 <div class="layui-card-body" id="trsMapEchartsDiv">
                     <div id="trsMapEcharts" style="height: 500px; overflow: hidden;"></div>
@@ -94,7 +94,7 @@
 
         <div class="layui-col-xs12 layui-col-md4">
             <div class="layui-card">
-                <div class="layui-card-header">散点可视化
+                <div class="layui-card-header">产销可视化
                     <span id="trsPointTips" style="cursor: pointer;">
                         <i class="fa fa-info-circle" aria-hidden="true" id="trsPointTipsI"></i>
                     </span>
@@ -110,23 +110,32 @@
                 <div class="layui-card-body">
                     <div class="layui-tab layui-tab-brief" lay-filter="tabZZT">
                         <ul class="layui-tab-title">
-                            <li lay-id="0">产销具体分析</li>
-                            <li lay-id="1">最小成本分析</li>
+                            <li lay-id="0">产地角度分析</li>
+                            <li lay-id="1">销地角度分析</li>
+                            <li lay-id="2">最小成本分析</li>
                         </ul>
                         <div class="layui-tab-content">
-                            <!--产销具体分析-->
+                            <!--产地角度分析-->
                             <div class="layui-tab-item layui-show">
                                 <div class="layui-card">
-                                    <div class="layui-card-body" id="slackEchartsDiv">
-                                        <div id="slackEcharts" style="height: 600px;"></div>
+                                    <div class="layui-card-body" id="producteEchartsDiv">
+                                        <div id="produceEcharts" style="height: 500px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--销地角度分析-->
+                            <div class="layui-tab-item">
+                                <div class="layui-card">
+                                    <div class="layui-card-body" id="saleEchartsDiv">
+                                        <div id="saleEcharts" style="height: 500px;"></div>
                                     </div>
                                 </div>
                             </div>
                             <!--最小成本分析-->
                             <div class="layui-tab-item">
                                 <div class="layui-card">
-                                    <div class="layui-card-body" id="weightEchartsDiv">
-                                        <div id="weightEcharts" style="height: 600px;"></div>
+                                    <div class="layui-card-body" id="costEchartsDiv">
+                                        <div id="costEcharts" style="height: 500px;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -139,35 +148,29 @@
         <div class="layui-col-xs12">
             <div class="layui-card">
                 <div class="layui-card-header">结果说明</div>
-                <div class="layui-card-body" style="height: 200px;overflow: hidden;">
+                <div class="layui-card-body" style="height: 200px;overflow: hidden; text-align: center">
                     <blockquote class="layui-elem-quote layui-quote-nm">
-                        如果评价单元的纯技术效率为 1，而规模效率小于 1 时，这说明<span
-                            style="color: chocolate">评价单元本身的技术效率而言没有投入需要减少、没有产出需要增加;</span></li><br>
-                        样本单元的综合效率没有达到有效(即1)，是因为其规模和投入、产出不相匹配，<span style="color: chocolate">需要增加规模或减少规模</span></li><br>
-                        此外，纯技术效率 = 1，表示在目前的技术水平上，其投入资源的使用是有效率的，未能达到综合有效的根本原因在于其规模无效，因此其改革的<span
-                            style="color: chocolate">重点在于如何更好地发挥其规模效益</span></li>
-                        </ul>
-                    </blockquote>
-                    <blockquote class="layui-elem-quote layui-quote-nm">
-                        如果评价单元的纯技术效率为1，而规模效率小于1时，这说明评价单元本身的技术效率而言<span style="color: chocolate">没有投入需要减少、没有产出需要增加</span><br>
-                        评价单元的综合效率没有达到有效(即1)，是因为其规模和投入、产出不相匹配，<span style="color: chocolate">需要增加规模或减少规模</span>
+                        经运输优化后,可得出如下结果<br><hr>
+                        最小运输成本为 : <span style="color: chocolate; font-size: x-large" id="bestValueSpan"></span> (万元)<br>
+                        总得剩余产量为 : <span style="color: chocolate; font-size: x-large" id="originSumSpan"></span> (万台)<br>
+                        总得剩余销量为 : <span style="color: chocolate; font-size: x-large" id="saleSumSpan"></span>   (万台)<br>
                     </blockquote>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
 
 <!-- js部分 -->
 <script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
-<script type="text/javascript" src="/assets/libs/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/assets/libs/jquery/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/assets/libs/slimscroll/jquery.slimscroll.js"></script>
 <script type="text/javascript" src="/assets/libs/dropify/js/dropify.js"></script>
 <script type="text/javascript" src="/assets/libs/loading/loading.js"></script>
 
-<script type="text/javascript" src="/assets/libs/echarts/echarts.js"></script>
-<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echartsTheme.js"></script>
 <script type="text/javascript" src="/assets/libs/echarts/bmap.min.js"></script>
 <script type="text/javascript" src="/assets/libs/echarts/china.js"></script>
 
@@ -177,7 +180,7 @@
 
 <script>
     //layui建议所有代码都写在layui.use()里面，相当于jquery的$(function(){})
-    var use = layui.use(['table', 'layer', 'form', 'util', 'admin', 'element'], function () {
+    var use = layui.use(['table', 'layer', 'form', 'util', 'admin', 'element','index'], function () {
         var $ = layui.jquery;
         var layer = layui.layer;
         var form = layui.form;
@@ -185,433 +188,639 @@
         var util = layui.util;
         var admin = layui.admin;
         var element = layui.element;
+        var index = layui.index;
 
-        var calData = admin.getTempData("effCalData");
+        var trsData = admin.getTempData("trResData");
+        //如果没有点计算,切换tab
+        if(isEmpty(trsData)){
+            layer.closeAll();
+            layer.open({
+                type: 1,
+                title: false,
+                closeBtn: false,
+                area: '250px;',
+                shade: 0.8,
+                id: 'LAY_layuipro',
+                btn: ['返回计算'],
+                btnAlign: 'c',
+                moveType: 1, //拖拽模式，0或者1,
+                content: '<div style="padding: 30px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;" align="center">您未点击计算<br>请返回数据采集页面!<br></div>',
+                yes: function(layero){
 
-        // 渲染效率分析预测
-        table.render({
-            elem: "#efAnTable",
-            cellMinWidth: 105,
-            height: 'full-110',
-            cols: [calData.effHead],
-            data: calData.objectives,
-            limit: 100,
-        });
-
-        var myCharts = echarts.init(document.getElementById('trsMapEcharts'));
-        var geoCoordMap = {
-            '上海': [121.4648, 31.2891],
-            '新疆': [87.9236, 43.5883],
-            '甘肃': [103.5901, 36.3043],
-            '北京': [116.4551, 40.2539],
-            '江苏': [118.8062, 31.9208],
-            '广西': [108.479, 23.1152],
-            '江西': [116.0046, 28.6633],
-            '安徽': [117.29, 32.0581],
-            '内蒙古': [111.4124, 40.4901],
-            '黑龙江': [127.9688, 45.368],
-            '天津': [117.4219, 39.4189],
-            '山西': [112.3352, 37.9413],
-            '广东': [113.5107, 23.2196],
-            '四川': [103.9526, 30.7617],
-            '西藏': [91.1865, 30.1465],
-            '云南': [102.9199, 25.4663],
-            '浙江': [119.5313, 29.8773],
-            '湖北': [114.3896, 30.6628],
-            '辽宁': [123.1238, 42.1216],
-            '山东': [117.1582, 36.8701],
-            '海南': [110.3893, 19.8516],
-            '河北': [114.4995, 38.1006],
-            '福建': [119.4543, 25.9222],
-            '青海': [101.4038, 36.8207],
-            '陕西': [109.1162, 34.2004],
-            '贵州': [106.6992, 26.7682],
-            '河南': [113.4668, 34.6234],
-            '重庆': [107.7539, 30.1904],
-            '宁夏': [106.3586, 38.1775],
-            '吉林': [125.8154, 44.2584],
-            '湖南': [113.0823, 28.2568]
-        };
-
-        var BJData = [
-            [{name: '北京'}, {name: '上海', value: 20}],
-            [{name: '北京'}, {name: '广东', value: 9}],
-            [{name: '北京'}, {name: '西藏', value: 8}],
-            [{name: '北京'}, {name: '广西', value: 7}]
-        ];
-
-        var SHData = [
-            [{name: '上海'}, {name: '甘肃', value: 5}],
-            [{name: '上海'}, {name: '云南', value: 5}],
-            [{name: '上海'}, {name: '广东', value: 5}],
-            [{name: '上海'}, {name: '河南', value: 7}],
-            [{name: '上海'}, {name: '吉林', value: 6}]
-        ];
-
-        var GZData = [
-            [{name: '广东'}, {name: '福建', value: 5}],
-            [{name: '广东'}, {name: '山西', value: 5}],
-            [{name: '广东'}, {name: '吉林', value: 5}],
-            [{name: '广东'}, {name: '重庆', value: 5}],
-            [{name: '广东'}, {name: '陕西', value: 5}]
-        ];
-
-        var planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
-
-        var convertData = function (data) {
-            console.log(data);
-            var res = [];
-            for (var i = 0; i < data.length; i++) {
-                var dataItem = data[i];
-                var fromCoord = geoCoordMap[dataItem[0].name];
-                var toCoord = geoCoordMap[dataItem[1].name];
-                if (fromCoord && toCoord) {
-                    res.push({
-                        fromName: dataItem[0].name,
-                        toName: dataItem[1].name,
-                        coords: [fromCoord, toCoord],
-                        value: dataItem[1].value
+                    //来到数据采集页面
+                    top.layui.index.openTab({
+                        url: 'solution/transport/trCollect',
+                        title: '数据采集'
                     });
+
+                    //关闭结果分析页面
+                    top.layui.index.closeTab({
+                        url: 'solution/transport/trAnalysis'
+                    });
+
+
                 }
+            });
+        }else{
+            //为结果说明赋值
+            $("#bestValueSpan").html(trsData.costData.bestValue);
+            $("#originSumSpan").html(trsData.costData.originSum);
+            $("#saleSumSpan").html(trsData.costData.saleSum);
+
+            // 渲染优化结果表
+            table.render({
+                elem: "#trsTable",
+                cellMinWidth: 105,
+                height: 'full-130',
+                cols: [trsData.resHead],
+                data: trsData.resData,
+                limit: 100,
+            });
+
+            var myCharts = echarts.init(document.getElementById('trsMapEcharts'),myEchartsTheme);
+            var geoCoordMap = {
+                '上海': [121.4648, 31.2891],
+                '新疆': [87.9236, 43.5883],
+                '甘肃': [103.5901, 36.3043],
+                '北京': [116.4551, 40.2539],
+                '江苏': [118.8062, 31.9208],
+                '广西': [108.479, 23.1152],
+                '江西': [116.0046, 28.6633],
+                '安徽': [117.29, 32.0581],
+                '内蒙古': [111.4124, 40.4901],
+                '黑龙江': [127.9688, 45.368],
+                '天津': [117.4219, 39.4189],
+                '山西': [112.3352, 37.9413],
+                '广东': [113.5107, 23.2196],
+                '四川': [103.9526, 30.7617],
+                '西藏': [91.1865, 30.1465],
+                '云南': [102.9199, 25.4663],
+                '浙江': [119.5313, 29.8773],
+                '湖北': [114.3896, 30.6628],
+                '辽宁': [123.1238, 42.1216],
+                '山东': [117.1582, 36.8701],
+                '海南': [110.3893, 19.8516],
+                '河北': [114.4995, 38.1006],
+                '福建': [119.4543, 25.9222],
+                '青海': [101.4038, 36.8207],
+                '陕西': [109.1162, 34.2004],
+                '贵州': [106.6992, 26.7682],
+                '河南': [113.4668, 34.6234],
+                '重庆': [107.7539, 30.1904],
+                '宁夏': [106.3586, 38.1775],
+                '吉林': [125.8154, 44.2584],
+                '湖南': [113.0823, 28.2568]
+            };
+
+            //根据返回的地图点数据,构建显示点数据
+            var legendData = trsData.triMapData["legend"];
+            var pointData = trsData.triMapData["pointData"];
+
+            var dataArr2 = new Array();
+            for (var item in pointData) {
+                var arr1 = new Array();
+                arr1.push(item,pointData[item]);
+                dataArr2.push(arr1);
             }
-            return res;
-        };
 
-        var color = ['#a6c84c', '#ffa022', '#46bee9'];
-        var series = [];
-        [['北京', BJData], ['上海', SHData], ['广东', GZData]].forEach(function (item, i) {
-            //console.log(item,i);
-            series.push({
-                    name: item[0],
-                    type: 'lines',
+            var planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
 
-                    lineStyle: {
-                        normal: {
-                            color: color[i],
-                            width: 0,
-                            curveness: 0.2
-                        }
-                    },
-                    data: convertData(item[1])
-                },
-                {
-                    name: item[0],
-                    type: 'lines',
-                    zlevel: 2,
-                    symbol: ['none', 'arrow'],
-                    symbolSize: 10,
-                    effect: {
-                        show: true,
-                        period: 6,
-                        trailLength: 0,
-                        symbol: planePath,
-                        symbolSize: 15
-                    },
-
-                    lineStyle: {
-                        normal: {
-                            color: color[i],
-                            width: 1,
-                            opacity: 0.6,
-                            curveness: 0.2
-                        }
-                    },
-                    data: convertData(item[1])
-                },
-                {
-                    name: item[0],
-                    type: 'effectScatter',
-                    coordinateSystem: 'geo',
-                    symbolSize: function (val) {
-                        return val[2] / 8;
-                    },
-                    itemStyle: {
-                        normal: {
-                            color: color[i]
-                        }
-                    },
-                    data: item[1].map(function (dataItem) {
-                        return {
-                            name: dataItem[1].name,
-                            value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
-                        };
-                    })
-                });
-        });
-        console.log(series)
-
-        option = {
-            backgroundColor: '#404a59',
-            title: {
-                text: '产销可视化',
-                subtext: '数据纯属虚构',
-                left: 'center',
-                textStyle: {
-                    color: '#fff'
-                }
-            },
-            tooltip: {
-                trigger: 'item',
-                formatter: function (params, ticket, callback) {
-                    console.log(params);
-                    if (params.seriesType == "effectScatter") {
-                        return "线路：" + params.data.name + "" + params.data.value[2];
-                    } else if (params.seriesType == "lines") {
-                        return params.data.fromName + "销往" + params.data.toName + ": " + params.data.value + " (万台)";
-                    } else {
-                        return params.name;
+            var convertData = function (data) {
+                var res = [];
+                for (var i = 0; i < data.length; i++) {
+                    var dataItem = data[i];
+                    var fromCoord = geoCoordMap[dataItem[0].name];
+                    var toCoord = geoCoordMap[dataItem[1].name];
+                    if (fromCoord && toCoord) {
+                        res.push({
+                            fromName: dataItem[0].name,
+                            toName: dataItem[1].name,
+                            coords: [fromCoord, toCoord],
+                            value: dataItem[1].value
+                        });
                     }
                 }
-            },
-            legend: {
-                orient: 'vertical',
-                top: 'bottom',
-                left: 'right',
-                data: ['北京', '上海', '广东'],
-                textStyle: {
-                    color: '#fff'
+                return res;
+            };
+
+            var series = [];
+            dataArr2.forEach(function (item, i) {
+                series.push({
+                        name: item[0],
+                        type: 'lines',
+                        zlevel: 1,
+                        effect: {
+                            show: true,
+                            period: 6,
+                            trailLength: 0.7,
+                            color: '#fff',
+                            symbolSize: 3
+                        },
+                        lineStyle: {
+                            normal: {
+                                width: 0,
+                                curveness: 0.2
+                            }
+                        },
+                        data: convertData(item[1])
+                    },
+                    {
+                        name: item[0],
+                        type: 'lines',
+                        zlevel: 2,
+                        symbol: ['none', 'arrow'],
+                        symbolSize: 10,
+                        effect: {
+                            show: true,
+                            period: 6,
+                            trailLength: 0,
+                            symbol: planePath,
+                            symbolSize: 15
+                        },
+
+                        lineStyle: {
+                            normal: {
+                                width: 1,
+                                opacity: 0.6,
+                                curveness: 0.2
+                            }
+                        },
+                        data: convertData(item[1])
+                    },
+                    {
+                        name: item[0],
+                        type: 'effectScatter',
+                        coordinateSystem: 'geo',
+                        symbolSize: 5,
+                        zlevel: 2,
+                        rippleEffect: {
+                            brushType: 'stroke'
+                        },
+                        data: item[1].map(function (dataItem) {
+                            return {
+                                name: dataItem[1].name,
+                                value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
+                            };
+                        })
+                    });
+            });
+            var option = {
+                backgroundColor: '#404a59',
+                title: {
+                    text: '地图可视化',
+                    subtext: '运输优化',
+                    left: 'center',
+                    textStyle: {
+                        color: '#fff'
+                    }
                 },
-                selectedMode: 'multiple'
-            },
-            geo: {
-                map: 'china',
-                label: {
-                    normal: {
-                        show: true,
+                toolbox: {
+                    show: true,
+                    feature: {
+                        restore: {
+                            show: true
+                        },
+                        saveAsImage: {
+                            show: true
+                        }
+                    }
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (params, ticket, callback) {
+                        // console.log(params);
+                        if (params.seriesType == "effectScatter") {
+                            return "销量<br>" + params.data.name + ": " + params.data.value[2]+ " (万台)";
+                        } else if (params.seriesType == "lines") {
+                            return params.data.fromName + "销往" + params.data.toName + ": " + params.data.value + " (万台)";
+                        } else {
+                            return params.name;
+                        }
+                    }
+                },
+                legend: {
+                    orient: 'vertical',
+                    top: 'bottom',
+                    left: 'right',
+                    data: legendData,
+                    textStyle: {
                         color: '#fff'
                     },
-                    emphasis: {
-                        show: true
+                    selectedMode: 'multiple'
+                },
+                geo: {
+                    map: 'china',
+                    label: {
+                        normal: {
+                            show: true,
+                            color: '#fff'
+                        },
+                        emphasis: {
+                            show: true
+                        }
+                    },
+                    roam: true,
+                    itemStyle: {
+                        normal: {
+                            areaColor: '#323c48',
+                            borderColor: '#404a59'
+                        },
+                        emphasis: {
+                            areaColor: '#2a333d'
+                        }
                     }
                 },
-                roam: true,
-                itemStyle: {
-                    normal: {
-                        areaColor: '#323c48',
-                        borderColor: '#404a59'
-                    },
-                    emphasis: {
-                        areaColor: '#2a333d'
-                    }
+                series: series
+            };
+
+            myCharts.setOption(option);
+
+            //点击打开关闭图表
+            $("#trsMapShow").click(function () {
+                var isExapnd = $("#trsTableDiv").hasClass('dis-none');
+                if (isExapnd) { //如果是隐藏的,则打开图表
+                    $("#trsTableDiv").removeClass('dis-none');
+                    $("#trsMapEchartsDiv").addClass('dis-none');
+                    $("#trsMapFa").text(" 打开图表");
+
+                } else {
+                    $("#trsTableDiv").addClass('dis-none');
+                    $("#trsMapEchartsDiv").removeClass('dis-none');
+                    $("#trsMapFa").text(" 关闭图表");
+
+                    myCharts.resize();
                 }
-            },
-            series: series
-        };
+            })
 
-        myCharts.setOption(option);
+            // 渲染产销可视化图表
+            var  proSaleData = trsData.proSaleData;
 
-        //点击打开关闭图表
-        $("#effShow").click(function () {
-            var isExapnd = $("#efAnTableDiv").hasClass('dis-none');
-            if (isExapnd) { //如果是隐藏的,则打开图表
-                $("#efAnTableDiv").removeClass('dis-none');
-                $("#efAnEchartsDiv").addClass('dis-none');
-                $("#effFa").text(" 打开图表");
-
-            } else {
-                $("#efAnTableDiv").addClass('dis-none');
-                $("#efAnEchartsDiv").removeClass('dis-none');
-                $("#effFa").text(" 关闭图表");
-
-                myCharts.resize();
-            }
-        })
-
-        // 渲染有效性分析图表
-        var myCharts2 = echarts.init(document.getElementById('trsPointEcharts'));
-        var option2 = {
-            title: {
-                text: "虚拟数据",
-                subtext: "ZBH",
-                top: "top",
-                left: "left"
-            },
-            tooltip: {},
-            legend: [{
+            var myCharts2 = echarts.init(document.getElementById('trsPointEcharts'));
+            var option2 = {
+                title: {
+                    text: "产销可视化",
+                    subtext: "运输优化",
+                    top: "top",
+                    left: "left"
+                },
                 tooltip: {
-                    show: true
+                    trigger: 'item',
+                    formatter: function (params, ticket, callback) {
+                        if(params.dataType == 'node'){ //节点
+                            if(params.data.saleNum != 0){
+                                return "销量<br>" + params.data.name + ": " + params.data.saleNum + " (万台)";
+                            }else{
+                                return "产量<br>" + params.data.name + ": " + params.data.originNum + " (万台)";
+                            }
+                        }else if(params.dataType == 'edge'){//边
+                            return params.data.source + "销往" + params.data.target + ": " + params.data.value + " (万台)";
+                        }
+
+                    }
                 },
-                selectedMode: 'false',
-                bottom: 20,
-                data: ['北京', '上海', '天津', '浙江', '江苏', '广东']
-            }],
-            toolbox: {
-                show: true,
-                feature: {
-                    dataView: {
-                        show: true,
-                        readOnly: true
-                    },
-                    restore: {
+                legend: [{
+                    tooltip: {
                         show: true
                     },
-                    saveAsImage: {
-                        show: true
+                    selectedMode: 'false',
+                    bottom: 10,
+                    data: proSaleData.legend
+                }],
+                toolbox: {
+                    show: true,
+                    feature: {
+                        restore: {
+                            show: true
+                        },
+                        saveAsImage: {
+                            show: true
+                        }
                     }
+                },
+                animationDuration: 3000,
+                animationEasingUpdate: 'quinticInOut',
+                series: [{
+                    name: '产销联系',
+                    type: 'graph',
+                    //layout: 'force',
+                    layout: 'circular',
+                    edgeLength: [10, 50],
+                    circular: {
+                        rotateLabel: true
+                    },
+                    force: {
+                        repulsion: 150,
+                        gravity:150,
+                    },
+                    left: '12%',
+                    right: '12%',
+                    data: proSaleData.seriesData,
+                    links: proSaleData.seriesLinks,
+                    categories: proSaleData.seriesCategories,
+                    focusNodeAdjacency: true,
+                    roam: true,
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top'
+                        }
+                    },
+                    lineStyle: {
+                        normal: {
+                            color: 'source',
+                            curveness: 0,
+                            type: "solid"
+                        }
+                    }
+                }]
+            };
+            myCharts2.setOption(option2);
+
+            //切换tab
+            element.on('tab(tabZZT)', function (data) {
+                if ($(this).attr('render')) {
+                    // 不需要渲染
+                    return;
                 }
-            },
-            animationDuration: 3000,
-            animationEasingUpdate: 'quinticInOut',
-            series: [{
-                name: '产销联系',
-                type: 'graph',
-                //layout: 'force',
-                layout: 'circular',
-                circular: {
-                    rotateLabel: true
-                },
-                force: {
-                    repulsion: 350
-                },
-                data: [
-                    {
-                        "name": "北京",
-                        "symbolSize": 35,
-                        "category": "北京",
-                        "draggable": "true"
-                    },
-                    {
-                        "name": "上海",
-                        "symbolSize": 15,
-                        "category": "上海",
-                        "draggable": "true"
-                    },
-                    {
-                        "name": "天津",
-                        "symbolSize": 15,
-                        "category": "天津",
-                        "draggable": "true"
-                    },
-                    {
-                        "name": "浙江",
-                        "symbolSize": 15,
-                        "category": "浙江",
-                        "draggable": "true"
-                    },
-                    {
-                        "name": "江苏",
-                        "symbolSize": 30,
-                        "category": "江苏",
-                        "draggable": "true"
-                    },
-                    {
-                        "name": "广东",
-                        "symbolSize": 15,
-                        "category": "广东",
-                        "draggable": "true"
-                    },
-                    {
-                        "name": "河南",
-                        "symbolSize": 15,
-                        "draggable": "true"
-                    },
-                    {
-                        "name": "广西",
-                        "symbolSize": 15,
-                        "draggable": "true"
-                    },
-                    {
-                        "name": "西藏",
-                        "symbolSize": 15,
-                        "draggable": "true"
-                    }
-                ],
-                links: [
-                    {
-                        "source": "北京",
-                        "target": "西藏",
+                $(this).attr('render', 'done');
+                var index = data.index;
+                if(index == 0){
 
+                    var produceData = trsData.produceData;
+                    var legendData = produceData['legend'];
+                    legendData.push("产量剩余")
+                    var myCharts3 = echarts.init(document.getElementById('produceEcharts'));
+                    var option3 = {
+                        title: {
+                            text: '产地角度分析情况',
+                            x: 'center'
+                        },
+                        tooltip: {
+                            confine: true,
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        legend: {
+                            bottom: '0%',
+                            data: legendData,
+                        },
+                        grid: {
+                            left: '5%',
+                            right: '5%'
+                        },
+                        toolbox: {
+                            feature: {
+                                magicType: {
+                                    type: ['stack', 'bar', 'line', 'tiled']
+                                },
+                                mark: {show: true},
+                                dataZoom: {show: true},
+                                dataView: {show: true, readOnly: false},
+                                restore: {show: true},
+                                saveAsImage: {show: true}
+                            }
+                        },
+                        xAxis: {
+                            data: produceData.xAxis,
+                            axisPointer: {
+                                type: 'shadow'
+                            },
+                        },
+                        yAxis: [{
+                            type: 'value',
+                            name: '销量',
+                            axisLabel: {
+                                formatter: '{value} (万台)'
+                            },
+                            position: 'end'
+                        },{
+                            type:'value',
+                            axisLabel: {
+                                formatter: '{value} (万台)'
+                            },
+                            name: '产量剩余',
+                            nameLocation: 'end',
+                        }],
+                        series: produceData.series
+                    };
+                    myCharts3.setOption(option3);
+                }else if(index == 1){
 
-                    },
-                    {
-                        "source": "北京",
-                        "target": "广西",
+                    var saleData = trsData.saleData;
+                    var legendData = saleData['legend'];
+                    legendData.push("销量剩余");
+                    var myCharts4 = echarts.init(document.getElementById('saleEcharts'));
+                    var option4 = {
+                        title: {
+                            text: '销地角度分析情况',
+                            x: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        legend: {
+                            bottom: '0%',
+                            data: saleData.legend,
+                        },
+                        grid: {
+                            left: '5%',
+                            right: '5%'
+                        },
+                        toolbox: {
+                            feature: {
+                                magicType: {
+                                    type: ['line', 'bar', 'stack', 'tiled']
+                                },
+                                mark: {show: true},
+                                dataZoom: {show: true},
+                                dataView: {show: true, readOnly: false},
+                                restore: {show: true},
+                                saveAsImage: {show: true}
+                            }
+                        },
+                        xAxis: {
+                            data: saleData.xAxis,
+                            axisPointer: {
+                                type: 'shadow'
+                            },
+                            axisLabel: {
+                                interval: 0,
+                                formatter: function (value) {
+                                    return value.split("").join("\n");
+                                }
+                            }
+                        },
+                        yAxis: [{
+                            type: 'value',
+                            name: '产量',
+                            axisLabel: {
+                                formatter: '{value} (万台)'
+                            },
+                            position: 'end'
+                        },{
+                            type:'value',
+                            axisLabel: {
+                                formatter: '{value} (万台)'
+                            },
+                            name: '销量剩余',
+                            nameLocation: 'end',
+                        }],
+                        series: saleData.series
+                    };
+                    myCharts4.setOption(option4);
 
-                    },
-                    {
-                        "source": "广东",
-                        "target": "河南",
+                }else if(index == 2){
+                    var costData = trsData.costData;
+                    var maxNumS = parseInt(costData.bestValue) * 1.5;
+                    var maxNum = maxNumS+''.substring(0, maxNumS+''.lastIndexOf('.'));
 
-                    },
-                    {
-                        "source": "北京",
-                        "target": "上海",
-
-                    },
-                    {
-                        "source": "广东",
-                        "target": "江苏",
-
-                    },
-                    {
-                        "source": "浙江",
-                        "target": "天津",
-
-                    },
-                    {
-                        "source": "浙江",
-                        "target": "广东",
-
-
-                    }
-                ],
-                categories: [
-                    {
-                        'name': '北京'
-                    },
-                    {
-                        'name': '广东'
-                    },
-                    {
-                        'name': '上海'
-                    },
-                    {
-                        'name': '江苏'
-                    },
-                    {
-                        'name': '浙江'
-                    },
-                    {
-                        'name': '天津'
-                    }
-                ],
-                focusNodeAdjacency: true,
-                roam: true,
-                label: {
-                    normal: {
-                        show: true,
-                        position: 'top'
-                    }
-                },
-                lineStyle: {
-                    normal: {
-                        color: 'source',
-                        curveness: 0,
-                        type: "solid"
-                    }
+                    var myCharts5 = echarts.init(document.getElementById('costEcharts'));
+                    var option5 = {
+                        title: {
+                            text: '最小运输成本分析情况',
+                            x: 'center'
+                        },
+                        tooltip : {
+                            formatter: "{a} <br/>{c} {b}"
+                        },
+                        grid: {
+                            left: '5%',
+                            right: '5%'
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                restore: {show: true},
+                                saveAsImage: {show: true}
+                            }
+                        },
+                        series : [
+                            {
+                                name: '总运输成本',
+                                type: 'gauge',
+                                z: 3,
+                                min: 0,
+                                max: maxNum,
+                                splitNumber: 10,
+                                radius: '80%',
+                                axisLine: {            // 坐标轴线
+                                    lineStyle: {       // 属性lineStyle控制线条样式
+                                        width: 10
+                                    }
+                                },
+                                axisTick: {            // 坐标轴小标记
+                                    length: 15,        // 属性length控制线长
+                                    lineStyle: {       // 属性lineStyle控制线条样式
+                                        color: 'auto'
+                                    }
+                                },
+                                splitLine: {           // 分隔线
+                                    length: 20,         // 属性length控制线长
+                                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                        color: 'auto'
+                                    }
+                                },
+                                title : {
+                                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                        fontWeight: 'bolder',
+                                        fontSize: 20,
+                                        fontStyle: 'italic'
+                                    }
+                                },
+                                detail : {
+                                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                        fontWeight: 'bolder'
+                                    }
+                                },
+                                data:[{value: costData.bestValue, name: ' 万元'}]
+                            },
+                            {
+                                name: '总剩余产量',
+                                type: 'gauge',
+                                center: ['24%', '55%'],    // 默认全局居中
+                                radius: '65%',
+                                endAngle:45,
+                                axisLine: {            // 坐标轴线
+                                    lineStyle: {       // 属性lineStyle控制线条样式
+                                        width: 8
+                                    }
+                                },
+                                axisTick: {            // 坐标轴小标记
+                                    length:12,        // 属性length控制线长
+                                    lineStyle: {       // 属性lineStyle控制线条样式
+                                        color: 'auto'
+                                    }
+                                },
+                                splitLine: {           // 分隔线
+                                    length:20,         // 属性length控制线长
+                                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                        color: 'auto'
+                                    }
+                                },
+                                pointer: {
+                                    width:5
+                                },
+                                title: {
+                                    offsetCenter: [0, '-30%'],       // x, y，单位px
+                                },
+                                detail: {
+                                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                        fontWeight: 'bolder'
+                                    }
+                                },
+                                data:[{value: costData.originSum, name: ' 万台'}]
+                            },
+                            {
+                                name: '总剩余销量',
+                                type: 'gauge',
+                                center: ['77%', '55%'],    // 默认全局居中
+                                radius: '65%',
+                                startAngle:140,
+                                endAngle:-45,
+                                axisLine: {            // 坐标轴线
+                                    lineStyle: {       // 属性lineStyle控制线条样式
+                                        width: 8
+                                    }
+                                },
+                                axisTick: {            // 坐标轴小标记
+                                    length:12,        // 属性length控制线长
+                                    lineStyle: {       // 属性lineStyle控制线条样式
+                                        color: 'auto'
+                                    }
+                                },
+                                splitLine: {           // 分隔线
+                                    length:20,         // 属性length控制线长
+                                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                        color: 'auto'
+                                    }
+                                },
+                                pointer: {
+                                    width:5
+                                },
+                                title: {
+                                    offsetCenter: [0, '-30%'],       // x, y，单位px
+                                },
+                                detail: {
+                                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                        fontWeight: 'bolder'
+                                    }
+                                },
+                                data:[{value: costData.saleSum, name: '万台'}]
+                            }
+                        ]
+                    };
+                    myCharts5.setOption(option5);
                 }
-            }]
-        };
 
-        myCharts2.setOption(option2);
+            });
 
-
-        //点击打开关闭图表
-        $("#slackShow").click(function () {
-            var isExapnd = $("#slackTablesDiv").hasClass('dis-none');
-            if (isExapnd) { //如果是隐藏的,则打开图表
-                $("#slackTablesDiv").removeClass('dis-none');
-                $("#slackEchartsDiv").addClass('dis-none');
-                $("#slackFa").text(" 打开图表");
-                $("#slackNameShow").text("数据表展示")
-
-            } else {
-                $("#slackTablesDiv").addClass('dis-none');
-                $("#slackEchartsDiv").removeClass('dis-none');
-                $("#slackFa").text(" 关闭图表");
-                $("#slackNameShow").text("可视化展示")
-            }
-        })
+            element.tabChange('tabZZT', 0); //初始选择第一个tab
+        }
 
     });
 </script>

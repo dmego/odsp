@@ -33,6 +33,7 @@ public class TransportProblem {
     private double[][] plan;
     public List<Map<String, String>> resultData;
     public String log;
+    private double bestValue;
 
     public boolean TransportationProblemCalculate(TransportVo transportVo) {
         try {
@@ -200,9 +201,11 @@ public class TransportProblem {
         map2.put("sales",funType == 2 ? "总运输成本" : "总运输利润");
         map2.put("B1",String.valueOf(CommonUtil.retainDecimal(num1,3)));
         mapList.add(map2);
+        bestValue = CommonUtil.retainDecimal(num1,3);
 
         return mapList;
     }
+
 
     private void vogelCalculate() {
         boolean flag1 = true;

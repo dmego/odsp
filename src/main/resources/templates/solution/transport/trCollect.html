@@ -92,7 +92,7 @@
                 <hr>
                 <br>
                 <div class="layui-card-body" align="center">
-                    <button class="layui-btn layui-btn-lg layui-btn-radius" id="calculate" lay-filter="calculate" lay-submit>
+                    <button class="layui-btn layui-btn-lg layui-btn-radius" id="calculate" >
                         <i class="fa fa-play-circle" aria-hidden="true"></i> 点击计算
                     </button>
                 </div>
@@ -109,9 +109,8 @@
 <script type="text/javascript" src="/assets/libs/dropify/js/dropify.js"></script>
 <script type="text/javascript" src="/assets/libs/loading/loading.js"></script>
 
-
-<script type="text/javascript" src="/assets/libs/echarts/echarts.js"></script>
-<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.min.js"></script>
 
 <script type="text/javascript" src="/assets/js/common.js"></script>
 <script type="text/javascript" src="/assets/js/utils.js"></script>
@@ -126,6 +125,15 @@
         var table = layui.table;
         var util = layui.util;
         var admin = layui.admin;
+
+        var resData;
+
+        //点击计算,将计算得到得值保存到浏览器session中
+        $('#calculate').click(function () {
+            admin.putTempData("trResData",resData);
+            parent.loadTrspan();
+
+        });
 
         $('.dropify').dropify({
             messages: {
@@ -160,6 +168,8 @@
                     if (data.code == 200) {
                         //数据返回成功,得到数据,渲染表格
                         top.layer.msg(data.msg, {icon: 1});
+                        resData = data.resData;
+
                         renderTables(data);
                     } else {
                         console.log(data.msg)
@@ -259,7 +269,7 @@
                     show: false,
                     left: '53%',
                     top: '10%',
-                    right: '0%',
+                    right: '10%',
                     containLabel: true,
                     width: '45%',
                     height: '40%'
@@ -267,7 +277,7 @@
                     show: false,
                     left: '53%',
                     top: '60%',
-                    right: '0%',
+                    right: '10%',
                     containLabel: true,
                     width: '45%',
                     height: '40%'
@@ -328,35 +338,6 @@
             }
         }
 
-
-        function loading() {
-            loadingTime = 0;
-            $('body').loading({
-                loadingWidth: 300,
-                title: '请稍等!',
-                name: 'test',
-                discription: [
-                    '正在上传文件 . . .',
-                    '上传文件成功 . . .',
-                    '正在解析数据 . . .',
-                    '数据解析成功 . . .'
-                ],
-                timeSpan: [1, 1, 1, 1], //每条描述显示的时间
-                direction: 'column',
-                type: 'origin',
-                //originBg:'#71EA71',
-                originDivWidth: 40,
-                originDivHeight: 40,
-                originWidth: 6,
-                originHeight: 6,
-                smallLoading: false,
-                loadingMaskBg: 'rgba(0,0,0,0.2)'
-            });
-
-            setTimeout(function () {
-                removeLoading('test');
-            }, 4500);
-        }
     });
 </script>
 </body>

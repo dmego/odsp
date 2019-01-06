@@ -54,15 +54,14 @@
 <script type="text/javascript" src="/assets/js/main.js"></script>
 <script type="text/javascript" src="/assets/libs/jquery/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" src="/assets/libs/loading/loading.js"></script>
-<script type="text/javascript" src="/assets/libs/echarts/echarts.js"></script>
-<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.min.js"></script>
 <script>
 
     /**
      * 加载条
      */
-    function loadIndex() {
-        loadingTime = 0;
+    function loadEfficency() {
         $("body").loading({
             loadingWidth: 300,
             title: '请稍等!',
@@ -70,9 +69,11 @@
             discription: [
                 '正在解析数据 . . .',
                 '数据解析成功 . . .',
-                '正在求解 . . .'
+                '正在求解...',
+                '求解成功...',
+                '正再跳转结果页面...'
             ],
-            timeSpan: [3, 1, 1], //每条描述显示的时间
+            timeSpan: [1, 1, 2, 1, 1], //每条描述显示的时间
             direction: 'column',
             type: 'origin',
             //originBg:'#71EA71',
@@ -87,6 +88,40 @@
 
     function closeLoad() {
         removeLoading('test');
+    }
+
+    function loadTrspan() {
+        $('body').loading({
+            loadingWidth: 300,
+            title: '请稍等!',
+            name: 'test',
+            discription: [
+                '正在解析数据 . . .',
+                '数据解析成功 . . .',
+                '正在求解...',
+                '求解成功...',
+                '正再跳转结果页面...'
+            ],
+            timeSpan: [1, 1, 2, 1, 1], //每条描述显示的时间
+            direction: 'column',
+            type: 'origin',
+            //originBg:'#71EA71',
+            originDivWidth: 40,
+            originDivHeight: 40,
+            originWidth: 6,
+            originHeight: 6,
+            smallLoading: false,
+            loadingMaskBg: 'rgba(0,0,0,0.2)'
+        });
+
+        setTimeout(function () {
+            removeLoading('test');
+            //来到数据分析页面
+            top.layui.index.openTab({
+                url: 'solution/transport/trAnalysis',
+                title: '结果分析'
+            });
+        }, 6500);
     }
 
 
