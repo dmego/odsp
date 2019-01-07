@@ -305,6 +305,29 @@ public class CommonUtil {
         return new BigDecimal(value).setScale(scale, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
+    /**
+     * Int 类型保留 scale 位小数
+     *
+     * @param value
+     * @return
+     */
+    public static Double retainDecimal(Integer value, int scale) {
+        return new BigDecimal(value).setScale(scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
+
+    /**
+     * 返回一个int数组最大值的下标
+     */
+    public static int bigValueIndex(int[] data){
+        int big = data[0];
+        for (int i = 1; i < data.length; i++) {
+            if(data[i] > big){
+                return i;
+            }
+        }
+        return 0;
+    }
 
     /**
      * 返回参数中的最大值
@@ -524,6 +547,22 @@ public class CommonUtil {
         try {
             inputStream = new FileInputStream(filePath);
             return EasyExcelFactory.read(inputStream, new Sheet(1, 0));
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("解析Execl 文件出错");
+            return null;
+        }
+    }
+
+    /**
+     * 读取Excel sheet1 并返回数据
+     */
+    public static List<Object> easyExcel(String filePath,int sheetNo) {
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(filePath);
+            return EasyExcelFactory.read(inputStream, new Sheet(sheetNo, 0));
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();

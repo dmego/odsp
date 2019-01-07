@@ -34,6 +34,12 @@
             line-height: 20px;
         }
     </style>
+    <style>
+        .layui-table[lay-skin=line] {
+            border-width: 0 0 0 0 !important;
+            width:100%;
+        }
+    </style>
 </head>
 
 <body class="page-aside-fixed">
@@ -73,7 +79,7 @@
                     </div>
                     <div class="layui-card dis-none" id="dataShow">
                         <div class="layui-card-body">
-                            <table class="layui-hide" id="oriDataTable" lay-size="sm"></table>
+                            <table class="layui-table" id="oriDataTable" ></table>
                         </div>
                     </div>
 
@@ -126,12 +132,13 @@
         var util = layui.util;
         var admin = layui.admin;
 
-        var resData;
+
+        var decResData,decOriData;
 
         //点击计算,将计算得到得值保存到浏览器session中
         $('#calculate').click(function () {
-            admin.putTempData("trResData",resData);
-            parent.loadAnalysis('solution/transport/trAnalysis');
+            admin.putTempData("decResData",decResData);
+            parent.loadAnalysis('solution/decision/deAnalysis');
 
         });
 
@@ -168,9 +175,8 @@
                     if (data.code == 200) {
                         //数据返回成功,得到数据,渲染表格
                         top.layer.msg(data.msg, {icon: 1});
-                        resData = data.resData;
-
-                        renderTables(data);
+                        decResData = data.decResData;
+                        renderTables(data.decOriData);
                     } else {
                         console.log(data.msg)
                         top.layer.msg(data.msg, {icon: 2});
@@ -180,157 +186,128 @@
         });
 
         function renderTables(res) {
+            //表头数据
+            var thead = '<thead>' +
+                            '<tr>';
+            var head1 = res.head1;
+            var head2 = res.head2;
+            var head3 = res.head3;
+            var head4 = res.head4;
+
+            for (var i = 0; i < head1.length; i++) {
+                thead += '<th  rowspan="'+head1[i].rowspan+'" colspan="'+head1[i].colspan+'"><div  align="center">'+head1[i].title+'</div></th>'
+            }
+            thead += '</tr><tr style="background-color: #FFFFFF">';
+
+            for (var i = 0; i < head2.length; i++) {
+                thead += '<th  rowspan="'+head2[i].rowspan+'" colspan="'+head2[i].colspan+'">'+head2[i].title+'</th>'
+            }
+            thead += '</tr>';
+
+            for (var i = 0; i < head3.length; i++) {
+                thead += '<th align="center"  rowspan="'+head3[i].rowspan+'" colspan="'+head3[i].colspan+'"><div align="center">'+head3[i].title+'</div></th>'
+            }
+            thead += '</tr><tr style="background-color: #FFFFFF">';
+
+            for (var i = 0; i < head4.length; i++) {
+                thead += '<th  rowspan="'+head4[i].rowspan+'" colspan="'+head4[i].colspan+'">'+head4[i].title+'</th>'
+            }
+            thead += '</tr>' +
+                '</thead>' +
+                '<tbody>';
+
+            var tbody = '';
+            var body = res.data;
+            for (var i = 0; i < body.length; i++) {
+                var data = body[i];
+                tbody += '<tr>'
+
+                var length = 0;
+                for(var ever in data) {
+                    length++;
+                }
+                for (var j = 0; j < length; j++) {
+                    if(j == 0){
+                        tbody += '<td>'+data['strategy']+'</td>';
+                    }else {
+                        tbody += '<td>'+data['saleNum'+j+'']+'</td>';
+                    }
+
+                }
+                tbody += '</tr>'
+            }
+            tbody += '</tbody>';
+
+            $("#oriDataTable").append(thead + tbody)
 
             $("#title1").addClass("dis-none");
             $("#title2").removeClass("dis-none");
-            $("#fileName").html("("+res.oriData.fileName+")");
+            $("#fileName").html("("+res.fileName+")");
 
             $("#dataAcqu").addClass("dis-none");
             $("#dataShow").removeClass("dis-none");
-
-            table.render({
-                elem: "#oriDataTable",
-                cellMinWidth: 100,
-                height: 'full-110',
-                cols: [res.oriData.head],
-                data: res.oriData.data,
-                limit: 100
-            });
-
             $("#echartShow").removeClass("dis-none");
 
-            var otherData = [{
-                name: '产量情况',
-                type: 'line',
-                smooth: true,
-                xAxisIndex: 1 ,
-                yAxisIndex: 1,
-                symbolSize: 8, //拐点大小
-                lineStyle: {
-                    normal: {
-                        width: 4,
-                        color: '#145de4'
-                    }
-                },
-                data: res.oriData.originData,
-            }, {
-                name: '销量情况',
-                type: 'line',
-                xAxisIndex: 2,
-                yAxisIndex: 2,
-                smooth: true,
-                symbolSize: 8, //拐点大小
-                lineStyle: {
-                    normal: {
-                        width: 4,
-                        color: '#9BCA63'
-                    }
-                },
-                data: res.oriData.saleData,
-            }];
 
-            var series = otherData.concat(res.oriData.series);
-
+            var legendData = res.legend;
+            legendData.push("销售概率");
             var myChart = echarts.init(document.getElementById('echartsDiv'));
             var app = {};
             option = null;
             app.title = '采集数据展示';
             option = {
-                title: [{
-                    text: '产地至销地运输成本情况',
-                    left: '28%',
-                    top: '5%',
-                    textAlign: 'center'
-                }, {
-                    text: '产地产量情况',
-                    left: '78%',
-                    top: '5%',
-                    textAlign: 'center'
-                }, {
-                    text: '销地销量情况',
-                    left: '78%',
-                    top: '55%',
-                    textAlign: 'center'
-                }],
                 tooltip: {
                     trigger: 'axis',
-                    axisPointer : {
-                        type : 'shadow'
+                    axisPointer: {
+                        type: 'cross',
+                        crossStyle: {
+                            color: '#999'
+                        }
                     }
                 },
-                grid: [{
-                    show: false,
-                    left: '0%',
-                    top: '10%',
-                    containLabel: true,
-                    width: '45%',
-                    height: '90%'
-                }, {
-                    show: false,
-                    left: '53%',
-                    top: '10%',
-                    right: '10%',
-                    containLabel: true,
-                    width: '45%',
-                    height: '40%'
-                },{
-                    show: false,
-                    left: '53%',
-                    top: '60%',
-                    right: '10%',
-                    containLabel: true,
-                    width: '45%',
-                    height: '40%'
-                }],
-                legend: {
-                    data: res.oriData.legend,
-                    x:'left',
+                toolbox: {
+                    feature: {
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar']},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
                 },
-                xAxis: [{
-                    gridIndex: 0,
-                    type: 'value',
-                    name: '运输成本(元/万台)',
-                    nameLocation: 'end',
-                }, {
-                    gridIndex: 1,
-                    type: 'category',
-                    axisLabel: {
-                        interval: 0,
-                        formatter: function (value) {
-                            return value.split("").join("\n");
+                legend: {
+                    data:legendData
+                },
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: res.xAxis,
+                        axisPointer: {
+                            type: 'shadow'
+                        }
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        name: '销售收益',
+                        splitLine:{
+                            show: false
+                        },
+                        axisLabel: {
+                            formatter: '{value} 元'
                         }
                     },
-                    data: res.oriData.xAxis2,
-                }, {
-                    gridIndex: 2,
-                    type: 'category',
-                    axisLabel: {
-                        interval: 0,
-                        formatter: function (value) {
-                            return value.split("").join("\n");
+                    {
+                        type: 'value',
+                        name: '销售概率',
+                        splitLine:{
+                            show: false
+                        },
+                        axisLabel: {
+                            formatter: '{value} '
                         }
-                    },
-                    data: res.oriData.xAxis1,
-
-                }],
-                yAxis: [{
-                    gridIndex: 0,
-                    type: 'category',
-                    data: res.oriData.yAxis0,
-
-                }, {
-                    gridIndex: 1,
-                    type: 'value',
-                    name: '生产量(万台)',
-                    nameLocation: 'end',
-                }, {
-                    gridIndex: 2,
-                    type: 'value',
-                    name: '销售量(万台)',
-                    nameLocation: 'end',
-                    position: 'left'
-                }],
-                series: series
+                    }
+                ],
+                series: res.series
             };
 
             if (option && typeof option === "object") {

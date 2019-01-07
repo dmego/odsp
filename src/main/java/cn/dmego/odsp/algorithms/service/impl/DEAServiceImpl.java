@@ -177,6 +177,7 @@ public class DEAServiceImpl implements DEAService {
         Map<String, Object> aMap = new HashMap<>();
         aMap.put("value", aNum);
         aMap.put("name", legend[0]);
+        aMap.put("selected",true);
         valSeriesMapList.add(aMap);
         Map<String, Object> bMap = new HashMap<>();
         bMap.put("value", bNum);

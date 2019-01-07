@@ -3,6 +3,7 @@ package cn.dmego.odsp.algorithms.vo;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * class_name: Uncertain
