@@ -6,7 +6,7 @@
   "Head": [
     {
       "field": "sales",
-      "title": "场地/销地",
+      "title": "产地/销地",
       "minWidth": 100
     },
     {
@@ -67,7 +67,7 @@
   "resultHead": [
     {
       "field": "sales",
-      "title": "场地/销地",
+      "title": "产地/销地",
       "minWidth": 100
     },
     {

@@ -34,6 +34,12 @@
             line-height: 20px;
         }
     </style>
+    <style>
+        .layui-table[lay-skin=line] {
+            border-width: 0 0 0 0 !important;
+            width:100%;
+        }
+    </style>
 </head>
 
 <body class="page-aside-fixed">
@@ -73,7 +79,7 @@
                     </div>
                     <div class="layui-card dis-none" id="dataShow">
                         <div class="layui-card-body">
-                            <table class="layui-hide" id="efDataTable" lay-size="sm"></table>
+                            <table class="layui-table" id="oriDataTable" ></table>
                         </div>
                     </div>
 
@@ -87,7 +93,14 @@
                 <hr>
                 <br>
                 <div class="layui-field-box">
-                    <div id="echartsDiv" class="layui-show echartsDiv"></div>
+                    <div id="echartsDiv" class="layui-show echartsDiv" style="height: 500px;overflow: hidden;"></div>
+                </div>
+                <hr>
+                <br>
+                <div class="layui-card-body" align="center">
+                    <button class="layui-btn layui-btn-lg layui-btn-radius" id="calculate" >
+                        <i class="fa fa-play-circle" aria-hidden="true"></i> 点击计算
+                    </button>
                 </div>
             </div>
         </div>
@@ -101,7 +114,6 @@
 <script type="text/javascript" src="/assets/libs/slimscroll/jquery.slimscroll.js"></script>
 <script type="text/javascript" src="/assets/libs/dropify/js/dropify.js"></script>
 <script type="text/javascript" src="/assets/libs/loading/loading.js"></script>
-
 
 <script type="text/javascript" src="/assets/libs/echarts/echarts.min.js"></script>
 <script type="text/javascript" src="/assets/libs/echarts/echarts-gl.min.js"></script>
@@ -119,6 +131,16 @@
         var table = layui.table;
         var util = layui.util;
         var admin = layui.admin;
+
+
+        var decResData,decOriData;
+
+        //点击计算,将计算得到得值保存到浏览器session中
+        $('#calculate').click(function () {
+            admin.putTempData("decResData",decResData);
+            parent.loadAnalysis('solution/decision/deAnalysis');
+
+        });
 
         $('.dropify').dropify({
             messages: {
@@ -153,7 +175,8 @@
                     if (data.code == 200) {
                         //数据返回成功,得到数据,渲染表格
                         top.layer.msg(data.msg, {icon: 1});
-                        renderTables(data);
+                        decResData = data.decResData;
+                        renderTables(data.decOriData);
                     } else {
                         console.log(data.msg)
                         top.layer.msg(data.msg, {icon: 2});
@@ -163,43 +186,95 @@
         });
 
         function renderTables(res) {
+            //表头数据
+            var thead = '<thead>' +
+                            '<tr>';
+            var head1 = res.head1;
+            var head2 = res.head2;
+            var head3 = res.head3;
+            var head4 = res.head4;
+
+            for (var i = 0; i < head1.length; i++) {
+                thead += '<th  rowspan="'+head1[i].rowspan+'" colspan="'+head1[i].colspan+'"><div  align="center">'+head1[i].title+'</div></th>'
+            }
+            thead += '</tr><tr style="background-color: #FFFFFF">';
+
+            for (var i = 0; i < head2.length; i++) {
+                thead += '<th  rowspan="'+head2[i].rowspan+'" colspan="'+head2[i].colspan+'">'+head2[i].title+'</th>'
+            }
+            thead += '</tr>';
+
+            for (var i = 0; i < head3.length; i++) {
+                thead += '<th align="center"  rowspan="'+head3[i].rowspan+'" colspan="'+head3[i].colspan+'"><div align="center">'+head3[i].title+'</div></th>'
+            }
+            thead += '</tr><tr style="background-color: #FFFFFF">';
+
+            for (var i = 0; i < head4.length; i++) {
+                thead += '<th  rowspan="'+head4[i].rowspan+'" colspan="'+head4[i].colspan+'">'+head4[i].title+'</th>'
+            }
+            thead += '</tr>' +
+                '</thead>' +
+                '<tbody>';
+
+            var tbody = '';
+            var body = res.data;
+            for (var i = 0; i < body.length; i++) {
+                var data = body[i];
+                tbody += '<tr>'
+
+                var length = 0;
+                for(var ever in data) {
+                    length++;
+                }
+                for (var j = 0; j < length; j++) {
+                    if(j == 0){
+                        tbody += '<td>'+data['strategy']+'</td>';
+                    }else {
+                        tbody += '<td>'+data['saleNum'+j+'']+'</td>';
+                    }
+
+                }
+                tbody += '</tr>'
+            }
+            tbody += '</tbody>';
+
+            $("#oriDataTable").append(thead + tbody)
+
             $("#title1").addClass("dis-none");
             $("#title2").removeClass("dis-none");
             $("#fileName").html("("+res.fileName+")");
 
             $("#dataAcqu").addClass("dis-none");
             $("#dataShow").removeClass("dis-none");
-
-            table.render({
-                elem: "#efDataTable",
-                cellMinWidth: 190,
-                height: 'full-110',
-                cols: [res.head],
-                data: res.data,
-                limit: 100
-            });
-
             $("#echartShow").removeClass("dis-none");
+
+
+            var legendData = res.legend;
+            legendData.push("销售概率");
             var myChart = echarts.init(document.getElementById('echartsDiv'));
             var app = {};
             option = null;
             app.title = '采集数据展示';
-
             option = {
                 tooltip: {
                     trigger: 'axis',
-                    axisPointer : {
-                        type : 'shadow'
+                    axisPointer: {
+                        type: 'cross',
+                        crossStyle: {
+                            color: '#999'
+                        }
+                    }
+                },
+                toolbox: {
+                    feature: {
+                        dataView: {show: true, readOnly: false},
+                        magicType: {show: true, type: ['line', 'bar']},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
                     }
                 },
                 legend: {
-                    data: res.legend
-                },
-                grid: {
-                    left: '3%',
-                    right: '4%',
-                    bottom: '3%',
-                    containLabel: true
+                    data:legendData
                 },
                 xAxis: [
                     {
@@ -207,56 +282,39 @@
                         data: res.xAxis,
                         axisPointer: {
                             type: 'shadow'
-                        },
-                        axisLabel: {
-                            interval: 0,
-                            formatter: function (value) {
-                                return value.split("").join("\n");
-                            }
                         }
                     }
                 ],
                 yAxis: [
                     {
                         type: 'value',
+                        name: '销售收益',
+                        splitLine:{
+                            show: false
+                        },
+                        axisLabel: {
+                            formatter: '{value} 元'
+                        }
+                    },
+                    {
+                        type: 'value',
+                        name: '销售概率',
+                        splitLine:{
+                            show: false
+                        },
+                        axisLabel: {
+                            formatter: '{value} '
+                        }
                     }
                 ],
                 series: res.series
             };
+
             if (option && typeof option === "object") {
                 myChart.setOption(option, true);
             }
         }
 
-
-        function loading() {
-            loadingTime = 0;
-            $('body').loading({
-                loadingWidth: 300,
-                title: '请稍等!',
-                name: 'test',
-                discription: [
-                    '正在上传文件 . . .',
-                    '上传文件成功 . . .',
-                    '正在解析数据 . . .',
-                    '数据解析成功 . . .'
-                ],
-                timeSpan: [1, 1, 1, 1], //每条描述显示的时间
-                direction: 'column',
-                type: 'origin',
-                //originBg:'#71EA71',
-                originDivWidth: 40,
-                originDivHeight: 40,
-                originWidth: 6,
-                originHeight: 6,
-                smallLoading: false,
-                loadingMaskBg: 'rgba(0,0,0,0.2)'
-            });
-
-            setTimeout(function () {
-                removeLoading('test');
-            }, 4500);
-        }
     });
 </script>
 </body>

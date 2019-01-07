@@ -31,7 +31,6 @@ public class TransportServiceImpl implements TransportService {
 
         if(transportProblem.TransportationProblemCalculate(transportVo)){
             mapList = transportProblem.resultData;
-
         }else {
             jsonResult = JsonResult.error(500, "运输问题计算错误!"+transportProblem.log);
             return jsonResult;
@@ -40,5 +39,20 @@ public class TransportServiceImpl implements TransportService {
         jsonResult.put("result",mapList);
         CommonUtil.retState(jsonResult,200);
         return jsonResult;
+    }
+
+
+    /**
+     * 计算解决方案中的运输优化问题
+     * @param transportVo
+     */
+    @Override
+    public TransportProblem calculateSolution(TransportVo transportVo) {
+        TransportProblem transportProblem = new TransportProblem();
+        if(transportProblem.TransportationProblemCalculate(transportVo)){
+            return transportProblem;
+        }else {
+            return null;
+        }
     }
 }

@@ -4,12 +4,19 @@ import cn.dmego.odsp.algorithms.model.EData;
 import cn.dmego.odsp.algorithms.model.Graph;
 import cn.dmego.odsp.algorithms.vo.*;
 import cn.dmego.odsp.common.JsonResult;
+import cn.dmego.odsp.common.utils.DateUtil;
+import com.alibaba.excel.EasyExcelFactory;
+import com.alibaba.excel.metadata.Sheet;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -298,6 +305,29 @@ public class CommonUtil {
         return new BigDecimal(value).setScale(scale, BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
+    /**
+     * Int 类型保留 scale 位小数
+     *
+     * @param value
+     * @return
+     */
+    public static Double retainDecimal(Integer value, int scale) {
+        return new BigDecimal(value).setScale(scale, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
+
+    /**
+     * 返回一个int数组最大值的下标
+     */
+    public static int bigValueIndex(int[] data){
+        int big = data[0];
+        for (int i = 1; i < data.length; i++) {
+            if(data[i] > big){
+                return i;
+            }
+        }
+        return 0;
+    }
 
     /**
      * 返回参数中的最大值
@@ -365,6 +395,21 @@ public class CommonUtil {
     }
 
     /**
+     * 矩阵转置 String
+     */
+    public static String[][] transpose(String[][] matrix){
+        int line = matrix.length;
+        int list = matrix[0].length;
+        String[][] trans = new String[list][line];
+        for (int i = 0; i < line; i++) {
+            for (int j = 0; j < list; j++) {
+                trans[j][i] = matrix[i][j];
+            }
+        }
+        return trans;
+    }
+
+    /**
      * 返回二维数组中每一行得最大值
      */
     public static double[] getMax(double[][] arr){
@@ -413,5 +458,116 @@ public class CommonUtil {
             }
         }
         return maxcol;
+    }
+
+
+    /**
+     * 行业解决方案模板文件下载
+     * @param filePath
+     * @param fileName
+     */
+    public static void downLoadTempFile(String filePath, String fileName, HttpServletResponse response) {
+        File file = new File(filePath);
+        if(file.exists()){
+            byte[] buffer = new byte[1024];
+            FileInputStream fis = null;
+            BufferedInputStream bis = null;
+            try {
+                String name = new String(fileName.getBytes("utf-8"), "iso8859-1");
+                response.setContentType("application/force-download");// 设置强制下载不打开
+                response.addHeader("Content-Disposition", "attachment;fileName="+name+".xlsx");// 设置文件名
+
+                fis = new FileInputStream(file);
+                bis = new BufferedInputStream(fis);
+                OutputStream os = response.getOutputStream();
+                int i = bis.read(buffer);
+                while (i != -1){
+                    os.write(buffer,0,i);
+                    i = bis.read(buffer);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }finally {
+                if(bis != null){
+                    try {
+                        bis.close();
+                    }catch (IOException e){
+                        e.printStackTrace();
+                    }
+                }
+                if(fis != null){
+                    try {
+                        fis.close();
+                    }catch (IOException e){
+                        e.printStackTrace();
+                    }
+                }
+            }
+        }
+    }
+
+
+    /**
+     * 将上传的文件保存到指定文件夹下
+     */
+    public static String saveFile(String filePath, MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        //获取文件后缀名
+        String suffixName = fileName.substring(fileName.lastIndexOf("."));
+        //获取文件名
+        String prefixName = fileName.substring(0, fileName.lastIndexOf("."));
+        //获取时间戳
+        String stamp = DateUtil.getStamp();
+        //重新生成文件名
+        fileName = prefixName + "_" + stamp + suffixName;
+
+        File targetFile = new File(filePath);
+        if (!targetFile.exists()) {
+            targetFile.mkdirs();
+        }
+        FileOutputStream out = null;
+        try {
+            out = new FileOutputStream(filePath + fileName);
+            out.write(file.getBytes());
+            out.flush();
+            out.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("文件上传失败!");
+            return null;
+        }
+        return fileName;
+    }
+
+    /**
+     * 读取Excel sheet1 并返回数据
+     */
+    public static List<Object> easyExcel(String filePath) {
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(filePath);
+            return EasyExcelFactory.read(inputStream, new Sheet(1, 0));
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("解析Execl 文件出错");
+            return null;
+        }
+    }
+
+    /**
+     * 读取Excel sheet1 并返回数据
+     */
+    public static List<Object> easyExcel(String filePath,int sheetNo) {
+        InputStream inputStream = null;
+        try {
+            inputStream = new FileInputStream(filePath);
+            return EasyExcelFactory.read(inputStream, new Sheet(sheetNo, 0));
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            System.out.println("解析Execl 文件出错");
+            return null;
+        }
     }
 }

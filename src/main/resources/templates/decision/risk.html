@@ -401,7 +401,7 @@
                                 }
                                 //再判断相加是否等于 1
                                 sum += parseFloat(item[j+"_state"]);
-                                console.log(parseInt(sum))
+                                // console.log(parseInt(sum))
                             } else if (i > 1 && !/^[+-]?\d*\.?\d{0,3}$/.test(item[j + "_state"])) {
                                 isNotNum = true;
                                 break;
@@ -658,10 +658,11 @@
 
 
             }
+            //
+            // console.log(newX)
+            // console.log(newY)
+            // console.log(newData)
 
-            console.log(newX)
-            console.log(newY)
-            console.log(newData)
             var option = {
                 tooltip: {},
                 //工具箱组件

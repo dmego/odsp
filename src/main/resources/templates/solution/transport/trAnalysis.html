@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html>
+
+<head>
+    <title>ODSP</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+    <link rel="stylesheet" href="/assets/css/site.css"/>
+    <link rel="stylesheet" href="/assets/libs/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/assets/libs/dropify/css/dropify.css"/>
+    <style>
+        .numberInfoSubTitle {
+            color: rgba(0, 0, 0, .45);
+            font-size: 14px;
+            height: 22px;
+            line-height: 22px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            word-break: break-all;
+        }
+
+        .numberInfoValue {
+            color: rgba(0, 0, 0, .85);
+            font-size: 24px;
+            margin-top: 10px;
+            height: 32px;
+            line-height: 32px;
+        }
+
+        .numberInfoSuffix {
+            color: rgba(0, 0, 0, .65);
+            font-size: 16px;
+            font-style: normal;
+            margin-left: 4px;
+            line-height: 32px;
+        }
+
+        .layui-input-block {
+            margin-left: 150px;
+            min-height: 36px;
+        }
+
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 15px;
+            width: 120px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+        }
+
+        .layui-table-cell {
+            height: 20px;
+            line-height: 20px;
+        }
+    </style>
+</head>
+
+
+<body class="page-aside-fixed">
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-xs12 layui-col-md8">
+            <div class="layui-card">
+                <div class="layui-card-header">地图可视化
+                    <span id="trsMapTips" style="cursor: pointer;">
+                        <i class="fa fa-info-circle" aria-hidden="true" id="trsMapTipsI"></i>
+                    </span>
+                    <span id="trsMapShow" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="trsMapFa"> 打开图表</i>
+                    </span>
+                </div>
+                <div class="layui-card-body dis-none" id="trsTableDiv" style="height: 500px;">
+                    <table class="layui-hide" id="trsTable" lay-size="sm"></table>
+                </div>
+                <div class="layui-card-body" id="trsMapEchartsDiv">
+                    <div id="trsMapEcharts" style="height: 500px; overflow: hidden;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-xs12 layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">产销可视化
+                    <span id="trsPointTips" style="cursor: pointer;">
+                        <i class="fa fa-info-circle" aria-hidden="true" id="trsPointTipsI"></i>
+                    </span>
+                </div>
+                <div class="layui-card-body">
+                    <div id="trsPointEcharts" style="width: 100%; height: 500px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-xs12">
+            <div class="layui-card">
+                <div class="layui-card-body">
+                    <div class="layui-tab layui-tab-brief" lay-filter="tabZZT">
+                        <ul class="layui-tab-title">
+                            <li lay-id="0">产地角度分析</li>
+                            <li lay-id="1">销地角度分析</li>
+                            <li lay-id="2">最小成本分析</li>
+                        </ul>
+                        <div class="layui-tab-content">
+                            <!--产地角度分析-->
+                            <div class="layui-tab-item layui-show">
+                                <div class="layui-card">
+                                    <div class="layui-card-body" id="producteEchartsDiv">
+                                        <div id="produceEcharts" style="height: 500px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--销地角度分析-->
+                            <div class="layui-tab-item">
+                                <div class="layui-card">
+                                    <div class="layui-card-body" id="saleEchartsDiv">
+                                        <div id="saleEcharts" style="height: 500px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--最小成本分析-->
+                            <div class="layui-tab-item">
+                                <div class="layui-card">
+                                    <div class="layui-card-body" id="costEchartsDiv">
+                                        <div id="costEcharts" style="height: 500px;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-xs12">
+            <div class="layui-card">
+                <div class="layui-card-header">结果说明</div>
+                <div class="layui-card-body" style="height: 200px;overflow: hidden; text-align: center">
+                    <blockquote class="layui-elem-quote layui-quote-nm">
+                        经运输优化后,可得出如下结果<br><hr>
+                        最小运输成本为 : <span style="color: chocolate; font-size: x-large" id="bestValueSpan"></span> (万元)<br>
+                        总剩余产量为 : <span style="color: chocolate; font-size: x-large" id="originSumSpan"></span> (万台)<br>
+                        总剩余销量为 : <span style="color: chocolate; font-size: x-large" id="saleSumSpan"></span>   (万台)<br>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/libs/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="/assets/libs/slimscroll/jquery.slimscroll.js"></script>
+<script type="text/javascript" src="/assets/libs/dropify/js/dropify.js"></script>
+<script type="text/javascript" src="/assets/libs/loading/loading.js"></script>
+
+<script type="text/javascript" src="/assets/libs/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echartsTheme.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/bmap.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/china.js"></script>
+
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script type="text/javascript" src="/assets/js/utils.js"></script>
+<script type="text/javascript" src="/assets/js/tool.js"></script>
+
+<script>
+    //layui建议所有代码都写在layui.use()里面，相当于jquery的$(function(){})
+    var use = layui.use(['table', 'layer', 'form', 'util', 'admin', 'element','index'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var element = layui.element;
+        var index = layui.index;
+
+        var trsData = admin.getTempData("trResData");
+        //如果没有点计算,切换tab
+        if(isEmpty(trsData)){
+            layer.closeAll();
+            layer.open({
+                type: 1,
+                title: false,
+                closeBtn: false,
+                area: '250px;',
+                shade: 0.8,
+                id: 'LAY_layuipro',
+                btn: ['返回计算'],
+                btnAlign: 'c',
+                moveType: 1, //拖拽模式，0或者1,
+                content: '<div style="padding: 30px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;" align="center">您未点击计算<br>请返回数据采集页面!<br></div>',
+                yes: function(layero){
+
+                    //来到数据采集页面
+                    top.layui.index.openTab({
+                        url: 'solution/transport/trCollect',
+                        title: '数据采集'
+                    });
+
+                    //关闭结果分析页面
+                    top.layui.index.closeTab({
+                        url: 'solution/transport/trAnalysis'
+                    });
+
+
+                }
+            });
+        }else{
+            //为结果说明赋值
+            $("#bestValueSpan").html(trsData.costData.bestValue);
+            $("#originSumSpan").html(trsData.costData.originSum);
+            $("#saleSumSpan").html(trsData.costData.saleSum);
+
+            // 渲染优化结果表
+            table.render({
+                elem: "#trsTable",
+                cellMinWidth: 105,
+                height: 'full-130',
+                cols: [trsData.resHead],
+                data: trsData.resData,
+                limit: 100,
+            });
+
+            var myCharts = echarts.init(document.getElementById('trsMapEcharts'),myEchartsTheme);
+            var geoCoordMap = {
+                '上海': [121.4648, 31.2891],
+                '新疆': [87.9236, 43.5883],
+                '甘肃': [103.5901, 36.3043],
+                '北京': [116.4551, 40.2539],
+                '江苏': [118.8062, 31.9208],
+                '广西': [108.479, 23.1152],
+                '江西': [116.0046, 28.6633],
+                '安徽': [117.29, 32.0581],
+                '内蒙古': [111.4124, 40.4901],
+                '黑龙江': [127.9688, 45.368],
+                '天津': [117.4219, 39.4189],
+                '山西': [112.3352, 37.9413],
+                '广东': [113.5107, 23.2196],
+                '四川': [103.9526, 30.7617],
+                '西藏': [91.1865, 30.1465],
+                '云南': [102.9199, 25.4663],
+                '浙江': [119.5313, 29.8773],
+                '湖北': [114.3896, 30.6628],
+                '辽宁': [123.1238, 42.1216],
+                '山东': [117.1582, 36.8701],
+                '海南': [110.3893, 19.8516],
+                '河北': [114.4995, 38.1006],
+                '福建': [119.4543, 25.9222],
+                '青海': [101.4038, 36.8207],
+                '陕西': [109.1162, 34.2004],
+                '贵州': [106.6992, 26.7682],
+                '河南': [113.4668, 34.6234],
+                '重庆': [107.7539, 30.1904],
+                '宁夏': [106.3586, 38.1775],
+                '吉林': [125.8154, 44.2584],
+                '湖南': [113.0823, 28.2568]
+            };
+
+            //根据返回的地图点数据,构建显示点数据
+            var legendData = trsData.triMapData["legend"];
+            var pointData = trsData.triMapData["pointData"];
+
+            var dataArr2 = new Array();
+            for (var item in pointData) {
+                var arr1 = new Array();
+                arr1.push(item,pointData[item]);
+                dataArr2.push(arr1);
+            }
+
+            var planePath = 'path://M1705.06,1318.313v-89.254l-319.9-221.799l0.073-208.063c0.521-84.662-26.629-121.796-63.961-121.491c-37.332-0.305-64.482,36.829-63.961,121.491l0.073,208.063l-319.9,221.799v89.254l330.343-157.288l12.238,241.308l-134.449,92.931l0.531,42.034l175.125-42.917l175.125,42.917l0.531-42.034l-134.449-92.931l12.238-241.308L1705.06,1318.313z';
+
+            var convertData = function (data) {
+                var res = [];
+                for (var i = 0; i < data.length; i++) {
+                    var dataItem = data[i];
+                    var fromCoord = geoCoordMap[dataItem[0].name];
+                    var toCoord = geoCoordMap[dataItem[1].name];
+                    if (fromCoord && toCoord) {
+                        res.push({
+                            fromName: dataItem[0].name,
+                            toName: dataItem[1].name,
+                            coords: [fromCoord, toCoord],
+                            value: dataItem[1].value
+                        });
+                    }
+                }
+                return res;
+            };
+
+            var series = [];
+            dataArr2.forEach(function (item, i) {
+                series.push({
+                        name: item[0],
+                        type: 'lines',
+                        zlevel: 1,
+                        effect: {
+                            show: true,
+                            period: 6,
+                            trailLength: 0.7,
+                            color: '#fff',
+                            symbolSize: 3
+                        },
+                        lineStyle: {
+                            normal: {
+                                width: 0,
+                                curveness: 0.2
+                            }
+                        },
+                        data: convertData(item[1])
+                    },
+                    {
+                        name: item[0],
+                        type: 'lines',
+                        zlevel: 2,
+                        symbol: ['none', 'arrow'],
+                        symbolSize: 10,
+                        effect: {
+                            show: true,
+                            period: 6,
+                            trailLength: 0,
+                            symbol: planePath,
+                            symbolSize: 15
+                        },
+
+                        lineStyle: {
+                            normal: {
+                                width: 1,
+                                opacity: 0.6,
+                                curveness: 0.2
+                            }
+                        },
+                        data: convertData(item[1])
+                    },
+                    {
+                        name: item[0],
+                        type: 'effectScatter',
+                        coordinateSystem: 'geo',
+                        symbolSize: 5,
+                        zlevel: 2,
+                        rippleEffect: {
+                            brushType: 'stroke'
+                        },
+                        data: item[1].map(function (dataItem) {
+                            return {
+                                name: dataItem[1].name,
+                                value: geoCoordMap[dataItem[1].name].concat([dataItem[1].value])
+                            };
+                        })
+                    });
+            });
+            var option = {
+                backgroundColor: '#404a59',
+                title: {
+                    text: '地图可视化',
+                    subtext: '运输优化',
+                    left: 'center',
+                    textStyle: {
+                        color: '#fff'
+                    }
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        restore: {
+                            show: true
+                        },
+                        saveAsImage: {
+                            show: true
+                        }
+                    }
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (params, ticket, callback) {
+                        // console.log(params);
+                        if (params.seriesType == "effectScatter") {
+                            return "销量<br>" + params.data.name + ": " + params.data.value[2]+ " (万台)";
+                        } else if (params.seriesType == "lines") {
+                            return params.data.fromName + "销往" + params.data.toName + ": " + params.data.value + " (万台)";
+                        } else {
+                            return params.name;
+                        }
+                    }
+                },
+                legend: {
+                    orient: 'vertical',
+                    top: 'bottom',
+                    left: 'right',
+                    data: legendData,
+                    textStyle: {
+                        color: '#fff'
+                    },
+                    selectedMode: 'multiple'
+                },
+                geo: {
+                    map: 'china',
+                    label: {
+                        normal: {
+                            show: true,
+                            color: '#fff'
+                        },
+                        emphasis: {
+                            show: true
+                        }
+                    },
+                    roam: true,
+                    itemStyle: {
+                        normal: {
+                            areaColor: '#323c48',
+                            borderColor: '#404a59'
+                        },
+                        emphasis: {
+                            areaColor: '#2a333d'
+                        }
+                    }
+                },
+                series: series
+            };
+
+            myCharts.setOption(option);
+
+            //点击打开关闭图表
+            $("#trsMapShow").click(function () {
+                var isExapnd = $("#trsTableDiv").hasClass('dis-none');
+                if (isExapnd) { //如果是隐藏的,则打开图表
+                    $("#trsTableDiv").removeClass('dis-none');
+                    $("#trsMapEchartsDiv").addClass('dis-none');
+                    $("#trsMapFa").text(" 打开图表");
+
+                } else {
+                    $("#trsTableDiv").addClass('dis-none');
+                    $("#trsMapEchartsDiv").removeClass('dis-none');
+                    $("#trsMapFa").text(" 关闭图表");
+
+                    myCharts.resize();
+                }
+            })
+
+            // 渲染产销可视化图表
+            var  proSaleData = trsData.proSaleData;
+
+            var myCharts2 = echarts.init(document.getElementById('trsPointEcharts'));
+            var option2 = {
+                title: {
+                    text: "产销可视化",
+                    subtext: "运输优化",
+                    top: "top",
+                    left: "left"
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: function (params, ticket, callback) {
+                        if(params.dataType == 'node'){ //节点
+                            if(params.data.saleNum != 0){
+                                return "销量<br>" + params.data.name + ": " + params.data.saleNum + " (万台)";
+                            }else{
+                                return "产量<br>" + params.data.name + ": " + params.data.originNum + " (万台)";
+                            }
+                        }else if(params.dataType == 'edge'){//边
+                            return params.data.source + "销往" + params.data.target + ": " + params.data.value + " (万台)";
+                        }
+
+                    }
+                },
+                legend: [{
+                    tooltip: {
+                        show: true
+                    },
+                    selectedMode: 'false',
+                    bottom: 10,
+                    data: proSaleData.legend
+                }],
+                toolbox: {
+                    show: true,
+                    feature: {
+                        restore: {
+                            show: true
+                        },
+                        saveAsImage: {
+                            show: true
+                        }
+                    }
+                },
+                animationDuration: 3000,
+                animationEasingUpdate: 'quinticInOut',
+                series: [{
+                    name: '产销联系',
+                    type: 'graph',
+                    //layout: 'force',
+                    layout: 'circular',
+                    edgeLength: [10, 50],
+                    circular: {
+                        rotateLabel: true
+                    },
+                    force: {
+                        repulsion: 150,
+                        gravity:150,
+                    },
+                    left: '12%',
+                    right: '12%',
+                    data: proSaleData.seriesData,
+                    links: proSaleData.seriesLinks,
+                    categories: proSaleData.seriesCategories,
+                    focusNodeAdjacency: true,
+                    roam: true,
+                    label: {
+                        normal: {
+                            show: true,
+                            position: 'top'
+                        }
+                    },
+                    lineStyle: {
+                        normal: {
+                            color: 'source',
+                            curveness: 0,
+                            type: "solid"
+                        }
+                    }
+                }]
+            };
+            myCharts2.setOption(option2);
+
+            //切换tab
+            element.on('tab(tabZZT)', function (data) {
+                if ($(this).attr('render')) {
+                    // 不需要渲染
+                    return;
+                }
+                $(this).attr('render', 'done');
+                var index = data.index;
+                if(index == 0){
+
+                    var produceData = trsData.produceData;
+                    var legendData = produceData['legend'];
+                    legendData.push("产量剩余")
+                    var myCharts3 = echarts.init(document.getElementById('produceEcharts'));
+                    var option3 = {
+                        title: {
+                            text: '产地角度分析情况',
+                            x: 'center'
+                        },
+                        tooltip: {
+                            confine: true,
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        legend: {
+                            bottom: '0%',
+                            data: legendData,
+                        },
+                        grid: {
+                            left: '5%',
+                            right: '5%'
+                        },
+                        toolbox: {
+                            feature: {
+                                magicType: {
+                                    type: ['stack', 'bar', 'line', 'tiled']
+                                },
+                                mark: {show: true},
+                                dataZoom: {show: true},
+                                dataView: {show: true, readOnly: false},
+                                restore: {show: true},
+                                saveAsImage: {show: true}
+                            }
+                        },
+                        xAxis: {
+                            data: produceData.xAxis,
+                            axisPointer: {
+                                type: 'shadow'
+                            },
+                        },
+                        yAxis: [{
+                            type: 'value',
+                            name: '销量',
+                            axisLabel: {
+                                formatter: '{value} (万台)'
+                            },
+                            position: 'end'
+                        },{
+                            type:'value',
+                            axisLabel: {
+                                formatter: '{value} (万台)'
+                            },
+                            name: '产量剩余',
+                            nameLocation: 'end',
+                        }],
+                        series: produceData.series
+                    };
+                    myCharts3.setOption(option3);
+                }else if(index == 1){
+
+                    var saleData = trsData.saleData;
+                    var legendData = saleData['legend'];
+                    legendData.push("销量剩余");
+                    var myCharts4 = echarts.init(document.getElementById('saleEcharts'));
+                    var option4 = {
+                        title: {
+                            text: '销地角度分析情况',
+                            x: 'center'
+                        },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                type: 'shadow'
+                            }
+                        },
+                        legend: {
+                            bottom: '0%',
+                            data: saleData.legend,
+                        },
+                        grid: {
+                            left: '5%',
+                            right: '5%'
+                        },
+                        toolbox: {
+                            feature: {
+                                magicType: {
+                                    type: ['line', 'bar', 'stack', 'tiled']
+                                },
+                                mark: {show: true},
+                                dataZoom: {show: true},
+                                dataView: {show: true, readOnly: false},
+                                restore: {show: true},
+                                saveAsImage: {show: true}
+                            }
+                        },
+                        xAxis: {
+                            data: saleData.xAxis,
+                            axisPointer: {
+                                type: 'shadow'
+                            },
+                            axisLabel: {
+                                interval: 0,
+                                formatter: function (value) {
+                                    return value.split("").join("\n");
+                                }
+                            }
+                        },
+                        yAxis: [{
+                            type: 'value',
+                            name: '产量',
+                            axisLabel: {
+                                formatter: '{value} (万台)'
+                            },
+                            position: 'end'
+                        },{
+                            type:'value',
+                            axisLabel: {
+                                formatter: '{value} (万台)'
+                            },
+                            name: '销量剩余',
+                            nameLocation: 'end',
+                        }],
+                        series: saleData.series
+                    };
+                    myCharts4.setOption(option4);
+
+                }else if(index == 2){
+                    var costData = trsData.costData;
+                    var maxNumS = parseInt(costData.bestValue) * 1.5;
+                    var maxNum = maxNumS+''.substring(0, maxNumS+''.lastIndexOf('.'));
+
+                    var myCharts5 = echarts.init(document.getElementById('costEcharts'));
+                    var option5 = {
+                        title: {
+                            text: '最小运输成本分析情况',
+                            x: 'center'
+                        },
+                        tooltip : {
+                            formatter: "{a} <br/>{c} {b}"
+                        },
+                        grid: {
+                            left: '5%',
+                            right: '5%'
+                        },
+                        toolbox: {
+                            show: true,
+                            feature: {
+                                restore: {show: true},
+                                saveAsImage: {show: true}
+                            }
+                        },
+                        series : [
+                            {
+                                name: '总运输成本',
+                                type: 'gauge',
+                                z: 3,
+                                min: 0,
+                                max: maxNum,
+                                splitNumber: 10,
+                                radius: '80%',
+                                axisLine: {            // 坐标轴线
+                                    lineStyle: {       // 属性lineStyle控制线条样式
+                                        width: 10
+                                    }
+                                },
+                                axisTick: {            // 坐标轴小标记
+                                    length: 15,        // 属性length控制线长
+                                    lineStyle: {       // 属性lineStyle控制线条样式
+                                        color: 'auto'
+                                    }
+                                },
+                                splitLine: {           // 分隔线
+                                    length: 20,         // 属性length控制线长
+                                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                        color: 'auto'
+                                    }
+                                },
+                                title : {
+                                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                        fontWeight: 'bolder',
+                                        fontSize: 20,
+                                        fontStyle: 'italic'
+                                    }
+                                },
+                                detail : {
+                                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                        fontWeight: 'bolder'
+                                    }
+                                },
+                                data:[{value: costData.bestValue, name: ' 万元'}]
+                            },
+                            {
+                                name: '总剩余产量',
+                                type: 'gauge',
+                                center: ['24%', '55%'],    // 默认全局居中
+                                radius: '65%',
+                                endAngle:45,
+                                axisLine: {            // 坐标轴线
+                                    lineStyle: {       // 属性lineStyle控制线条样式
+                                        width: 8
+                                    }
+                                },
+                                axisTick: {            // 坐标轴小标记
+                                    length:12,        // 属性length控制线长
+                                    lineStyle: {       // 属性lineStyle控制线条样式
+                                        color: 'auto'
+                                    }
+                                },
+                                splitLine: {           // 分隔线
+                                    length:20,         // 属性length控制线长
+                                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                        color: 'auto'
+                                    }
+                                },
+                                pointer: {
+                                    width:5
+                                },
+                                title: {
+                                    offsetCenter: [0, '-30%'],       // x, y，单位px
+                                },
+                                detail: {
+                                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                        fontWeight: 'bolder'
+                                    }
+                                },
+                                data:[{value: costData.originSum, name: ' 万台'}]
+                            },
+                            {
+                                name: '总剩余销量',
+                                type: 'gauge',
+                                center: ['77%', '55%'],    // 默认全局居中
+                                radius: '65%',
+                                startAngle:140,
+                                endAngle:-45,
+                                axisLine: {            // 坐标轴线
+                                    lineStyle: {       // 属性lineStyle控制线条样式
+                                        width: 8
+                                    }
+                                },
+                                axisTick: {            // 坐标轴小标记
+                                    length:12,        // 属性length控制线长
+                                    lineStyle: {       // 属性lineStyle控制线条样式
+                                        color: 'auto'
+                                    }
+                                },
+                                splitLine: {           // 分隔线
+                                    length:20,         // 属性length控制线长
+                                    lineStyle: {       // 属性lineStyle（详见lineStyle）控制线条样式
+                                        color: 'auto'
+                                    }
+                                },
+                                pointer: {
+                                    width:5
+                                },
+                                title: {
+                                    offsetCenter: [0, '-30%'],       // x, y，单位px
+                                },
+                                detail: {
+                                    textStyle: {       // 其余属性默认使用全局文本样式，详见TEXTSTYLE
+                                        fontWeight: 'bolder'
+                                    }
+                                },
+                                data:[{value: costData.saleSum, name: '万台'}]
+                            }
+                        ]
+                    };
+                    myCharts5.setOption(option5);
+                }
+
+            });
+
+            element.tabChange('tabZZT', 0); //初始选择第一个tab
+        }
+
+    });
+</script>
+</body>
+
+</html>

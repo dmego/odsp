@@ -21,6 +21,8 @@ import java.util.*;
 @Service
 public class UncertainServiceImpl implements UncertainService {
 
+    private Map<String,Integer> bestMap =  new HashMap<>();
+
     @Override
     public JsonResult calculate(DecisionVo uncertainVo) {
         List<Integer> funs = uncertainVo.getFunctions();
@@ -50,6 +52,7 @@ public class UncertainServiceImpl implements UncertainService {
             }
         }
 
+        jsonResult.put("bestMap",bestMap);
         CommonUtil.retState(jsonResult,200);
         return jsonResult;
     }
@@ -59,7 +62,7 @@ public class UncertainServiceImpl implements UncertainService {
      *
      * @return
      */
-    private static List<Map<String,String>> arrayToListMap(DecisionVo uncertainVo, Double[][] matrix, Integer row, Integer col){
+    private  List<Map<String,String>> arrayToListMap(DecisionVo uncertainVo, Double[][] matrix, Integer row, Integer col,String funName){
 
         Integer bestFlag = uncertainVo.getBestFlag();
         Double[] bestArr = uncertainVo.getBestArr();
@@ -76,7 +79,8 @@ public class UncertainServiceImpl implements UncertainService {
                 map.put((j+1)+"_state", String.valueOf(matrix[i][j]));
             }
             if(i == bestFlag){
-                map.put("result", String.valueOf(bestArr[i])+"(最优方案)");
+                map.put("result", bestArr[i]+"(最优方案)");
+                bestMap.put(funName,bestFlag);
             }else{
                 map.put("result", String.valueOf(bestArr[i]));
             }
@@ -122,7 +126,7 @@ public class UncertainServiceImpl implements UncertainService {
      * @col 决策矩阵列数
      * @return 返回计算完成后的 json 数据
      */
-    private static List<Map<String,String>> maxMin(DecisionVo uncertainVo, Double[][] matrix, Integer row, Integer col){
+    private  List<Map<String,String>> maxMin(DecisionVo uncertainVo, Double[][] matrix, Integer row, Integer col){
         Double[] maxMar = new Double[row];
         for (int i = 0; i < row; i++) {
             double min = matrix[i][0]; //让第一个最小
@@ -138,7 +142,7 @@ public class UncertainServiceImpl implements UncertainService {
         //计算最佳方案值与下标，放入Vo对象中
         calBestValue(uncertainVo,row,maxMar,"max");
         //将数组矩阵转为List<Map> 并返回
-        return arrayToListMap(uncertainVo,matrix,row,col);
+        return arrayToListMap(uncertainVo,matrix,row,col,"maxMin");
     }
 
     /**
@@ -148,7 +152,7 @@ public class UncertainServiceImpl implements UncertainService {
      * @row 决策矩阵行数
      * @col 决策矩阵列数
      */
-    private static List<Map<String,String>> maxMax(DecisionVo uncertainVo, Double[][] matrix, Integer row, Integer col){
+    private  List<Map<String,String>> maxMax(DecisionVo uncertainVo, Double[][] matrix, Integer row, Integer col){
         Double[] maxMar = new Double[row];
         for (int i = 0; i < row; i++) {
             double max = matrix[i][0]; //让第一个最大
@@ -164,7 +168,7 @@ public class UncertainServiceImpl implements UncertainService {
         //计算最佳方案值与下标，放入Vo对象中
         calBestValue(uncertainVo,row,maxMar,"max");
         //将数组矩阵转为List<Map> 并返回
-        return arrayToListMap(uncertainVo,matrix,row,col);
+        return arrayToListMap(uncertainVo,matrix,row,col,"maxMax");
     }
 
     /**
@@ -174,7 +178,7 @@ public class UncertainServiceImpl implements UncertainService {
      * @row 决策矩阵行数
      * @col 决策矩阵列数
      */
-    private static List<Map<String,String>> savage(DecisionVo uncertainVo, Double[][] matrix, Integer row, Integer col){
+    private  List<Map<String,String>> savage(DecisionVo uncertainVo, Double[][] matrix, Integer row, Integer col){
         //损失矩阵
         Double[][] loss = new Double[row][col];
         for (int j = 0; j < col; j++) {
@@ -206,7 +210,7 @@ public class UncertainServiceImpl implements UncertainService {
         //计算最佳方案值与下标，放入Vo对象中
         calBestValue(uncertainVo,row,maxMar,"min");
         //将数组矩阵转为List<Map> 并返回
-        return arrayToListMap(uncertainVo,loss,row,col);
+        return arrayToListMap(uncertainVo,loss,row,col,"savage");
     }
 
     /**
@@ -216,7 +220,7 @@ public class UncertainServiceImpl implements UncertainService {
      * @row 决策矩阵行数
      * @col 决策矩阵列数
      */
-    private static List<Map<String,String>> laplace(DecisionVo uncertainVo, Double[][] matrix, Integer row, Integer col){
+    private  List<Map<String,String>> laplace(DecisionVo uncertainVo, Double[][] matrix, Integer row, Integer col){
         Double[] maxMar = new Double[row];
         for (int i = 0; i < row; i++) {
             double sum = 0;
@@ -231,7 +235,7 @@ public class UncertainServiceImpl implements UncertainService {
         //计算最佳方案值与下标，放入Vo对象中
         calBestValue(uncertainVo,row,maxMar,"max");
         //将数组矩阵转为List<Map> 并返回
-        return arrayToListMap(uncertainVo,matrix,row,col);
+        return arrayToListMap(uncertainVo,matrix,row,col,"laplace");
     }
 
     /**
@@ -242,7 +246,7 @@ public class UncertainServiceImpl implements UncertainService {
      * @col 决策矩阵列数
      * @a 乐观系数
      */
-    private static List<Map<String,String>> eclecticism(DecisionVo uncertainVo, Double[][] matrix, Integer row, Integer col, Double a){
+    private  List<Map<String,String>> eclecticism(DecisionVo uncertainVo, Double[][] matrix, Integer row, Integer col, Double a){
         Double[] maxMar = new Double[row];
         for (int i = 0; i < row; i++) {
             double max = matrix[i][0]; //让第一个最大
@@ -264,7 +268,7 @@ public class UncertainServiceImpl implements UncertainService {
         //计算最佳方案值与下标，放入Vo对象中
         calBestValue(uncertainVo,row,maxMar,"max");
         //将数组矩阵转为List<Map> 并返回
-        return arrayToListMap(uncertainVo,matrix,row,col);
+        return arrayToListMap(uncertainVo,matrix,row,col,"eclecticism");
 
     }
 

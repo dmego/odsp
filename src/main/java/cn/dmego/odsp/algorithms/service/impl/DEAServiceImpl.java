@@ -177,6 +177,7 @@ public class DEAServiceImpl implements DEAService {
         Map<String, Object> aMap = new HashMap<>();
         aMap.put("value", aNum);
         aMap.put("name", legend[0]);
+        aMap.put("selected",true);
         valSeriesMapList.add(aMap);
         Map<String, Object> bMap = new HashMap<>();
         bMap.put("value", bNum);
@@ -398,35 +399,35 @@ public class DEAServiceImpl implements DEAService {
         List<Map<String, Object>> weightIndLiat = new ArrayList<>();
         List<Map<String, Object>> weightSerDLiat = new ArrayList<>();
 
-        double[] weightMax = CommonUtil.getMax(weight,1);
-        for (int i = 0; i < nbVar; i++) {
+        double[] weightMax = CommonUtil.getMax(weight,0);
+        for (int i = 0; i < nbDMUs; i++) {
             Map<String, Object> map = new HashMap<>();
-            map.put("name", varChNames[i]);
+            map.put("name", dmuNames[i]);
             map.put("max", weightMax[i]);
             weightIndLiat.add(map);
         }
 
-//        for (int i = 0; i < nbVar; i++) {
-//            double[] varData = new double[nbDMUs];
-//            for (int j = 0; j < nbDMUs; j++) {
-//                varData[j] = weight[j][i];
-//            }
-//            Map<String, Object> data = new HashMap<>();
-//            data.put("name", varChNames[i]);
-//            data.put("value", varData);
-//            weightSerDLiat.add(data);
-//        }
-
-        for (int i = 0; i < nbDMUs; i++) {
+        for (int i = 0; i < nbVar; i++) {
+            double[] varData = new double[nbDMUs];
+            for (int j = 0; j < nbDMUs; j++) {
+                varData[j] = weight[j][i];
+            }
             Map<String, Object> data = new HashMap<>();
-            data.put("name", dmuNames[i]);
-            data.put("value", weight[i]);
+            data.put("name", varChNames[i]);
+            data.put("value", varData);
             weightSerDLiat.add(data);
         }
 
+//        for (int i = 0; i < nbDMUs; i++) {
+//            Map<String, Object> data = new HashMap<>();
+//            data.put("name", dmuNames[i]);
+//            data.put("value", weight[i]);
+//            weightSerDLiat.add(data);
+//        }
+
         weightData.put("head", weightHeadList);
         weightData.put("data", weightDataList);
-        weightData.put("legend", dmuNames);
+        weightData.put("legend", varChNames);
         weightData.put("indicator", weightIndLiat);
         weightData.put("seriesData", weightSerDLiat);
 

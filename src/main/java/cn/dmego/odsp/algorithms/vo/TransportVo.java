@@ -22,7 +22,11 @@ public class TransportVo {
 
     private Integer originNum; //产地个数
 
+    private String[] originNames; //产地名称数组
+
     private Integer salesNum; //销地个数
+
+    private String[] saleNames; //销地名称数组
 
     private String ratioTableData; //json 字符串格式的表格数据
 

@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html>
+
+<head>
+    <title>ODSP</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+    <link rel="stylesheet" href="/assets/css/site.css"/>
+    <link rel="stylesheet" href="/assets/libs/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/assets/libs/dropify/css/dropify.css"/>
+    <style>
+        .numberInfoSubTitle {
+            color: rgba(0, 0, 0, .45);
+            font-size: 14px;
+            height: 22px;
+            line-height: 22px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            word-break: break-all;
+        }
+
+        .numberInfoValue {
+            color: rgba(0, 0, 0, .85);
+            font-size: 24px;
+            margin-top: 10px;
+            height: 32px;
+            line-height: 32px;
+        }
+
+        .numberInfoSuffix {
+            color: rgba(0, 0, 0, .65);
+            font-size: 16px;
+            font-style: normal;
+            margin-left: 4px;
+            line-height: 32px;
+        }
+
+        .layui-input-block {
+            margin-left: 150px;
+            min-height: 36px;
+        }
+
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 15px;
+            width: 120px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+        }
+
+        .layui-table-cell {
+            height: 20px;
+            line-height: 20px;
+        }
+    </style>
+</head>
+
+
+<body class="page-aside-fixed">
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-xs12 layui-col-md8">
+            <div class="layui-card">
+                <div class="layui-card-header">策略分布分析
+                    <span id="decTips1" style="cursor: pointer;">
+                        <i class="fa fa-info-circle" aria-hidden="true" id="decTipsI1"></i>
+                    </span>
+                </div>
+                <div class="layui-card-body" id="decEchartsDiv1">
+                    <div id="decEcharts1" style="height: 500px; overflow: hidden;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-xs12 layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">策略占比分析
+                    <span id="decTips2" style="cursor: pointer;">
+                        <i class="fa fa-info-circle" aria-hidden="true" id="decTipsI2"></i>
+                    </span>
+                </div>
+                <div class="layui-card-body">
+                    <div id="decEcharts2" style="width: 100%; height: 500px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-xs12">
+            <div class="layui-card">
+                <div class="layui-card-header">最优策略图示
+                    <span id="decTips3" style="cursor: pointer;">
+                        <i class="fa fa-info-circle" aria-hidden="true" id="decTipsI3"></i>
+                    </span>
+                </div>
+                <div class="layui-card-body">
+                    <div id="decEcharts3" style="height: 500px;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="layui-col-xs12">
+            <div class="layui-card">
+                <div class="layui-card-header">结果说明</div>
+                <div class="layui-card-body" style="height: 200px;overflow: hidden; text-align: center">
+                    <blockquote class="layui-elem-quote layui-quote-nm">
+                        通过运用 9 种不同的决策模型计算, 可得出如下结果<br><hr>
+                        如果从不确定型角度作决策, <span style="color: chocolate;" id="uncertainSpan"></span> 为最优决策策略!<br>
+                        如果各状况的概率值已知,从风险决策角度作决策, <span style="color: chocolate; " id="riskSpan"></span> 为最优决策策略!<br>
+                        综合考虑,<span style="color: chocolate;" id="bestSpan"></span> 为决策者最佳决策策略!<br>
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/libs/jquery/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="/assets/libs/slimscroll/jquery.slimscroll.js"></script>
+<script type="text/javascript" src="/assets/libs/dropify/js/dropify.js"></script>
+<script type="text/javascript" src="/assets/libs/loading/loading.js"></script>
+
+<script type="text/javascript" src="/assets/libs/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echartsTheme.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/bmap.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/china.js"></script>
+
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script type="text/javascript" src="/assets/js/utils.js"></script>
+<script type="text/javascript" src="/assets/js/tool.js"></script>
+
+<script type="text/javascript" src="/assets/js/solution/decision.js"></script>
+
+<script>
+    //layui建议所有代码都写在layui.use()里面，相当于jquery的$(function(){})
+    var use = layui.use(['table', 'layer', 'form', 'util', 'admin', 'element','index'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+        var element = layui.element;
+        var index = layui.index;
+
+        var decData = admin.getTempData("decResData");
+        //如果没有点计算,切换tab
+        if(isEmpty(decData)){
+            layer.closeAll();
+            layer.open({
+                type: 1,
+                title: false,
+                closeBtn: false,
+                area: '250px;',
+                shade: 0.8,
+                id: 'LAY_layuipro',
+                btn: ['返回计算'],
+                btnAlign: 'c',
+                moveType: 1, //拖拽模式，0或者1,
+                content: '<div style="padding: 30px; line-height: 22px; background-color: #393D49; color: #fff; font-weight: 300;" align="center">您未点击计算<br>请返回数据采集页面!<br></div>',
+                yes: function(layero){
+
+                    //来到数据采集页面
+                    top.layui.index.openTab({
+                        url: 'solution/decision/deCollect',
+                        title: '数据采集'
+                    });
+
+                    //关闭结果分析页面
+                    top.layui.index.closeTab({
+                        url: 'solution/decision/deAnalysis'
+                    });
+                }
+            });
+        }else {
+            //为结果说明赋值
+            $("#bestSpan").html(decData.bestb);
+            $("#uncertainSpan").html(decData.unb);
+            $("#riskSpan").html(decData.rib);
+
+            var myCharts = echarts.init(document.getElementById('decEcharts1'));
+            var graph3 = decData.graph3;
+            var graph3Series = [];
+            for (item in graph3.seriesData) {
+                graph3Series.push({
+                    name: "生产 "+item+" (万台)",
+                    type: 'scatter',
+                    data: graph3.seriesData[item],
+                    symbolSize: function(data) {
+                        if(isEmpty(data[1])){
+                            return 0;
+                        }else {
+                            return 20;
+                        }
+                    },
+                })
+            }
+
+            var option = {
+                title: {
+                    text: '策略分布分析',
+                    subtext: '策略决策',
+                    left: 'center'
+                },
+
+                legend: {
+                    show: true,
+                    top:'top',
+                    right:'left',
+                    orient:'vertical',
+                    data: graph3.legend
+                },
+                tooltip: {
+                    trigger: 'axis',
+                },
+                grid: {
+                    left:'10%',
+                    right:'20%',
+                    bottom:'10%',
+                },
+                xAxis: {
+                    type: 'category',
+                    data:  graph3.xAxis,
+                    axisTick: {
+                        alignWithLabel: true
+                    },
+                    name: '求解模型',
+                    position: 'end',
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,
+                    },
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                },
+                yAxis: {
+                    name: '生产策略(万台)',
+                    position: 'end',
+                    type: 'value',
+                },
+                series: graph3Series
+            };
+
+            myCharts.setOption(option);
+
+
+            // 渲染策略占比分析
+
+            var myCharts2 = echarts.init(document.getElementById('decEcharts2'));
+            var graph2 = decData.graph2;
+            myCharts2.setOption({
+                graphic: {
+                    elements: [{
+                        type: 'image',
+                        style: {
+                            image: imageUrl,
+                            width: 30,
+                            height: 30
+                        },
+                        left: 'center',
+                        top: 'center'
+                    }]
+                },
+                title: {
+                    text: '策略占比分析',
+                    subtext: '策略决策',
+                    left: 'left'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{b} : ({c}%)"
+                },
+                toolbox: {
+                    show: true,
+                    feature: {
+                        dataView: {show: true, readOnly: false},
+                        restore: {show: true},
+                        saveAsImage: {show: true}
+                    }
+                },
+                legend: {
+                    bottom: '0%',
+                    data: graph2.legend
+                },
+                series: [{
+                    type: 'pie',
+                    radius: [30, '55%'],
+                    center: ['50%', '50%'],
+                    roseType: 'radius',
+                    color: ['#5793f3','#f2c955', '#00a69d', '#46d185', '#ec5845'],
+                    data: graph2.series,
+                    label: {
+                        normal: {
+                            textStyle: {
+                                fontSize: 14
+                            },
+                            formatter: function(param) {
+                                return param.percent + '%';
+                            }
+                        }
+                    },
+                    labelLine: {
+                        normal: {
+                            smooth: true,
+                            lineStyle: {
+                                width: 2
+                            }
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            shadowBlur: 30,
+                            shadowColor: 'rgba(0, 0, 0, 0.4)'
+                        }
+                    },
+                    animationType: 'scale',
+                    animationEasing: 'elasticOut',
+                    animationDelay: function(idx) {
+                        return Math.random() * 200;
+                    }
+                }]
+            });
+
+
+            // 渲染策略分布分析
+            //var proSaleData = trsData.proSaleData;
+
+            var myCharts3 = echarts.init(document.getElementById('decEcharts3'));
+            var graph1 = decData.graph1;
+            var colors = ['#5793f3', '#d14a61', '#675bba','#5793f3', '#d14a61', '#675bba','#5793f3', '#d14a61', '#675bba','#5793f3', '#d14a61', '#675bba'];
+            var aCategorys = graph1.aCategorys;
+            var aSeries = [];
+            aCategorys.forEach(function(v,i,a){
+                var name = v;
+                if(v != ''){
+                    var data = [];
+                    var z = 2;
+                    if(i % 2 == 1){
+                        z = 3;
+                    }
+                    for(var j = 0; j < aCategorys.length; j++){
+                        data.push('-');
+                    }
+                    data[i - 1] = 0;
+                    data[i] = graph1.aSeriesData[i];
+                    data[i + 1] = 0;
+                    aSeries.push({
+                        name:name,
+                        type:'line',
+                        smooth: true,
+                        showSymbol: false,
+                        areaStyle:{
+                            normal:{
+                                opacity: 0.7,
+                                color: {
+                                    type: 'linear',
+                                    x: 0,
+                                    y: 0,
+                                    x2: 0,
+                                    y2: 1,
+                                    colorStops: [{
+                                        offset: 0, color: colors[i-1] // 0% 处的颜色
+                                    }, {
+                                        offset: 1, color: colors[i-1] // 100% 处的颜色
+                                    }],
+                                    globalCoord: false // 缺省为 false
+                                }
+                            }
+                        },
+                        data: data,
+                        z: z
+                    });
+                }
+            });
+
+            var option3 = {
+                color: colors,
+                title: {
+                    text: '最优策略图示',
+                    subtext: '策略决策',
+                    left: 'center'
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    formatter: function(params){
+                        var rValue;
+                        params.forEach(function(v,i,a){
+                            if(v.data != 0 && v.data != "-"){
+                                rValue = v.seriesName + ": 生产 " + v.data + " (万台)";
+                            }
+                        })
+                        return rValue;
+                    }
+                },
+                grid: {
+                    left:'5%',
+                    right:'5%',
+                    bottom:'10%',
+                },
+                xAxis: [{
+                    name: '求解模型',
+                    type: 'category',
+                    data: aCategorys,
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 20,
+                    },
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    position: 'end'
+                }],
+                yAxis: [{
+                    name: '生产策略(万台)',
+                    type: 'value',
+                    position: 'end'
+                }],
+                series: aSeries
+            };
+
+            myCharts3.setOption(option3);
+
+        }
+
+    });
+</script>
+</body>
+
+</html>

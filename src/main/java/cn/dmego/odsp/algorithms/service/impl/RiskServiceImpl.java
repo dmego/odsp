@@ -19,6 +19,8 @@ import java.util.*;
 @Service
 public class RiskServiceImpl implements RiskService {
 
+    private Map<String,Integer> bestMap =  new HashMap<>();
+
     @Override
     public JsonResult calculate(DecisionVo riskVo) {
         List<Integer> funs = riskVo.getFunctions(); //方法List
@@ -44,6 +46,7 @@ public class RiskServiceImpl implements RiskService {
             }
         }
 
+        jsonResult.put("bestMap",bestMap);
         CommonUtil.retState(jsonResult,200);
         return jsonResult;
     }
@@ -56,7 +59,7 @@ public class RiskServiceImpl implements RiskService {
      * @param col
      * @return
      */
-    private static List<Map<String, String>> arrayToListMap(DecisionVo riskVo, Double[][] matrix, Integer row, Integer col,String name) {
+    private  List<Map<String, String>> arrayToListMap(DecisionVo riskVo, Double[][] matrix, Integer row, Integer col,String name) {
 
         Integer bestFlag = riskVo.getBestFlag();  //最优方案的下标
         Double[] bestArr = riskVo.getBestArr(); //最优方案数组
@@ -71,13 +74,16 @@ public class RiskServiceImpl implements RiskService {
             }else{
                 map.put("income","行动方案"+i);
                 if(i == bestFlag){
+
+                    bestMap.put(name,bestFlag-1);
+
                     //如果 except 与 value 都不为空
                     if(name.equals("EPVI")){
-                        map.put("result",String.valueOf(bestArr[i]+"(最大期望收益)"));
+                        map.put("result",bestArr[i]+"(最大期望收益)");
                         map.put("except",String.valueOf(riskVo.getExpect()));
                         map.put("value",String.valueOf(riskVo.getValue()));
                     }else{
-                        map.put("result",String.valueOf(bestArr[i]+"(最优方案)"));
+                        map.put("result",bestArr[i]+"(最优方案)");
                     }
                 }else{
                     map.put("result", String.valueOf(bestArr[i]));
@@ -100,7 +106,7 @@ public class RiskServiceImpl implements RiskService {
      * @param row
      * @param col
      */
-    private static List<Map<String,String>> EMV(DecisionVo riskVo, Double[][] matrix, Integer row, Integer col){
+    private  List<Map<String,String>> EMV(DecisionVo riskVo, Double[][] matrix, Integer row, Integer col){
         Double[] maxMar = new Double[row+1]; //记录每种行动方案的结果，第一行是自然状态概率
         Double max = 0.0; //最优结果
         Double temp = 0.0;
@@ -137,7 +143,7 @@ public class RiskServiceImpl implements RiskService {
      * @param row
      * @param col
      */
-    private static List<Map<String,String>> EOL(DecisionVo riskVo, Double[][] matrix, Integer row, Integer col){
+    private  List<Map<String,String>> EOL(DecisionVo riskVo, Double[][] matrix, Integer row, Integer col){
 
         //先求损失矩阵
         Double[][] loss = new Double[row+1][col];
@@ -193,7 +199,7 @@ public class RiskServiceImpl implements RiskService {
      * @param row
      * @param col
      */
-    private static List<Map<String,String>> EVPI(DecisionVo riskVo, Double[][] matrix, Integer row, Integer col){
+    private  List<Map<String,String>> EVPI(DecisionVo riskVo, Double[][] matrix, Integer row, Integer col){
 
         EMV(riskVo,matrix,row,col); //先进行 EMV 决策法计算
         Double max = riskVo.getBestValue();
@@ -228,7 +234,7 @@ public class RiskServiceImpl implements RiskService {
      * @param row
      * @param col
      */
-    private static List<Map<String,String>> EUV(DecisionVo riskVo, Double[][] matrix, Double t, Integer row, Integer col){
+    private  List<Map<String,String>> EUV(DecisionVo riskVo, Double[][] matrix, Double t, Integer row, Integer col){
 
         //先求出收益矩阵中的最大值与最小值
         Double min = matrix[1][0];
