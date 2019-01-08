@@ -1,6 +1,9 @@
 package cn.dmego.odsp.algorithms.controller;
 
+import cn.dmego.odsp.algorithms.service.DEAService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
  * class_name: DEAController
@@ -11,6 +14,16 @@ import org.springframework.stereotype.Controller;
  * creat_time: 22:47
  **/
 @Controller
+@RequestMapping("/analysis/deaModel")
 public class DEAController {
+
+    @Autowired
+    private DEAService deaService;
+
+    @RequestMapping
+    public String deaModel(){
+        return "analysis/deaModel.html";
+    }
+
 
 }

@@ -29,7 +29,7 @@ public class StrategyController {
     private StrategyService strategyService;
 
     @RequestMapping
-    public String strategy(Model model){
+    public String strategy(){
         return "optimization/strategy.html";
     }
 
