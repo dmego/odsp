@@ -1,3 +1,20 @@
+@font-face {
+    font-family: 'iconfont';  /* project id 1000661 */
+    src: url('//at.alicdn.com/t/font_1000661_z4kjl43gyhk.eot');
+    src: url('//at.alicdn.com/t/font_1000661_z4kjl43gyhk.eot?#iefix') format('embedded-opentype'),
+    url('//at.alicdn.com/t/font_1000661_z4kjl43gyhk.woff2') format('woff2'),
+    url('//at.alicdn.com/t/font_1000661_z4kjl43gyhk.woff') format('woff'),
+    url('//at.alicdn.com/t/font_1000661_z4kjl43gyhk.ttf') format('truetype'),
+    url('//at.alicdn.com/t/font_1000661_z4kjl43gyhk.svg#iconfont') format('svg');
+}
+
+.iconfont{
+    font-family:"iconfont" !important;
+    font-size:16px;font-style:normal;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke-width: 0.2px;
+    -moz-osx-font-smoothing: grayscale;}
+
 /** 卡片轮播图样式 */
 .admin-carousel .layui-carousel-ind {
     position: absolute;
@@ -145,6 +162,20 @@
 }
 
 .layadmin-shortcut li .layui-icon {
+    display: inline-block;
+    width: 100%;
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    border-radius: 2px;
+    font-size: 30px;
+    background-color: #F8F8F8;
+    color: #333;
+    transition: all .3s;
+    -webkit-transition: all .3s
+}
+
+.layadmin-shortcut li .fa {
     display: inline-block;
     width: 100%;
     height: 60px;

@@ -6,9 +6,11 @@
     <meta charset="utf-8"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <link rel="stylesheet" href="./assets/libs/layui/css/layui.css"/>
-    <link rel="stylesheet" href="./assets/css/admin.css"/>
-    <link rel="stylesheet" href="./assets/css/console.css">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+    <link rel="stylesheet" href="/assets/css/console.css">
+    <link rel="stylesheet" href="/assets/libs/font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="//at.alicdn.com/t/font_1000661_fgnqsuaro8p.css"/>
 </head>
 
 <body>
@@ -19,164 +21,200 @@
 </div>
 
 <!-- 正文开始 -->
-
 <div class="layui-fluid">
     <div class="layui-row layui-col-space15">
         <div class="layui-col-md8">
             <div class="layui-row layui-col-space15">
-                <div class="layui-col-md6">
-                    <div class="layui-card">
-                        <div class="layui-card-header">快捷方式</div>
+                <div class="layui-col-md12">
+                    <div class="layui-card" style="overflow: hidden;">
+                        <div class="layui-card-header">模型直达</div>
                         <div class="layui-card-body">
-
-                            <div class="layui-carousel layadmin-carousel layadmin-shortcut">
+                            <div class="layui-carousel layadmin-carousel layadmin-shortcut" data-autoplay="true"
+                                 data-anim="fade">
                                 <div carousel-item>
                                     <ul class="layui-row layui-col-space10">
-                                        <li class="layui-col-xs3">
+                                        <li class="layui-col-xs2">
                                             <a lay-href="home/homepage1.html">
-                                                <i class="layui-icon layui-icon-console"></i>
-                                                <cite>主页一</cite>
+                                                <i class="layui-icon iconfont icon-ku"></i>
+                                                <cite>悲观决策法</cite>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs3">
+                                        <li class="layui-col-xs2">
                                             <a lay-href="home/homepage2.html">
-                                                <i class="layui-icon layui-icon-chart"></i>
-                                                <cite>主页二</cite>
+                                                <i class="layui-icon iconfont icon-xiao2"></i>
+                                                <cite>乐观决策法</cite>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs3">
+                                        <li class="layui-col-xs2">
                                             <a lay-href="component/layer/list.html">
-                                                <i class="layui-icon layui-icon-template-1"></i>
-                                                <cite>弹层</cite>
+                                                <i class="layui-icon iconfont icon-jihui"></i>
+                                                <cite>最小机会损失准则</cite>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs3">
+                                        <li class="layui-col-xs2">
                                             <a layadmin-event="im">
-                                                <i class="layui-icon layui-icon-chat"></i>
-                                                <cite>聊天</cite>
+                                                <i class="layui-icon iconfont icon-xianden"></i>
+                                                <cite>等概率准则</cite>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs3">
+                                        <li class="layui-col-xs2">
                                             <a lay-href="component/progress/index.html">
-                                                <i class="layui-icon layui-icon-find-fill"></i>
-                                                <cite>进度条</cite>
+                                                <i class="layui-icon iconfont icon-zhong"></i>
+                                                <cite>折中主义准则</cite>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs3">
+                                        <li class="layui-col-xs2">
                                             <a lay-href="app/workorder/list.html">
-                                                <i class="layui-icon layui-icon-survey"></i>
-                                                <cite>工单</cite>
+                                                <i class="layui-icon iconfont icon-mv"></i>
+                                                <cite>EMV决策法</cite>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs3">
+                                        <li class="layui-col-xs2">
                                             <a lay-href="user/user/list.html">
-                                                <i class="layui-icon layui-icon-user"></i>
-                                                <cite>用户</cite>
+                                                <i class="layui-icon iconfont icon-eol"></i>
+                                                <cite>EOL决策法</cite>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs3">
+                                        <li class="layui-col-xs2">
                                             <a lay-href="set/system/website.html">
-                                                <i class="layui-icon layui-icon-set"></i>
-                                                <cite>设置</cite>
+                                                <i class="layui-icon iconfont icon-PI1"></i>
+                                                <cite>EVPI决策法</cite>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs2">
+                                            <a lay-href="set/user/info.html">
+                                                <i class="layui-icon iconfont icon-uv1"></i>
+                                                <cite>EUV决策法</cite>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs2">
+                                            <a lay-href="set/user/info.html">
+                                                <i class="layui-icon iconfont icon-xianxing"></i>
+                                                <cite>线性规划</cite>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs2">
+                                            <a lay-href="set/user/info.html">
+                                                <i class="layui-icon iconfont icon-num"></i>
+                                                <cite>整数规划</cite>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs2">
+                                            <a lay-href="set/user/info.html">
+                                                <i class="layui-icon iconfont icon-01"></i>
+                                                <cite>0-1规划</cite>
                                             </a>
                                         </li>
                                     </ul>
                                     <ul class="layui-row layui-col-space10">
-                                        <li class="layui-col-xs3">
+                                        <li class="layui-col-xs2">
                                             <a lay-href="set/user/info.html">
-                                                <i class="layui-icon layui-icon-set"></i>
-                                                <cite>我的资料</cite>
+                                                <i class="layui-icon iconfont icon-011"></i>
+                                                <cite>0-1背包</cite>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs3">
+                                        <li class="layui-col-xs2">
                                             <a lay-href="set/user/info.html">
-                                                <i class="layui-icon layui-icon-set"></i>
-                                                <cite>我的资料</cite>
+                                                <i class="layui-icon iconfont icon-many"></i>
+                                                <cite>多重背包</cite>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs3">
+                                        <li class="layui-col-xs2">
                                             <a lay-href="set/user/info.html">
-                                                <i class="layui-icon layui-icon-set"></i>
-                                                <cite>我的资料</cite>
+                                                <i class="layui-icon iconfont icon-ziyuan"></i>
+                                                <cite>完全背包</cite>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs3">
+                                        <li class="layui-col-xs2">
                                             <a lay-href="set/user/info.html">
-                                                <i class="layui-icon layui-icon-set"></i>
-                                                <cite>我的资料</cite>
+                                                <i class="layui-icon iconfont icon-fenpei"></i>
+                                                <cite>资源分配</cite>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs3">
+                                        <li class="layui-col-xs2">
                                             <a lay-href="set/user/info.html">
-                                                <i class="layui-icon layui-icon-set"></i>
-                                                <cite>我的资料</cite>
+                                                <i class="layui-icon iconfont icon-shengchan"></i>
+                                                <cite>生产库存</cite>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs3">
+                                        <li class="layui-col-xs2">
                                             <a lay-href="set/user/info.html">
-                                                <i class="layui-icon layui-icon-set"></i>
-                                                <cite>我的资料</cite>
+                                                <i class="layui-icon iconfont icon-shortline"></i>
+                                                <cite>最短路径</cite>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs3">
+                                        <li class="layui-col-xs2">
                                             <a lay-href="set/user/info.html">
-                                                <i class="layui-icon layui-icon-set"></i>
-                                                <cite>我的资料</cite>
+                                                <i class="layui-icon iconfont icon-scshu"></i>
+                                                <cite>最小生成树</cite>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs3">
+                                        <li class="layui-col-xs2">
                                             <a lay-href="set/user/info.html">
-                                                <i class="layui-icon layui-icon-set"></i>
-                                                <cite>我的资料</cite>
+                                                <i class="layui-icon iconfont icon-liuliang"></i>
+                                                <cite>最大流</cite>
                                             </a>
                                         </li>
-                                    </ul>
-
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-                </div>
-                <div class="layui-col-md6">
-                    <div class="layui-card">
-                        <div class="layui-card-header">待办事项</div>
-                        <div class="layui-card-body">
-
-                            <div class="layui-carousel layadmin-carousel layadmin-backlog">
-                                <div carousel-item>
-                                    <ul class="layui-row layui-col-space10">
-                                        <li class="layui-col-xs6">
-                                            <a lay-href="app/content/comment.html" class="layadmin-backlog-body">
-                                                <h3>待审评论</h3>
-                                                <p><cite>66</cite></p>
+                                        <li class="layui-col-xs2">
+                                            <a lay-href="set/user/info.html">
+                                                <i class="layui-icon iconfont icon-feiyong"></i>
+                                                <cite>最小费用最大流</cite>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs6">
-                                            <a lay-href="app/forum/list.html" class="layadmin-backlog-body">
-                                                <h3>待审帖子</h3>
-                                                <p><cite>12</cite></p>
+                                        <li class="layui-col-xs2">
+                                            <a lay-href="set/user/info.html">
+                                                <i class="layui-icon iconfont icon-yunshu"></i>
+                                                <cite>表上作业法</cite>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs6">
-                                            <a lay-href="template/goodslist.html" class="layadmin-backlog-body">
-                                                <h3>待审商品</h3>
-                                                <p><cite>99</cite></p>
+                                        <li class="layui-col-xs2">
+                                            <a lay-href="set/user/info.html">
+                                                <i class="layui-icon iconfont icon-BBC"></i>
+                                                <cite>BBC模型</cite>
                                             </a>
                                         </li>
-                                        <li class="layui-col-xs6">
-                                            <a href="javascript:;" onclick="layer.tips('不跳转', this, {tips: 3});"
-                                               class="layadmin-backlog-body">
-                                                <h3>待发货</h3>
-                                                <p><cite>20</cite></p>
+                                        <li class="layui-col-xs2">
+                                            <a lay-href="set/user/info.html">
+                                                <i class="layui-icon iconfont icon-cr"></i>
+                                                <cite>CCR模型</cite>
                                             </a>
                                         </li>
                                     </ul>
                                     <ul class="layui-row layui-col-space10">
-                                        <li class="layui-col-xs6">
-                                            <a href="javascript:;" class="layadmin-backlog-body">
-                                                <h3>待审友情链接</h3>
-                                                <p><cite style="color: #FF5722;">5</cite></p>
+                                        <li class="layui-col-xs2">
+                                            <a lay-href="set/user/info.html">
+                                                <i class="layui-icon iconfont icon-drsxitong"></i>
+                                                <cite>DRS模型</cite>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs2">
+                                            <a lay-href="set/user/info.html">
+                                                <i class="layui-icon iconfont icon-IR"></i>
+                                                <cite>IRS模型</cite>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs2">
+                                            <a lay-href="set/user/info.html">
+                                                <i class="layui-icon iconfont icon-GRS"></i>
+                                                <cite>GRS模型</cite>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs2">
+                                            <a lay-href="set/user/info.html">
+                                                <i class="layui-icon iconfont icon-bm"></i>
+                                                <cite>SBM模型</cite>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs2">
+                                            <a lay-href="set/user/info.html">
+                                                <i class="layui-icon iconfont icon-nc"></i>
+                                                <cite>NCN模型</cite>
+                                            </a>
+                                        </li>
+                                        <li class="layui-col-xs2">
+                                            <a lay-href="set/user/info.html">
+                                                <i class="layui-icon iconfont icon-sc"></i>
+                                                <cite>NDSC模型</cite>
                                             </a>
                                         </li>
                                     </ul>
@@ -187,104 +225,86 @@
                 </div>
                 <div class="layui-col-md12">
                     <div class="layui-card">
-                        <div class="layui-card-header">数据概览</div>
+                        <div class="layui-card-header">平台概览</div>
                         <div class="layui-card-body">
-
-                            <div class="layui-carousel layadmin-carousel layadmin-dataview" data-anim="fade"
-                                 lay-filter="LAY-index-dataview">
-                                <div carousel-item id="LAY-index-dataview">
-                                    <div><i class="layui-icon layui-icon-loading1 layadmin-loading"></i></div>
-                                    <div></div>
-                                    <div></div>
-                                </div>
-                            </div>
-
+                            <div id="echartsDiv1" style="height: 400px; overflow: hidden;"></div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
-
         <div class="layui-col-md4">
-            <div class="layui-card">
-                <div class="layui-card-header">版本信息</div>
-                <div class="layui-card-body layui-text">
-                    <table class="layui-table">
-                        <colgroup>
-                            <col width="100">
-                            <col>
-                        </colgroup>
-                        <tbody>
-                        <tr>
-                            <td>当前版本</td>
-                            <td>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>基于框架</td>
-                            <td>
-                                <script type="text/html" template>
 
-                                </script>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>主要特色</td>
-                            <td>零门槛 / 响应式 / 清爽 / 极简</td>
-                        </tr>
-                        <tr>
-                            <td>获取渠道</td>
-                            <td style="padding-bottom: 0;">
+            <div class="layui-row layui-col-space15">
+                <!--解决方案-->
+                <div class="layui-col-md12">
+                    <div class="layui-card" style="height: 248px; overflow: hidden;">
+                        <div class="layui-card-header">解决方案</div>
+                        <div class="layui-card-body ">
+                            <div class="layui-carousel layadmin-carousel layadmin-news" data-autoplay="true"
+                                 data-anim="fade"
+                                 lay-filter="news">
+                                <div carousel-item>
+                                    <div>
+                                        <fieldset class="layui-elem-field">
+                                            <legend style="color: #009688">区域经济发展效率评价</legend>
+                                            <div class="layui-field-box">
+                                                &nbsp; &nbsp;&nbsp;运用DEA模型来分析区域经济发展中投入与产出比率问题。
+                                                通过多种模型结果的深入分析挖掘，决策者就能对投入冗余额产出不足额、达到DEA有效值等数据的分析，
+                                                调整下阶段经济发展中的投入规模，使评价单元达到DEA有效。
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div>
+                                        <fieldset class="layui-elem-field">
+                                            <legend style="color: #009688">运输配送成本优化</legend>
+                                            <div class="layui-field-box">
+                                                &nbsp; &nbsp;&nbsp;通过结合实际企业在运输企业产品中成本优化遇到的问题，运用于运筹学中运输问题的表上作业法模型，
+                                                构建企业将生产的产品从产地运往销地的最低运输成本解决方案，并结合地图可视化展示
+                                                企业将产品由产地运往销地，以及运输的具体产品量。
+                                            </div>
+                                        </fieldset>
+                                    </div>
+                                    <div>
+                                        <fieldset class="layui-elem-field">
+                                            <legend style="color: #009688">企业生产策略决策</legend>
+                                            <div class="layui-field-box">
+                                                &nbsp; &nbsp;&nbsp;企业在选择生产策略的过程中需要考虑市场状况，自身实际情况等因素；
+                                                通过运用运筹学里的风险决策法和不确定型决策法包含的9大决策模型，计算出每个模型下的最优策略，
+                                                然后分析得出在不同情况下的最佳策略，以及综合考虑下的最佳策略。
+                                            </div>
+                                        </fieldset>
 
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="layui-card">
-                <div class="layui-card-header">效果报告</div>
-                <div class="layui-card-body layadmin-takerates">
-                    <div class="layui-progress" lay-showPercent="yes">
-                        <h3>转化率（日同比 28% <span class="layui-edge layui-edge-top" lay-tips="增长"
-                                              lay-offset="-15"></span>）</h3>
-                        <div class="layui-progress-bar" lay-percent="65%"></div>
-                    </div>
-                    <div class="layui-progress" lay-showPercent="yes">
-                        <h3>签到率（日同比 11% <span class="layui-edge layui-edge-bottom" lay-tips="下降"
-                                              lay-offset="-15"></span>）</h3>
-                        <div class="layui-progress-bar" lay-percent="32%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="layui-card">
-                <div class="layui-card-header">实时监控</div>
-                <div class="layui-card-body layadmin-takerates">
-                    <div class="layui-progress" lay-showPercent="yes">
-                        <h3>CPU使用率</h3>
-                        <div class="layui-progress-bar" lay-percent="58%"></div>
-                    </div>
-                    <div class="layui-progress" lay-showPercent="yes">
-                        <h3>内存占用率</h3>
-                        <div class="layui-progress-bar layui-bg-red" lay-percent="90%"></div>
+                <!--平台优势-->
+                <div class="layui-col-md12">
+                    <div class="layui-card">
+                        <div class="layui-card-header">平台优势</div>
+                        <div class="layui-card-body">
+                            <div id="echartsDiv2" style="height: 400px; overflow: hidden;"></div>
+                        </div>
                     </div>
                 </div>
+
             </div>
-
-
-
         </div>
     </div>
 </div>
 
 <!-- js部分 -->
-<script type="text/javascript" src="./assets/libs/layui/layui.js"></script>
-<script type="text/javascript" src="./assets/js/common.js"></script>
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/js/common.js"></script>
 <script type="text/javascript" src="/assets/libs/echarts/echarts.min.js"></script>
 <script type="text/javascript" src="/assets/libs/echarts/echarts-gl.min.js"></script>
+
+<script type="text/javascript" src="/assets/js/solution/decision.js"></script>
+<script type="text/javascript" src="/assets/js/console.js"></script>
+
 <script>
     // layui建议所有代码都写在layui.use()里面，相当于jquery的$(function(){})
     layui.use(["admin", "carousel"], function () {
@@ -292,7 +312,14 @@
             t = (layui.admin, layui.carousel),
             a = layui.element,
             i = layui.device();
-        e(".layadmin-carousel").each(function () {
+
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+
+        $(".layadmin-carousel").each(function () {
             var a = e(this);
             t.render({
                 elem: this,
@@ -304,6 +331,12 @@
                 anim: a.data("anim")
             })
         })
+
+        var myCharts1 = echarts.init(document.getElementById('echartsDiv1'));
+        myCharts1.setOption(option1);
+
+        var myCharts2 = echarts.init(document.getElementById('echartsDiv2'));
+        myCharts2.setOption(option3);
 
 
     });
