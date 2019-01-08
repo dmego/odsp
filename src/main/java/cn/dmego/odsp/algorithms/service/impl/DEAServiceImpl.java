@@ -21,6 +21,93 @@ import java.util.*;
 public class DEAServiceImpl implements DEAService {
 
 
+
+    @Override
+    public JsonResult calculate(DEAVo deaVo) {
+        JsonResult jsonResult = new JsonResult();
+
+        String[] funs = deaVo.getFunctions();
+        int nbDMUs = deaVo.getDumNum(); //决策单元数
+        int inputNum = deaVo.getInputNum();
+        int outputNum = deaVo.getOutputNum();
+        int nbVar = inputNum + outputNum; //投入与产出总指标数
+
+        String[] dmuNames = deaVo.getDmuNames();
+        String[] variableNames = deaVo.getVariableNames();
+
+        double rtsLower = deaVo.getRtsLower();
+        double rtsUpper = deaVo.getRtsUpper();
+
+        double[][] matrix = deaVo.getMatrix(); //所有数据数组
+
+
+        //初始化 VariableOrientation 数据
+        VariableOrientation[] variableOrientations = new VariableOrientation[nbVar];
+        for (int i = 0; i < nbVar; i++) {
+            if (i < inputNum) {//前 input.length 项为投入
+                variableOrientations[i] = VariableOrientation.INPUT;
+            } else {//后面的为产出
+                variableOrientations[i] = VariableOrientation.OUTPUT;
+            }
+        }
+
+        //初始化 VariableTypes 数据
+        VariableType[] variableTypes = new VariableType[nbVar];
+        for (int i = 0; i < nbVar; i++) {
+            variableTypes[i] = VariableType.STANDARD;
+        }
+
+        //开始计算
+        try{
+            for (int i = 0; i < funs.length; i++) {
+                if(funs[i].equals("1")){ //CCR
+                    DEAProblem deaProblem = rendDEAProblem(nbDMUs, nbVar, dmuNames, variableNames, variableOrientations, variableTypes, matrix, ModelType.CCR_I);
+                    getDEAResult(deaProblem, nbDMUs,"1",jsonResult);
+
+
+                }else if(funs[i].equals("2")){ //BCC
+                    DEAProblem deaProblem = rendDEAProblem(nbDMUs, nbVar, dmuNames, variableNames, variableOrientations, variableTypes, matrix, ModelType.BCC_I);
+                    getDEAResult(deaProblem, nbDMUs,"2",jsonResult);
+
+                }else if(funs[i].equals("3")){ //DRS
+                    DEAProblem deaProblem = rendDEAProblem(nbDMUs, nbVar, dmuNames, variableNames, variableOrientations, variableTypes, matrix, ModelType.DRS_I);
+                    getDEAResult(deaProblem, nbDMUs,"3",jsonResult);
+
+                }else if(funs[i].equals("4")){ //GRS
+                    DEAProblem deaProblem = rendDEAProblem(nbDMUs, nbVar, dmuNames, variableNames, variableOrientations, variableTypes, matrix, ModelType.GRS_I);
+                    deaProblem.setRTSLowerBound(rtsLower);
+                    deaProblem.setRTSUpperBound(rtsUpper);
+                    getDEAResult(deaProblem, nbDMUs,"4",jsonResult);
+
+                }else if(funs[i].equals("5")){ //IRS
+                    DEAProblem deaProblem = rendDEAProblem(nbDMUs, nbVar, dmuNames, variableNames, variableOrientations, variableTypes, matrix, ModelType.IRS_I);
+                    getDEAResult(deaProblem, nbDMUs,"5",jsonResult);
+
+                }else if(funs[i].equals("6")){ //SBM
+                    DEAProblem deaProblem = rendDEAProblem(nbDMUs, nbVar, dmuNames, variableNames, variableOrientations, variableTypes, matrix, ModelType.SBM);
+                    getDEAResult(deaProblem, nbDMUs,"6",jsonResult);
+
+                }else if(funs[i].equals("7")){ //NC
+                    DEAProblem deaProblem = rendDEAProblem(nbDMUs, nbVar, dmuNames, variableNames, variableOrientations, variableTypes, matrix, ModelType.NC_I);
+                    getDEAResult(deaProblem, nbDMUs,"7",jsonResult);
+
+                }else if(funs[i].equals("8")){ //ND
+                    DEAProblem deaProblem = rendDEAProblem(nbDMUs, nbVar, dmuNames, variableNames, variableOrientations, variableTypes, matrix, ModelType.ND_I);
+                    getDEAResult(deaProblem, nbDMUs,"8",jsonResult);
+                }
+            }
+
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        //如果没有出现计算错误
+        if(!jsonResult.get("code").equals("500")){
+            CommonUtil.retState(jsonResult,200);
+        }
+        return jsonResult;
+    }
+
     /**
      * 解决方案下效率评价DEA求解
      */
@@ -604,6 +691,7 @@ public class DEAServiceImpl implements DEAService {
     }
 
 
+
     /**
      * 对 一维数组数据进行保留 p 位小数处理
      */
@@ -670,4 +758,35 @@ public class DEAServiceImpl implements DEAService {
         deaProblem.setModelType(modelType);
         return deaProblem;
     }
+
+
+
+    private void getDEAResult(DEAProblem deaProblem,int nbDMUs,String resultName,JsonResult jsonResult){
+
+        List<Map<String,Object>> mapList = new ArrayList<>();
+
+        try{
+            deaProblem.solve();
+            double[] objectives = retainDecimal(deaProblem.getObjectives(), 2); //效率值
+            boolean[] efficient = deaProblem.getSolution().getEfficient(); //DEA有效性
+            int[] ranks = deaProblem.getRanks(true, RankingType.STANDARD, 10);//排名
+
+            for (int j = 0; j < nbDMUs; j++) {
+                Map<String,Object> map = new HashMap<>();
+                map.put("dum","DUM "+(j+1));
+                map.put("objectives",objectives[j]);
+                map.put("efficient",efficient[j] ? "有效" : "无效");
+                map.put("ranks",ranks[j]);
+                mapList.add(map);
+            }
+        }catch (Exception e){
+            System.out.println("DEA计算错误,msg = "+e);
+            jsonResult.setCode(500);
+            jsonResult.put("msg","DEA计算错误,msg = "+e);
+        }
+        jsonResult.setCode(200);
+        jsonResult.put(resultName,mapList);
+    }
+
+
 }

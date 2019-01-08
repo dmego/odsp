@@ -33,8 +33,23 @@ $('#fl-btn').click(function () {
 });
 
 
-function returnMax(chartsData,action,state) {
-
+function renderTable1(tableId, head, data) {
+    table.render({
+        elem: tableId,
+        cellMinWidth: 115,
+        cols: [head],
+        data: data
+    });
 }
+
+function renderTable2(tableId, head, data) {
+    table.render({
+        elem: tableId,
+        cellMinWidth: 115,
+        cols: head,
+        data: data
+    });
+}
+
 
 

@@ -19,13 +19,25 @@ public class DEAVo {
 
     private String[] dmuNames; //DMU 决策单元数组
 
+    private Integer dumNum; //决策单元数
+
     private String[] variableNames; //变量指标简写数组
 
     private String[] varCHNames; //变量指标中文数组
 
     private String[] input; //投入指标集合
 
+    private Integer inputNum;
+
     private String[] output; //产出指标集合
+
+    private Integer outputNum;
+
+    private Double rtsLower; //rts 下界
+
+    private Double rtsUpper; //rts 上界
+
+    private String ratioTableData; //json 字符串格式的表格数据
 
     private double[][] matrix; //矩阵数据数组
 

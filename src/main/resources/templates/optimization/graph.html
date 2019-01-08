@@ -427,13 +427,13 @@
 
         // 编辑系数之前先校验数据
         function checkActAte(item) {
-                if (item < 1) {
-                    layer.msg("弧个数必须大于1!");
-                    return false;
-                }else if (item > 100) {
-                    layer.msg("最多添加 100 条弧!");
-                    return false;
-                }
+            if(!/^[1-9]\d*$/.test(item)){
+                layer.msg("弧个数必须是大于 0 的整数!");
+                return false;
+            } else if (item > 100) {
+                layer.msg("最多添加 100 条弧!");
+                return false;
+            }
             return true;
         }
 
@@ -682,8 +682,8 @@
                         return '弧个数已改变，请重新设置系数!';
                     }
                 }
-                if(value < 1){
-                    return '弧个数不能小于1!';
+                if(!/^[1-9]\d*$/.test(value)){
+                    return '弧个数必须是大于 0 的整数!';
                 }else if (value > 100) {
                     return '最多添加 100 条弧!';
                 }

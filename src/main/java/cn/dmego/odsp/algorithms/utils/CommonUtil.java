@@ -261,7 +261,40 @@ public class CommonUtil {
         transportVo.setPlan(plan);
     }
 
+
     /**
+     * 数据包络分析，对前台的json数据进行处理,方便后面计算
+     * @param deaVo
+     */
+    public static void jsonToArray(DEAVo deaVo){
+        String jsonStr = deaVo.getRatioTableData(); //json 字符串
+        int dumNum = deaVo.getDumNum();
+        int inputNum = deaVo.getInputNum();
+        int outputNum = deaVo.getOutputNum();
+        int varNum = inputNum + outputNum; //总指标数
+
+        //先定义一个 二维数组
+        double tableData[][] = new double[dumNum][varNum];
+        //将 JSON 字符串转成矩阵数组
+        JSONArray array = JSONObject.parseArray(jsonStr);
+        for (int i = 0; i < array.size(); i++) {
+            JSONObject jo = array.getJSONObject(i);
+            double tempArr[] = new double[varNum];
+            for (int j = 1; j <= varNum; j++) {
+                if(j <= inputNum){
+                    Double temp = jo.getDouble("input_"+j);
+                    tempArr[j - 1] = temp;
+                }else {
+                    Double temp = jo.getDouble("output_"+(j-inputNum));
+                    tempArr[j - 1] = temp;
+                }
+            }
+            tableData[i] = tempArr;
+        }
+        deaVo.setMatrix(tableData);
+     }
+
+     /**
      * 设置返回json中的 code 参数
      *
      * @param calculate

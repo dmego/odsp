@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ODSP</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+    <style>
+        .layui-table-cell {
+            overflow: visible !important;
+        }
+
+        td .layui-form-select {
+            margin-top: -10px;
+            margin-left: -15px;
+            margin-right: -15px;
+        }
+    </style>
+</head>
+
+<body>
+<table class="layui-table" id="ratio" lay-filter="ratio"></table>
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script type="text/javascript" src="/assets/js/utils.js"></script>
+
+<script>
+    // layui建议所有代码都写在layui.use()里面，相当于jquery的$(function(){})
+    layui.use(['table', 'layer', 'form', 'util', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+
+        var dumNum = parseInt("${dum}"); //评价单元数
+        var inputNum =  parseInt("${input}"); //投入指标数
+        var outputNum =  parseInt("${output}"); //产出指标数
+        var isUpd = "${isUpd}"; //是否是更新数据表
+
+        var Head, Data;
+
+        var data = admin.getTempData('analysisData');
+        if (isNotEmpty(data)) {
+            Head = data.Head;
+            Data = data.Data;
+        }
+        //如果是更新数据表
+        if (isUpd == "isup") {
+            renderTable();
+        }
+        //如果是初始化一张空表
+        else if (isUpd == "noup") {
+            newTable();
+        }
+
+
+        table.render({
+            id: 'ratio',
+            elem: '#ratio',
+            limit: 100,
+            height: 'full-110',
+            cellMinWidth: 110,
+            cols: Head,
+            data: Data
+        });
+
+        var rag2 = /^[+-]?\d*\.?\d{0,3}$/;
+
+        //监听单元格编辑
+        table.on('edit(ratio)', function (obj) {
+            var value = obj.value; //得到修改后的值
+            if (value.trim().length == 0) {
+                layer.msg('字段不能为空');
+            } else if (!rag2.test(value)) {
+                layer.msg('字段只能为整数或保留3位的小数');
+            }
+        });
+
+
+        function renderTable() {
+            for (var i = 0; i < Head[1].length; i++) {
+                Head[1][i].edit = 'text';
+            }
+        }
+
+        //初始化新的空表格
+        function newTable() {
+            var data = [];
+            //先生成Head
+            var returnHead = [],returnHead2 = [];
+            var head  =[], head1 = [],head2 = [];
+            var dum = {field: 'dum', title: '评价单元/指标', rowspan:2, minWidth:120 };
+            var input = {align: 'center', title: '投入指标', colspan:inputNum };
+            var output = {align: 'center', title: '产出指标', colspan:outputNum };
+
+            head1.push(dum); head1.push(input); head1.push(output);
+
+            for (var i = 1; i <= inputNum + outputNum; i++) {
+                var col1,col2;
+                if(i<= inputNum){
+                     col1 = {field: 'input_' + i, title: 'INPUT ' + i, edit: 'text'};
+                     col2 = {field: 'input_' + i, title: 'INPUT ' + i};
+                }else {
+                     col1 = {field: 'output_' + (i - inputNum), title: 'OUTPUT ' + (i - inputNum), edit: 'text'};
+                     col2 = {field: 'output_' + (i - inputNum), title: 'OUTPUT ' + (i - inputNum)};
+                }
+                head2.push(col1);
+                returnHead2.push(col2);
+            }
+
+            head.push(head1,head2);
+            returnHead.push(head1,returnHead2);
+
+            table.head = returnHead;
+
+            //再初始化数据
+            for (var i = 1; i <= dumNum; i++) {
+                var row = {};
+                row['dum'] = 'DUM '+i;
+                for (var j = 1; j <= inputNum + outputNum; j++) {
+                    if(j <= inputNum){
+                        row['input_'+j] = '';
+                    }else{
+                        row['output_'+j-inputNum] = '';
+                    }
+                }
+                data.push(row);
+            }
+
+            Head = head;
+            Data = data;
+        }
+    });
+</script>
+</body>
+
+</html>
+
+
+
