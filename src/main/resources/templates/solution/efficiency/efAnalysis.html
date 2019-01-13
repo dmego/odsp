@@ -191,26 +191,31 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="layui-col-xs12">
-            <div class="layui-card">
-                <div class="layui-card-header">结果说明</div>
-                <div class="layui-card-body" style="height: 200px;overflow: hidden;">
-                    <blockquote class="layui-elem-quote layui-quote-nm">
-                        如果评价单元的纯技术效率为 1，而规模效率小于 1 时，这说明<span style="color: chocolate">评价单元本身的技术效率而言没有投入需要减少、没有产出需要增加;</span></li><br>
-                        样本单元的综合效率没有达到有效(即1)，是因为其规模和投入、产出不相匹配，<span style="color: chocolate">需要增加规模或减少规模</span></li><br>
-                        此外，纯技术效率 = 1，表示在目前的技术水平上，其投入资源的使用是有效率的，未能达到综合有效的根本原因在于其规模无效，因此其改革的<span style="color: chocolate">重点在于如何更好地发挥其规模效益</span></li>
-                        </ul>
-                    </blockquote>
-                    <blockquote class="layui-elem-quote layui-quote-nm">
-                        如果评价单元的纯技术效率为1，而规模效率小于1时，这说明评价单元本身的技术效率而言<span style="color: chocolate">没有投入需要减少、没有产出需要增加</span><br>
-                        评价单元的综合效率没有达到有效(即1)，是因为其规模和投入、产出不相匹配，<span style="color: chocolate">需要增加规模或减少规模</span>
-                    </blockquote>
+                <div class="layui-card-body" align="center">
+                    <a href="report"  target="_blank" class="layui-btn layui-btn-lg  layui-btn-radius" id="report" lay-filter="report">
+                        <i class="fa fa-file-text" aria-hidden="true"></i> 生成分析报告
+                    </a>
                 </div>
             </div>
         </div>
+
+        <!--<div class="layui-col-xs12">-->
+            <!--<div class="layui-card">-->
+                <!--<div class="layui-card-header">结果说明</div>-->
+                <!--<div class="layui-card-body" style="height: 200px;overflow: hidden;">-->
+                    <!--<blockquote class="layui-elem-quote layui-quote-nm">-->
+                        <!--如果评价单元的纯技术效率为 1，而规模效率小于 1 时，这说明<span style="color: chocolate">评价单元本身的技术效率而言没有投入需要减少、没有产出需要增加;</span></li><br>-->
+                        <!--样本单元的综合效率没有达到有效(即1)，是因为其规模和投入、产出不相匹配，<span style="color: chocolate">需要增加规模或减少规模</span></li><br>-->
+                        <!--此外，纯技术效率 = 1，表示在目前的技术水平上，其投入资源的使用是有效率的，未能达到综合有效的根本原因在于其规模无效，因此其改革的<span style="color: chocolate">重点在于如何更好地发挥其规模效益</span></li>-->
+                        <!--</ul>-->
+                    <!--</blockquote>-->
+                    <!--<blockquote class="layui-elem-quote layui-quote-nm">-->
+                        <!--如果评价单元的纯技术效率为1，而规模效率小于1时，这说明评价单元本身的技术效率而言<span style="color: chocolate">没有投入需要减少、没有产出需要增加</span><br>-->
+                        <!--评价单元的综合效率没有达到有效(即1)，是因为其规模和投入、产出不相匹配，<span style="color: chocolate">需要增加规模或减少规模</span>-->
+                    <!--</blockquote>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
 
     </div>
 </div>
@@ -245,6 +250,8 @@
         var util = layui.util;
         var admin = layui.admin;
         var element = layui.element;
+
+        var myCharts,myCharts5,myCharts6;
 
         var calData = admin.getTempData("effCalData");
 
@@ -332,6 +339,10 @@
                 series: calData.effGraph.series
             };
             myCharts.setOption(option);
+            setTimeout(function () {;
+                calData.calChart = myCharts.getDataURL();
+                admin.putTempData("effCalData",calData);
+            }, 2000);
 
             //点击打开关闭图表
             $("#effShow").click(function () {
@@ -617,6 +628,10 @@
                     });
 
                     myCharts5.setOption(option5);
+                    setTimeout(function () {;
+                        calData.calChart5 = myCharts5.getDataURL();
+                        admin.putTempData("effCalData",calData);
+                    }, 2000);
 
                     //数据表渲染
                     table.render({
@@ -810,6 +825,11 @@
                     });
 
                     myCharts6.setOption(option6);
+                    setTimeout(function () {;
+                        calData.calChart6 = myCharts6.getDataURL();
+                        admin.putTempData("effCalData",calData);
+
+                    }, 2000);
 
                     //数据表渲染
                     table.render({
@@ -890,6 +910,27 @@
                 }
             })
         }
+
+
+
+        // //生成分析报告
+        // $('#report').click(function () {
+        //     layer.open({
+        //         type: 2,
+        //         title: '分析报告',
+        //         area: ['550px', '500px'],
+        //         content: 'report',
+        //         btn: ['保存', '取消'],
+        //         yes: function (index, layero) {
+        //
+        //         },
+        //         btn2: function (index, layero) { //取消按钮
+        //             layer.close();
+        //         }
+        //     });
+        // })
+
+
     });
 </script>
 </body>

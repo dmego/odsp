@@ -72,6 +72,14 @@ public class DecisionController extends BaseController implements ErrorControlle
         return null;
     }
 
+    /**
+     * 生成分析报告
+     */
+    @RequestMapping("/report")
+    public String report(){
+        return "solution/decision/deReport.html";
+    }
+
 
     /**
      * 上传策略决策模板,解析文件,计算优化结果,将解析数据与优化数据返回

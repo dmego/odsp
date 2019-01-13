@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 /**
  * class_name: HelpController
  * package: cn.dmego.odsp.algorithms.controller
- * describe: TODO
+ * describe: 模型说明
  * creat_user: Dmego
  * creat_date: 2019/1/9
  * creat_time: 6:53
  **/
 @Controller
-@RequestMapping("/help/index")
+@RequestMapping("/help")
 public class HelpController {
 
     @RequestMapping

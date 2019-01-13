@@ -142,22 +142,28 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <div class="layui-col-xs12">
-            <div class="layui-card">
-                <div class="layui-card-header">结果说明</div>
-                <div class="layui-card-body" style="height: 200px;overflow: hidden; text-align: center">
-                    <blockquote class="layui-elem-quote layui-quote-nm">
-                        经运输优化后,可得出如下结果<br><hr>
-                        最小运输成本为 : <span style="color: chocolate; font-size: x-large" id="bestValueSpan"></span> (万元)<br>
-                        总剩余产量为 : <span style="color: chocolate; font-size: x-large" id="originSumSpan"></span> (万台)<br>
-                        总剩余销量为 : <span style="color: chocolate; font-size: x-large" id="saleSumSpan"></span>   (万台)<br>
-                    </blockquote>
+                <div class="layui-card-body" align="center">
+                    <a href="report" target="_blank" class="layui-btn layui-btn-lg  layui-btn-radius" id="report" lay-filter="report">
+                        <i class="fa fa-file-text" aria-hidden="true"></i> 生成分析报告
+                    </a>
                 </div>
             </div>
+
         </div>
+
+        <!--<div class="layui-col-xs12">-->
+            <!--<div class="layui-card">-->
+                <!--<div class="layui-card-header">结果说明</div>-->
+                <!--<div class="layui-card-body" style="height: 200px;overflow: hidden; text-align: center">-->
+                    <!--<blockquote class="layui-elem-quote layui-quote-nm">-->
+                        <!--经运输优化后,可得出如下结果<br><hr>-->
+                        <!--最小运输成本为 : <span style="color: chocolate; font-size: x-large" id="bestValueSpan"></span> (万元)<br>-->
+                        <!--总剩余产量为 : <span style="color: chocolate; font-size: x-large" id="originSumSpan"></span> (万台)<br>-->
+                        <!--总剩余销量为 : <span style="color: chocolate; font-size: x-large" id="saleSumSpan"></span>   (万台)<br>-->
+                    <!--</blockquote>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
     </div>
 </div>
 
@@ -434,6 +440,10 @@
             };
 
             myCharts.setOption(option);
+            setTimeout(function () {;
+                trsData.calChart = myCharts.getDataURL();
+                admin.putTempData("trResData",trsData);
+            }, 2000);
 
             //点击打开关闭图表
             $("#trsMapShow").click(function () {
@@ -535,6 +545,7 @@
                 }]
             };
             myCharts2.setOption(option2);
+
 
             //切换tab
             element.on('tab(tabZZT)', function (data) {
@@ -673,6 +684,10 @@
                         series: saleData.series
                     };
                     myCharts4.setOption(option4);
+                    setTimeout(function () {;
+                        trsData.calChart4 = myCharts4.getDataURL();
+                        admin.putTempData("trResData",trsData);
+                    }, 2000);
 
                 }else if(index == 2){
                     var costData = trsData.costData;
@@ -815,6 +830,10 @@
                         ]
                     };
                     myCharts5.setOption(option5);
+                    setTimeout(function () {;
+                        trsData.calChart5 = myCharts5.getDataURL();
+                        admin.putTempData("trResData",trsData);
+                    }, 2000);
                 }
 
             });

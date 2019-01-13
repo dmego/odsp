@@ -72,6 +72,14 @@ public class TransoptiController extends BaseController implements ErrorControll
         return null;
     }
 
+    /**
+     * 生成分析报告
+     */
+    @RequestMapping("/report")
+    public String report(){
+        return "solution/transport/trReport.html";
+    }
+
 
     /**
      * 上传运输优化模板,解析文件,计算优化结果,将解析数据与优化数据返回
