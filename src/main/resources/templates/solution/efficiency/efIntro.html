@@ -1,10 +1,114 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<!--suppress ALL -->
+<html>
 
+<head>
+    <title>ODSP</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+    <link rel="stylesheet" href="/assets/css/site.css"/>
+    <link rel="stylesheet" href="/assets/libs/font-awesome/css/font-awesome.min.css"/>
+    <style>
+        .layui-input-block {
+            margin-left: 100px;
+            min-height: 36px;
+        }
+
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 15px;
+            width: 50px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body class="page-aside-fixed">
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" style="padding-top: 40px;">
+            <div align="center">
+                <h1>我国各地区科技活动绩效评价</h1>
+            </div>
+            <hr>
+
+            <fieldset class="layui-elem-field">
+                <legend>简介</legend>
+                <div class="layui-field-box">
+                    科学技术是第一生产力, 科技创新是应对国际金融危机的强大武器和经济社会持久繁荣的不竭动力。
+                    足够的科技投入强度和合理的科技投入结构是提高科技产出效率、 增强地区创新能力、 促进经济社会发展的必要条件。
+                    科技对经济增长的推动作用不仅取决于科技投入的总量, 更为关键的是科技投入产出的效率,
+                    因此科技投入产出效率无疑成为科技发展评价中的关键环节。为了能够有效支撑起经济社会又好又快的发展, 有必要针对自身薄弱环节集中力量进行改善, 把科技发展作为重中之重。
+                    因此本应用案例有针对性的从全国各省份科技投入产出角度出发, 采用<span style="color: chocolate;"> DEA 方法 </span> 对全国各省份的<span style="color: chocolate;"> 科技投入产出效率 </span> 进行评价,
+                    并在评价的基础上找出各省份及各个投入产出指标之间的差别, 据此提出相关对策和建议, 以期为制定发展规划以及宏观调控政策提供参考。
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field">
+                <legend><h4>数据源</h4></legend>
+                <div class="layui-field-box">
+                    由于高技术产业高收益、高带动性等特点，现阶段我国各个省、市、自治区都在加大力度发展高技术产业，并将其作为经济发展的增长点。
+                    为了便于对各个地区的发展情况及高技术产业的资源利用效率进行比较、分析，将我国 30 个省、市、自治区看作同类型的决策单元。
+                    从<span style="color: chocolate;">《中国科技统计年鉴》</span>中选取各个符合上述高技术产业产出效益综合效率评价指标体系的原始数据进行 DEA 效率评价。
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field">
+                <legend>DEA模型介绍</legend>
+                <div class="layui-field-box">
+                    DEA 方法是一种非参数、对多投入多产出决策单元进 行相对效率评价的计量经济方法。它根据一组输入输出观测值来估计有效生产的前沿面，并以此为基础进行多目标综合效果评价。
+                    技术效率(Technical Efficiency，TE)衡量技术在稳定使用 (即没有技术创新)过程中，生产者获得最大产出的能力表
+                    示生产者的生产活动接近其生产边界(最大产出)的程度，即反映了生产者利用现有技术的有效程度。</br></br>
+                    <div align="center">
+                        <img src="/assets/images/solution/dea.png" style="width: 400px">
+                    </div>
+                    DEA 使用数学规划（包括线性规划、多目标规划、具有锥结构的广义最优化、半无限规划、随机规划等等）模型对具有多个输入、特别是具有多个输出的“部门”或“单位” （称为决策单元（decision
+                    making unit），简记为 DMU ）间的相对有效性（称为 DEA 有效）进行评价。根据对各 DMU 观察的数据判断 DMU 是否为 DEA 有效，本质上是判断 DMU
+                    是否位于生产可能集的“生产前沿面”上（生产前沿面是经济学中生产函数向多产出情况的 一种推广）。已经证明，DEA 有效性与相应的多目标规划问题的有效解是等价的。</br></br>
+                    具体说，DEA 的建模就是通过对各 DMU（下面各种投入和产出变量）的输入、输出量进行比较分析后，建立一个由全部 DMU 按照一定方式组合所构成的新的“有效
+                    DMU”，将其作为评价的标准，把要评价的每一个 DMU 与该“有效 DMU”进行对比分析：设定“有效 DMU”的输出量不小于某一拟评 DMU 的输出量， 那么它的输入量与该 DMU
+                    输入量的比较则可以反映被评机构的效率情况。如果“有效 DMU” 用较小的输入量即可获得比拟评价的 DMU 同样或者较多的输出，则可认定该被评机构是低效的。
+                </div>
+            </fieldset>
+
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/libs/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/assets/libs/slimscroll/jquery.slimscroll.js"></script>
+
+<script type="text/javascript" src="/assets/libs/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echartsTheme.js"></script>
+
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script type="text/javascript" src="/assets/js/utils.js"></script>
+<script type="text/javascript" src="/assets/js/tool.js"></script>
+
+<script>
+    layui.use(['table', 'layer', 'form', 'util', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+    });
+</script>
 </body>
+
 </html>
