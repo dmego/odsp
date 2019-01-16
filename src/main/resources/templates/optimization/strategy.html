@@ -254,14 +254,14 @@
 
         // 编辑系数之前先校验数据
         function checkActAte(variable, constraint) {
-            if (variable < 1) {
-                layer.msg("变量个数必须大于1!");
+            if (!/^[1-9]\d*$/.test(variable)) {
+                layer.msg("变量个数必须是大于 0 的整数!");
                 return false;
             } else if (variable > 100) {
                 layer.msg("最多添加 100 个变量!");
                 return false;
-            } else if (constraint < 1) {
-                layer.msg("约束条件个数必须大于1!");
+            } else if (!/^[1-9]\d*$/.test(constraint)) {
+                layer.msg("约束条件个数必须是大于 0 的整数!");
                 return false;
             } else if (constraint > 100) {
                 layer.msg("最多添加 100 个约束条件!");
@@ -387,8 +387,8 @@
                 if ($("#variable").attr("isChange") == "true") {
                     return '变量个数已改变，请重新设置系数!';
                 }
-                if (value < 1) {
-                    return '变量个数必须大于1!';
+                if (!/^[1-9]\d*$/.test(value)) {
+                    return '变量个数必须是大于 0 的整数!';
                 } else if (value > 100) {
                     return '最多添加 100 个变量!';
                 }
@@ -397,9 +397,9 @@
                 if ($("#constraint").attr("isChange") == "true") {
                     return '约束条件个数已改变，请重新设置系数!';
                 }
-                if (value < 1) {
-                    return '约束条件个数必须大于1!';
-                } else if (value > 100) {
+                if (!/^[1-9]\d*$/.test(value)) {
+                    return '变量个数必须是大于 0 的整数!';
+                }  else if (value > 100) {
                     return '最多添加 100 个约束条件!';
                 }
             }

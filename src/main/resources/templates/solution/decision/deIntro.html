@@ -1,10 +1,99 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<!--suppress ALL -->
+<html>
 
+<head>
+    <title>ODSP</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+    <link rel="stylesheet" href="/assets/css/site.css"/>
+    <link rel="stylesheet" href="/assets/libs/font-awesome/css/font-awesome.min.css"/>
+    <style>
+        .layui-input-block {
+            margin-left: 100px;
+            min-height: 36px;
+        }
+
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 15px;
+            width: 50px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body class="page-aside-fixed">
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" style="padding-top: 40px;">
+            <div align="center">
+                <h1>某企业生产策略决策问题</h1>
+            </div>
+            <hr>
+
+            <fieldset class="layui-elem-field">
+                <legend>简介</legend>
+                <div class="layui-field-box">
+                    风险决策法是指决策者对客观情况不了解，但是对将发生各事件的概率是已知的。
+                    决策者往往通过调查，根据过去的经验或主观估计等途径获得这些概率。在风险决策中一般采用期望值作为决策准则，
+                    常用的有 <span style="color: chocolate;">最大期望收益决策准则（EMV）和最小机会损失决策准则（EOL）</span>。<br>
+                    不确定型的决策是指决策者对环境情况一无所知。这时决策者是根据自己的主观倾向进行决策，
+                    由决策者的主观态度的不同基本可分为四种准则：<span style="color: chocolate;">悲观主义决策准则、乐观主义决策准则、等可能性准则、最小机会损失决策准则</span>。
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field">
+                <legend><h4>数据源</h4></legend>
+                <div class="layui-field-box">
+                    本案例数据来源于网络。具体数据解释为，某企业现有 5 种生产策略，也就是生产产品的数量方案。其中每个策略都有其对应的
+                    一些销售状况，也就是市场对于该策略下对应不同销量下的销售额。根据数据显示，生产策略为 40 万台时，销售状况是最好的，其中
+                    当销售量也为 40 万台时，销售额为最高 200 万元。<br>
+                    对于风险决策法模型而言，需要知道每种销售状况的概率，所以数据中有效率概率值，我们可以发现，<span style="color: chocolate;">销售 20</span> 万台
+                    的概率最高。乐观系数对应的是 <span style="color: chocolate;">乐观决策法</span> 需要的参数值。而效用曲线系数对应的是
+                    <span style="color: chocolate;">EUV决策法</span>需要的参数值。
+                </div>
+            </fieldset>
+
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/libs/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/assets/libs/slimscroll/jquery.slimscroll.js"></script>
+
+<script type="text/javascript" src="/assets/libs/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echartsTheme.js"></script>
+
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script type="text/javascript" src="/assets/js/utils.js"></script>
+<script type="text/javascript" src="/assets/js/tool.js"></script>
+
+<script>
+    layui.use(['table', 'layer', 'form', 'util', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+    });
+</script>
 </body>
+
 </html>

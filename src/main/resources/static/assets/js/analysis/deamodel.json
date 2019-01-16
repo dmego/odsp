@@ -1,1 +1,143 @@
-{}
+{
+  "funs": [1,2,5],
+  "dumNum": 4,
+  "inputNum": 3,
+  "outputNum": 2,
+  "rtsLower": 0.8,
+  "rtsUpper": 1.2,
+  "isUpd": "isup",
+  "Head": [
+    [
+      {"field": "dum", "title": "评价单元/指标", "rowspan":2, "minWidth": 120},
+      {"align":"center", "title": "投入指标","colspan":3},
+      {"align":"center", "title": "产出指标","colspan":2}
+    ],
+    [
+      {"field": "input_1", "title": "INPUT 1"},
+      {"field": "input_2", "title": "INPUT 2"},
+      {"field": "input_3", "title": "INPUT 3"},
+      {"field": "output_1", "title": "OUTPUT 1"},
+      {"field": "output_2", "title": "OUTPUT 2"}
+    ]
+  ],
+  "Data": [
+    {
+      "dum": "DUM 1",
+      "input_1": "4424",
+      "input_2": "4332",
+      "input_3": "4419",
+      "output_1": "172",
+      "output_2": "153"
+    },
+    {
+      "dum": "DUM 2",
+      "input_1": "3217",
+      "input_2": "3313",
+      "input_3": "3129",
+      "output_1": "139",
+      "output_2": "128"
+    },
+    {
+      "dum": "DUM 3",
+      "input_1": "2418",
+      "input_2": "2445",
+      "input_3": "2429",
+      "output_1": "211",
+      "output_2": "101"
+    },
+    {
+      "dum": "DUM 4",
+      "input_1": "2451",
+      "input_2": "1420",
+      "input_3": "147",
+      "output_1": "253",
+      "output_2": "207"
+    }
+  ],
+  "resultHead": [
+    {
+      "field": "dum",
+      "title": "评价单元/结果",
+      "minWidth": 120
+    },
+    {
+      "field": "objectives",
+      "title": "效率值"
+    },
+    {
+      "field": "efficient",
+      "title": "DEA有效性"
+    },
+    {
+      "field": "ranks",
+      "title": "排名"
+    }
+  ],
+  "CCRData": [
+    {
+      "dum": "DUM 1",
+      "objectives": "0.41",
+      "efficient": "无效",
+      "ranks": "4"
+    },{
+      "dum": "DUM 2",
+      "objectives": "0.47",
+      "efficient": "无效",
+      "ranks": "3"
+    },{
+      "dum": "DUM 3",
+      "objectives": "0.85",
+      "efficient": "无效",
+      "ranks": "2"
+    },{
+      "dum": "DUM 4",
+      "objectives": "1",
+      "efficient": "有效",
+      "ranks": "1"
+    }
+  ],"BCCData": [
+  {
+    "dum": "DUM 1",
+    "objectives": "0.55",
+    "efficient": "无效",
+    "ranks": "4"
+  },{
+    "dum": "DUM 2",
+    "objectives": "0.75",
+    "efficient": "无效",
+    "ranks": "3"
+  },{
+    "dum": "DUM 3",
+    "objectives": "1",
+    "efficient": "有效",
+    "ranks": "1"
+  },{
+    "dum": "DUM 4",
+    "objectives": "1",
+    "efficient": "有效",
+    "ranks": "1"
+  }
+],"SBMData": [
+  {
+    "dum": "DUM 1",
+    "objectives": "0.22",
+    "efficient": "无效",
+    "ranks": "4"
+  },{
+    "dum": "DUM 2",
+    "objectives": "0.24",
+    "efficient": "无效",
+    "ranks": "3"
+  },{
+    "dum": "DUM 3",
+    "objectives": "0.34",
+    "efficient": "无效",
+    "ranks": "3"
+  },{
+    "dum": "DUM 4",
+    "objectives": "1",
+    "efficient": "有效",
+    "ranks": "1"
+  }
+]
+}

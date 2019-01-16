@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html>
+
+<head>
+    <title>ODSP</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+    <link rel="stylesheet" href="/assets/css/site.css"/>
+    <link rel="stylesheet" href="/assets/libs/font-awesome/css/font-awesome.min.css"/>
+    <style>
+        .layui-input-block {
+            margin-left: 100px;
+            min-height: 36px;
+        }
+
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 15px;
+            width: 50px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+        }
+
+        .layui-fluid {
+            padding-top: 10px;
+            padding-left: 150px;
+            padding-right: 150px;
+        }
+    </style>
+</head>
+
+<body class="page-aside-fixed">
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="page-content" class="layui-card-body" style="padding: 40px 40px 0 40px;">
+            <div align="center">
+                <h1>某企业产品运输配送成本优化</h1>
+            </div>
+            <div align="center" style="padding-top: 10px">
+                <h3>（分析报告）</h3>
+            </div>
+            <hr>
+
+            <fieldset class="layui-elem-field">
+                <legend><h4>背景简介</h4></legend>
+                <div class="layui-field-box">
+                    运输问题是运筹学中的一项重要的问题，运输成本在总物流成本中占很大比重。
+                    目前我国大部分企业的自身产品产销整体运输成本相对来说比较高、时间较长、运输效率较低。这就需要我们对物流进行合理化，
+                    在确保服务质量的同时，以最低的运输费用使产品由产地运至销地。 本案例选取某企业生产的产品由北京、上海等产地运往河北、海南等
+                    销地的运费数据，以及各产地的产量数据；销地的销量数据。使用表上作业法来分析解决该问题。该问题的解决，
+                    既可以加快物流的运输速度，及时使产品运达供应市场， 还能够加快企业资金的周转。
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field">
+                <legend><h4>样本选择及数据来源</h4></legend>
+                <div class="layui-field-box">
+                    本案例中的数据来自网络，该数据为某企业2018年产品运输优化数据。该企业在北京、上海、广东等九个省份建有生产基地，
+                    所以在这九个生产地都有相应的产品生产量。例如在北京生产基地2018年预计生产 7062.6 万台。同时该企业生产的产品会
+                    销往河北、山西、四川等二十二个省份市区，其中每个省份市区需求量也就是销售量各不相同，例如其中该企业在河北的销量为
+                    2240.2 万台。
+                </div>
+            </fieldset>
+
+            <fieldset class="layui-elem-field">
+                <legend><h4>可视化分析</h4></legend>
+                <div class="layui-field-box">
+                    根据表上作业法模型进行计算，并对计算结果进行相关类型的可视化分析。对应地图可视化和产销可视化，我们可以非常形象的看出
+                    哪个产地需要运往哪个销地多少数量的产品才能让运输成本最低。在产销可视化图示中，我们可以看出，对于产地北京来说，它是最大的
+                    产地，其生产量为 <span style="color: chocolate;">7062.6</span> 万台，单达到最小运输成本时，北京的销售地为<span style="color: chocolate;">6</span> 个，分别是河北销售 273.9 万台,内蒙古销售 1529.7 万台,
+                    辽宁销售 1687.8 万台,吉林销售 746.46 万台,黑龙江销售 1310.5 万台,西藏销售 211.88 万台,甘肃销售 1302.36万台。
+                    <span style="color: chocolate;"> </span>
+                    <div align="center" style="padding-top: 10px">
+                        <img src="" style="width: 600px" id="calChart">
+                        <div>（图1：地图可视化分析图示）</div>
+                    </div></br>
+                    从销地角度分析角度可以看出，哪个销售地依赖哪个产地最多，我们不难发现，<span style="color: chocolate;">黑龙江、内蒙古、辽宁、甘肃</span>
+                    这四个地方的产品完全依赖北京提供。而 <span style="color: chocolate;"> 安徽、江西、湖南</span>三个地方的产品则完全依赖上海提供。
+                    河北是所有销地里销量最高的一个省份。其大部分产品依赖于产地天津提供。
+                    <div align="center" style="padding-top: 10px">
+                        <img src="" style="width: 600px" id="calChart4">
+                        <div>（图2：销地角度分析图示）</div>
+                    </div></br>
+                    根据计算可得该案例最小运输成本为 <span style="color: chocolate;">1507525.74</span> 万元，总剩余产量为 0 ，总剩余销量为 0 。
+                     这说明该案例是产销平衡的运输问题，也就是所有产地的产量恰好等于所有销地的销量。
+                    <div align="center" style="padding-top: 10px">
+                        <img src="" style="width: 600px" id="calChart5">
+                        <div>（图3：最小成本分析图示）</div>
+                    </div></br>
+                </div>
+            </fieldset>
+
+            <fieldset class="layui-elem-field">
+                <legend><h4>结论和建议</h4></legend>
+                <div class="layui-field-box">
+                    从可视化图表以及最后求出的最小成本可以得出如下结论，该案例的最小成本为 <span style="color: chocolate;">1507525.74</span>
+                    万元，总剩余产量为 0 ，总剩余销量为 0 。<br>
+                    北京、上海两大产地的销地最多，并且其销量也最多，如若想缓解这两地的压力，可以增加如<span style="color: chocolate;">贵州、重庆</span>，
+                    两地的产量，适当减少北京、上海 两地的产量。
+                </div>
+            </fieldset>
+        </div>
+        <div class="layui-card-body" align="center">
+            <button href="report"  target="_blank" class="layui-btn layui-btn-lg  layui-btn-radius" id="export" lay-filter="export">
+                <i class="fa fa-sign-out" aria-hidden="true"></i> 导出报告
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/libs/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/assets/libs/slimscroll/jquery.slimscroll.js"></script>
+
+<script type="text/javascript" src="/assets/libs/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echartsTheme.js"></script>
+
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script type="text/javascript" src="/assets/js/utils.js"></script>
+<script type="text/javascript" src="/assets/js/tool.js"></script>
+
+
+<script src="https://cdn.bootcss.com/FileSaver.js/2014-11-29/FileSaver.js"></script>
+<script src="/assets/js/jquery.wordexport.js"></script>
+
+<script>
+    layui.use(['table', 'layer', 'form', 'util', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+
+        var trsData = admin.getTempData("trResData");
+        $("#calChart").attr('src',trsData.calChart);
+        $("#calChart4").attr('src',trsData.calChart4);
+        $("#calChart5").attr('src',trsData.calChart5);
+
+        //导出分析报告
+        $("#export").click(function(event) {
+            $("#page-content").wordExport("运输配送成本优化分析报告");
+        });
+
+    });
+</script>
+</body>
+
+</html>

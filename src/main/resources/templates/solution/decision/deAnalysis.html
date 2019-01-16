@@ -110,21 +110,28 @@
                     <div id="decEcharts3" style="height: 500px;"></div>
                 </div>
             </div>
-        </div>
-
-        <div class="layui-col-xs12">
-            <div class="layui-card">
-                <div class="layui-card-header">结果说明</div>
-                <div class="layui-card-body" style="height: 200px;overflow: hidden; text-align: center">
-                    <blockquote class="layui-elem-quote layui-quote-nm">
-                        通过运用 9 种不同的决策模型计算, 可得出如下结果<br><hr>
-                        如果从不确定型角度作决策, <span style="color: chocolate;" id="uncertainSpan"></span> 为最优决策策略!<br>
-                        如果各状况的概率值已知,从风险决策角度作决策, <span style="color: chocolate; " id="riskSpan"></span> 为最优决策策略!<br>
-                        综合考虑,<span style="color: chocolate;" id="bestSpan"></span> 为决策者最佳决策策略!<br>
-                    </blockquote>
-                </div>
+            <div class="layui-card-body" align="center">
+                <a href="report" target="_blank" class="layui-btn layui-btn-lg  layui-btn-radius" id="report" lay-filter="report">
+                    <i class="fa fa-file-text" aria-hidden="true"></i> 生成分析报告
+                </a>
             </div>
         </div>
+
+
+        <!--<div class="layui-col-xs12">-->
+            <!--<div class="layui-card">-->
+                <!--<div class="layui-card-header">结果说明</div>-->
+                <!--<div class="layui-card-body" style="height: 200px;overflow: hidden; text-align: center">-->
+                    <!--<blockquote class="layui-elem-quote layui-quote-nm">-->
+                        <!--通过运用 9 种不同的决策模型计算, 可得出如下结果<br><hr>-->
+                        <!--如果从不确定型角度作决策, <span style="color: chocolate;" id="uncertainSpan"></span> 为最优决策策略!<br>-->
+                        <!--如果各状况的概率值已知,从风险决策角度作决策, <span style="color: chocolate; " id="riskSpan"></span> 为最优决策策略!<br>-->
+                        <!--综合考虑,<span style="color: chocolate;" id="bestSpan"></span> 为决策者最佳决策策略!<br>-->
+                    <!--</blockquote>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
     </div>
 </div>
 
@@ -190,9 +197,9 @@
             });
         }else {
             //为结果说明赋值
-            $("#bestSpan").html(decData.bestb);
-            $("#uncertainSpan").html(decData.unb);
-            $("#riskSpan").html(decData.rib);
+            // $("#bestSpan").html(decData.bestb);
+            // $("#uncertainSpan").html(decData.unb);
+            // $("#riskSpan").html(decData.rib);
 
             var myCharts = echarts.init(document.getElementById('decEcharts1'));
             var graph3 = decData.graph3;
@@ -260,9 +267,13 @@
 
             myCharts.setOption(option);
 
+            setTimeout(function () {;
+                decData.calChart = myCharts.getDataURL();
+                admin.putTempData("decResData",decData);
+            }, 2000);
+
 
             // 渲染策略占比分析
-
             var myCharts2 = echarts.init(document.getElementById('decEcharts2'));
             var graph2 = decData.graph2;
             myCharts2.setOption({
@@ -337,6 +348,10 @@
                     }
                 }]
             });
+            setTimeout(function () {;
+                decData.calChart2 = myCharts2.getDataURL();
+                admin.putTempData("decResData",decData);
+            }, 2000);
 
 
             // 渲染策略分布分析
@@ -436,7 +451,10 @@
             };
 
             myCharts3.setOption(option3);
-
+            setTimeout(function () {;
+                decData.calChart3 = myCharts3.getDataURL();
+                admin.putTempData("decResData",decData);
+            }, 2000);
         }
 
     });

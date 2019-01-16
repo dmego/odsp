@@ -220,14 +220,14 @@
 
         // 编辑系数之前先校验数据
         function checkActAte(originNum, salesNum) {
-            if (originNum < 1) {
-                layer.msg("产地个数必须大于1!");
+            if (!/^[1-9]\d*$/.test(originNum)) {
+                layer.msg("产地个数必须是大于 0 的整数!");
                 return false;
             } else if (originNum > 100) {
                 layer.msg("最多添加 100 个产地!");
                 return false;
-            } else if (salesNum < 1) {
-                layer.msg("销地个数必须大于1!");
+            } else if (!/^[1-9]\d*$/.test(salesNum)) {
+                layer.msg("销地个数必须是大于 0 的整数!");
                 return false;
             } else if (salesNum > 100) {
                 layer.msg("最多添加 100 个销地!");
@@ -357,8 +357,8 @@
                 if($("#originNum").attr("isChange") == "true"){
                     return '产地个数已改变，请重新设置系数!';
                 }
-                if (value < 1) {
-                    return '产地个数必须大于1!';
+                if (!/^[1-9]\d*$/.test(value)) {
+                    return '产地个数必须是大于 0 的整数!';
                 } else if (value > 100) {
                     return '最多添加 100 个产地!';
                 }
@@ -367,8 +367,8 @@
                 if($("#salesNum").attr("isChange") == "true"){
                     return '销地个数已改变，请重新设置系数!';
                 }
-                if (value < 1) {
-                    return '销地个数必须大于1!';
+                if (!/^[1-9]\d*$/.test(value)) {
+                    return '产地个数必须是大于 0 的整数!';
                 } else if (value > 100) {
                     return '最多添加 100 个销地!';
                 }

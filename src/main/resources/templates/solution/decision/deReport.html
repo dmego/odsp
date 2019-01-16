@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html>
+
+<head>
+    <title>ODSP</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+    <link rel="stylesheet" href="/assets/css/site.css"/>
+    <link rel="stylesheet" href="/assets/libs/font-awesome/css/font-awesome.min.css"/>
+    <style>
+        .layui-input-block {
+            margin-left: 100px;
+            min-height: 36px;
+        }
+
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 15px;
+            width: 50px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+        }
+
+        .layui-fluid {
+            padding-top: 10px;
+            padding-left: 150px;
+            padding-right: 150px;
+        }
+    </style>
+</head>
+
+<body class="page-aside-fixed">
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="page-content" class="layui-card-body" style="padding: 40px 40px 0 40px;">
+            <div align="center">
+                <h1>某企业生产策略决策问题</h1>
+            </div>
+            <div align="center" style="padding-top: 10px">
+                <h3>（分析报告）</h3>
+            </div>
+            <hr>
+
+            <fieldset class="layui-elem-field">
+                <legend><h4>背景简介</h4></legend>
+                <div class="layui-field-box">
+                    风险决策法是指决策者对客观情况不了解，但是对将发生各事件的概率是已知的。
+                    决策者往往通过调查，根据过去的经验或主观估计等途径获得这些概率。在风险决策中一般采用期望值作为决策准则，
+                    常用的有 <span style="color: chocolate;">最大期望收益决策准则（EMV）和最小机会损失决策准则（EOL）</span>。<br>
+                    不确定型的决策是指决策者对环境情况一无所知。这时决策者是根据自己的主观倾向进行决策，
+                    由决策者的主观态度的不同基本可分为四种准则：<span style="color: chocolate;">悲观主义决策准则、乐观主义决策准则、等可能性准则、最小机会损失决策准则</span>。
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field">
+                <legend><h4>样本选择及数据来源</h4></legend>
+                <div class="layui-field-box">
+                    本案例数据来源于网络。具体数据解释为，某企业现有 5 种生产策略，也就是生产产品的数量方案。其中每个策略都有其对应的
+                    一些销售状况，也就是市场对于该策略下对应不同销量下的销售额。根据数据显示，生产策略为 40 万台时，销售状况是最好的，其中
+                    当销售量也为 40 万台时，销售额为最高 200 万元。<br>
+                    对于风险决策法模型而言，需要知道每种销售状况的概率，所以数据中有效率概率值，我们可以发现，<span style="color: chocolate;">销售 20</span> 万台
+                    的概率最高。乐观系数对应的是 <span style="color: chocolate;">乐观决策法</span> 需要的参数值。而效用曲线系数对应的是
+                    <span style="color: chocolate;">EUV决策法</span>需要的参数值。
+                </div>
+            </fieldset>
+
+            <fieldset class="layui-elem-field">
+                <legend><h4>可视化分析</h4></legend>
+                <div class="layui-field-box">
+                    根据决策模型中的方法对数据进行处理计算，然后进行可视化展示。我们从策略分布分析图示中可以看到，悲观决策法选择的是
+                    生产 0 万台，乐观决策法、最小机会损失准则、等概率准则、折中主义准则以及EUV决策都选择的是 <span style="color: chocolate;">生产 40 万台</span>，
+                    EMV 决策法，EOL 决策法和EPVI 决策法计算出选择的是 <span style="color: chocolate;">生产 30 万台</span>。
+                    <div align="center" style="padding-top: 10px">
+                        <img src="" style="width: 600px" id="calChart">
+                        <div>（图1：策略分布分析图示）</div>
+                    </div></br>
+                    对计算出来的数据进行统计并分析策略的占比情况，我们可以看出<span style="color: chocolate;">生产 40 万台</span>，
+                    在所有计算结果中的占比最多，共有 4 个决策模型选择了该策略，占比为 <span style="color: chocolate;">55.56%</span>，
+                    其次是<span style="color: chocolate;">生产 30 万台</span>，共有 3 个模型选择了该策略,占比 <span style="color: chocolate;">3.33%</span>。
+                    对于 生产 10 以及 20 万台策略来说，没有模型选择这两种策略。
+                    <div align="center" style="padding-top: 10px">
+                        <img src="" style="width: 300px;height: 500px;" id="calChart2">
+                        <div>（图2：策略占比分析图示）</div>
+                    </div></br>
+                    从最优策略图示中我们可以很明显的看出，哪个策略会是决策者选择的最优策略，根据不同的峰谷图，可以看出<span style="color: chocolate;">生产 40 万台</span>，
+                    将会是决策者选择的最佳生产策略。
+                    <div align="center" style="padding-top: 10px">
+                        <img src="" style="width: 600px" id="calChart3">
+                        <div>（图3：最优策略图示）</div>
+                    </div></br>
+                </div>
+            </fieldset>
+
+            <fieldset class="layui-elem-field">
+                <legend><h4>结论和建议</h4></legend>
+                <div class="layui-field-box">
+                    通过运用 9 种不同的决策模型计算, 可得出如下结论和建议， 如果从不确定型角度作决策, <span style="color: chocolate;" id="uncertainSpan">生产 30 万台</span> 为最优决策策略!
+                    如果各状况的概率值已知,从风险决策角度作决策, <span style="color: chocolate; " id="riskSpan">生产 40 万台</span> 为最优决策策略!
+                    综合考虑,可得出<span style="color: chocolate;" id="bestSpan">生产 40 万台</span> 为决策者最佳决策策略!当然这只是给决策者最佳的决策建议，具体最终的决策策略选择还需要更加深入的
+                    数据分析。
+                </div>
+            </fieldset>
+        </div>
+        <div class="layui-card-body" align="center">
+            <button href="report"  target="_blank" class="layui-btn layui-btn-lg  layui-btn-radius" id="export" lay-filter="export">
+                <i class="fa fa-sign-out" aria-hidden="true"></i> 导出报告
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/libs/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/assets/libs/slimscroll/jquery.slimscroll.js"></script>
+
+<script type="text/javascript" src="/assets/libs/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echartsTheme.js"></script>
+
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script type="text/javascript" src="/assets/js/utils.js"></script>
+<script type="text/javascript" src="/assets/js/tool.js"></script>
+
+
+<script src="https://cdn.bootcss.com/FileSaver.js/2014-11-29/FileSaver.js"></script>
+<script src="/assets/js/jquery.wordexport.js"></script>
+
+<script>
+    layui.use(['table', 'layer', 'form', 'util', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+
+        var decData = admin.getTempData("decResData");
+        $("#calChart").attr('src',decData.calChart);
+        $("#calChart2").attr('src',decData.calChart2);
+        $("#calChart3").attr('src',decData.calChart3);
+
+        //导出分析报告
+        $("#export").click(function(event) {
+            $("#page-content").wordExport("生产策略决策问题分析报告");
+        });
+
+    });
+</script>
+</body>
+
+</html>

@@ -170,6 +170,14 @@ public class EfficiencyController extends BaseController implements ErrorControl
         return null;
     }
 
+    /**
+     * 生成分析报告
+     */
+    @RequestMapping("/report")
+    public String report(){
+        return "solution/efficiency/efReport.html";
+    }
+
 
     /**
      * 获取当前用户目录下的效率评价的数据表

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<!--suppress ALL -->
+<html>
+
+<head>
+    <title>ODSP</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+    <link rel="stylesheet" href="/assets/css/site.css"/>
+    <link rel="stylesheet" href="/assets/libs/font-awesome/css/font-awesome.min.css"/>
+    <style>
+        .layui-input-block {
+            margin-left: 100px;
+            min-height: 36px;
+        }
+
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 15px;
+            width: 50px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+        }
+
+        .layui-fluid {
+            padding-top: 10px;
+            padding-left: 150px;
+            padding-right: 150px;
+        }
+    </style>
+</head>
+
+<body class="page-aside-fixed">
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div id="page-content" class="layui-card-body" style="padding: 40px 40px 0 40px;">
+            <div align="center">
+                <h1>我国各地区科技活动绩效评价</h1>
+            </div>
+            <div align="center" style="padding-top: 10px">
+                <h3>（分析报告）</h3>
+            </div>
+            <hr>
+
+            <fieldset class="layui-elem-field">
+                <legend><h4>背景简介</h4></legend>
+                <div class="layui-field-box">
+                    科学技术是第一生产力, 科技创新是应对国际金融危机的强大武器和经济社会持久繁荣的不竭动力。
+                    足够的科技投入强度和合理的科技投入结构是提高科技产出效率、 增强地区创新能力、 促进经济社会发展的必要条件。
+                    科技对经济增长的推动作用不仅取决于科技投入的总量, 更为关键的是科技投入产出的效率,
+                    因此科技投入产出效率无疑成为科技发展评价中的关键环节。为了能够有效支撑起经济社会又好又快的发展, 有必要针对自身薄弱环节集中力量进行改善, 把科技发展作为重中之重。
+                    因此本应用案例有针对性的从全国各省份科技投入产出角度出发, 采用<span style="color: chocolate;"> DEA 方法 </span> 对全国各省份的<span style="color: chocolate;"> 科技投入产出效率 </span> 进行评价,
+                    并在评价的基础上找出各省份及各个投入产出指标之间的差别, 据此提出相关对策和建议, 以期为制定发展规划以及宏观调控政策提供参考。
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field">
+                <legend><h4>样本选择及数据来源</h4></legend>
+                <div class="layui-field-box">
+                    由于高技术产业高收益、高带动性等特点，现阶段我国各个省、市、自治区都在加大力度发展高技术产业，并将其作为经济发展的增长点。
+                    为了便于对各个地区的发展情况及高技术产业的资源利用效率进行比较、分析，将我国 30 个省、市、自治区看作同类型的决策单元。
+                    从<span style="color: chocolate;">《中国科技统计年鉴》</span>中选取各个符合上述高技术产业产出效益综合效率评价指标体系的原始数据进行 DEA 效率评价。
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field">
+                <legend><h4>投入、产出指标选择</h4></legend>
+                <div class="layui-field-box">
+                    对于评价高科技产业的效率而言，影响因素众多，关系错综复杂，评价指标的选择非常重要。
+                    从高技术产业的生产来看，首先，所有要素投入中劳动力投入对任何一个产业的生产都是很重要的，
+                    对于高技术产业而言，劳动力的素质显得尤其重要。劳动力的素质越高，掌握的技术能力和技术创新能力就越强，
+                    对生产的促进作用就越大，故而<span style="color: chocolate;"> R&D 人员全时当量 </span>可以作为一个评价指标。 其次，R&D 经费投入反映了一个产业或者一个企业对技术创新的重视程度，是技术进步的基础。
+                    技术进步本身对高技术产业的发展有着很大的影响，也是影响高技术产业效率的一个因素。新产品的销售收入与主营业务的比例反映了研发活动带来的创新效应，高新技术科技项目数的增加也是产业技术效益的表现。
+                    从企业到产业，科技项目的一次次成功必将推动新项目的发展，使整个产业的研发项目总数持续增加，并且其上升的快慢程度能反映出技术效益的大小。
+                    拥有发明专利数和专利申请数作为间接效益指标，可以反映企业获得并持续获得垄断利润的能力。</br></br>
+
+                    本次评价选取的投入产出指标如下表所示：</br>
+                    <hr>
+                    <div align="center">
+                        <h3>投入产出评价指标表</h3>
+                    </div>
+                    <table class="layui-table" lay-skin="line">
+                        <thead>
+                        <tr>
+                            <th>投入指标</th>
+                            <th>产出指标</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>科技机构经费(万元)</td>
+                            <td>发表科技论文(篇)</td>
+                        </tr>
+                        <tr>
+                            <td>研究与开发机构数(个)</td>
+                            <td>拥有发明专利数(项)</td>
+                        </tr>
+                        <tr>
+                            <td>有研发机构的企业数(个)</td>
+                            <td>专利申请数(项)</td>
+                        </tr>
+                        <tr>
+                            <td>R&D项目数(百项)</td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field">
+                <legend><h4>DEA 模型选取</h4></legend>
+                <div class="layui-field-box">
+                    DEA 方法是一种非参数、对多投入多产出决策单元进 行相对效率评价的计量经济方法。它根据一组输入输出观测值来估计有效生产的前沿面，并以此为基础进行多目标综合效果评价。
+                    技术效率(Technical Efficiency，TE)衡量技术在稳定使用 (即没有技术创新)过程中，生产者获得最大产出的能力表
+                    示生产者的生产活动接近其生产边界(最大产出)的程度，即反映了生产者利用现有技术的有效程度。</br></br>
+                    <div align="center">
+                        <img src="/assets/images/solution/dea.png" style="width: 400px">
+                    </div>
+                    DEA 使用数学规划（包括线性规划、多目标规划、具有锥结构的广义最优化、半无限规划、随机规划等等）模型对具有多个输入、特别是具有多个输出的“部门”或“单位” （称为决策单元（decision
+                    making unit），简记为 DMU ）间的相对有效性（称为 DEA 有效）进行评价。根据对各 DMU 观察的数据判断 DMU 是否为 DEA 有效，本质上是判断 DMU
+                    是否位于生产可能集的“生产前沿面”上（生产前沿面是经济学中生产函数向多产出情况的 一种推广）。已经证明，DEA 有效性与相应的多目标规划问题的有效解是等价的。</br></br>
+                    具体说，DEA 的建模就是通过对各 DMU（下面各种投入和产出变量）的输入、输出量进行比较分析后，建立一个由全部 DMU 按照一定方式组合所构成的新的“有效
+                    DMU”，将其作为评价的标准，把要评价的每一个 DMU 与该“有效 DMU”进行对比分析：设定“有效 DMU”的输出量不小于某一拟评 DMU 的输出量， 那么它的输入量与该 DMU
+                    输入量的比较则可以反映被评机构的效率情况。如果“有效 DMU” 用较小的输入量即可获得比拟评价的 DMU 同样或者较多的输出，则可认定该被评机构是低效的。</br></br>
+
+                    本次评价选取的DEA模型有：<span style="color: chocolate;" id="bestSpan">CCR模型、BCC模型</span><br>
+
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field">
+                <legend><h4>可视化分析</h4></legend>
+                <div class="layui-field-box">
+                    根据选取的投入产出指标以及DEA模型进行计算，可以求出我国 30 个省、市、自治区的<span style="color: chocolate;"> 综合效率、纯技术效率、规模效率 </span>
+                    等值，其中<span style="color: chocolate;"> 北京、山西、海南、西藏、甘肃、新疆 </span>DEA效率达到了有效，而其它地区没有达到有效说明，该地区各种生产要素没有合理配置。
+                    其中 <span style="color: chocolate;"> 湖南 </span> DEA 有效排名最低，其综合效率只有 <span style="color: chocolate;"> 0.1444</span>
+                    <div align="center" style="padding-top: 10px">
+                        <img src="" style="width: 600px" id="calChart">
+                        <div>（图1：效率分析图示）</div>
+                    </div></br>
+                    投影分析就是分析各省份达到 DEA 有效时各个指标的值，对于DEA达到有效的各个省份，各指标的目标值即为原始值，各指标比率也就是
+                    各指标原始值与达到DEA有效时指标值的比率。从投影分析中我们可以看出，没有达到DEA有效的各省份市区，有的是投入上出现了问题，有的
+                    则是产出上不达标。对于<span style="color: chocolate;"> 北京、山西、海南、西藏、甘肃、新疆 </span>这些DEA效率达到了有效的
+                    省份来说，其各指标比率都是 100%，而对于 <span style="color: chocolate;">河北、福建、江西、湖南</span>等DEA排名靠后的省份来说，
+                    其各指标比率都相对较低。这说明其在投入上存在大量冗余或是在产出上存在大量不足。
+                    <div align="center" style="padding-top: 10px">
+                        <img src="" style="width: 600px" id="calChart5">
+                        <div>（图2：投影分析图示）</div>
+                    </div></br>
+                    投影分析是整体分析各省份市区各指标达到DEA的值。投入冗余与产出不足分析则是更为详细的分析各个地区的投入与产出情况。在本次分析中，<span style="color: chocolate;">宁夏</span>
+                    投入冗余量与产出不足量达到最大，其产出不足平均率达到了<span style="color: chocolate;"> 196.22% </span>，是所有省份市区中最高的。
+                    而对于达到DEA有效的各省份市区，其不存成投入冗余与产出不足的情况。
+                    <div align="center" style="padding-top: 10px">
+                        <img src="" style="width: 600px" id="calChart6">
+                        <div>（图3：投入冗余与产出不足分析图示）</div>
+                    </div></br>
+                </div>
+            </fieldset>
+
+            <fieldset class="layui-elem-field">
+                <legend><h4>结论和建议</h4></legend>
+                <div class="layui-field-box">
+                    从可视化图表中可以看出，我国高科技产业的发展，存在着显著的地区差异。这种差异不仅表现在东、中、西部地区差异上，
+                    也表现在各个省(市、区)之间。关于高科技产业的投入，东部沿海地区较高，西北部地区最低，中部省份、西南地区以及东北地区处于中间状态。
+                    这种高科技产业的聚集分布，与我国各个地区的经济发展水平是非常匹配的，这说明经济发展水平对高科技产业的带动作用是最主要的。
+                    虽然东部地区高科技产业的投入与产出在数量上均远远超过了中、西部地区，但是其总体上却未达到效率最优，存在大量的投入冗余。
+                    根据经济学生产理论的分析，投入和产出的比例处在一定的区间才是最佳的资源配置状态，若各种生产要素不能合理配置， 那么就不能达到产出的最大化。
+                    从全国范围来讲，这对高科技产业和经济的发展是很不利的。因而，东部地区如 广东、上海、天津、浙江、江苏、山东、福建、重庆 等省(市)目前在科技研究的投入上与新产品研发投入存在着落差，
+                    要提高这些省(市)的高科技产业投入产出效益，就应当 <span style="color: chocolate;"> 制定相关的政策，优化产业结构，减少资源浪费，调整投入比例</span>，以增加高科技产业的投入产出效率。
+                    还应当<span style="color: chocolate;"> 增加对中西部地区高技术产业的投入，尽可能多地吸引东部地区的技术、资金、人才，加强东部地区的技术扩散 效应，惠及中西部地区</span>。
+                    这样我国高技术产业的投入产出效益才会更高，高技术产业的发展才会进一步得到提升。
+                </div>
+            </fieldset>
+        </div>
+        <div class="layui-card-body" align="center">
+            <button href="report"  target="_blank" class="layui-btn layui-btn-lg  layui-btn-radius" id="export" lay-filter="export">
+                <i class="fa fa-sign-out" aria-hidden="true"></i> 导出报告
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/libs/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/assets/libs/slimscroll/jquery.slimscroll.js"></script>
+
+<script type="text/javascript" src="/assets/libs/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echartsTheme.js"></script>
+
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script type="text/javascript" src="/assets/js/utils.js"></script>
+<script type="text/javascript" src="/assets/js/tool.js"></script>
+
+
+<script src="https://cdn.bootcss.com/FileSaver.js/2014-11-29/FileSaver.js"></script>
+<script src="/assets/js/jquery.wordexport.js"></script>
+
+<script>
+    layui.use(['table', 'layer', 'form', 'util', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+
+        var calData = admin.getTempData("effCalData");
+        $("#calChart").attr('src',calData.calChart);
+        $("#calChart5").attr('src',calData.calChart5);
+        $("#calChart6").attr('src',calData.calChart6);
+
+        //导出分析报告
+        $("#export").click(function(event) {
+            $("#page-content").wordExport("科技活动绩效评价分析报告");
+        });
+
+    });
+</script>
+</body>
+
+</html>

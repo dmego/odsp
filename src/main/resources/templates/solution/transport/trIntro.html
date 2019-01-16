@@ -1,10 +1,96 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<!--suppress ALL -->
+<html>
 
+<head>
+    <title>ODSP</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="/assets/libs/layui/css/layui.css"/>
+    <link rel="stylesheet" href="/assets/css/admin.css"/>
+    <link rel="stylesheet" href="/assets/css/site.css"/>
+    <link rel="stylesheet" href="/assets/libs/font-awesome/css/font-awesome.min.css"/>
+    <style>
+        .layui-input-block {
+            margin-left: 100px;
+            min-height: 36px;
+        }
+
+        .layui-form-label {
+            float: left;
+            display: block;
+            padding: 9px 15px;
+            width: 50px;
+            font-weight: 400;
+            line-height: 20px;
+            text-align: right;
+        }
+    </style>
+</head>
+
+<body class="page-aside-fixed">
+
+<!-- 加载动画，移除位置在common.js中 -->
+<div class="page-loading">
+    <div class="rubik-loader"></div>
+</div>
+
+<!-- 正文开始 -->
+<div class="layui-fluid">
+    <div class="layui-card">
+        <div class="layui-card-body" style="padding-top: 40px;">
+            <div align="center">
+                <h1>某企业产品运输配送成本优化问题</h1>
+            </div>
+            <hr>
+
+            <fieldset class="layui-elem-field">
+                <legend>简介</legend>
+                <div class="layui-field-box">
+                    运输问题是运筹学中的一项重要的问题，运输成本在总物流成本中占很大比重。
+                    目前我国大部分企业的自身产品产销整体运输成本相对来说比较高、时间较长、运输效率较低。这就需要我们对物流进行合理化，
+                    在确保服务质量的同时，以最低的运输费用使产品由产地运至销地。 本案例选取某企业生产的产品由北京、上海等产地运往河北、海南等
+                    销地的运费数据，以及各产地的产量数据；销地的销量数据。使用表上作业法来分析解决该问题。该问题的解决，
+                    既可以加快物流的运输速度，及时使产品运达供应市场， 还能够加快企业资金的周转。
+                </div>
+            </fieldset>
+            <fieldset class="layui-elem-field">
+                <legend><h4>数据源</h4></legend>
+                <div class="layui-field-box">
+                    本案例中的数据来自网络，该数据为某企业2018年产品运输优化数据。该企业在北京、上海、广东等九个省份建有生产基地，
+                    所以在这九个生产地都有相应的产品生产量。例如在北京生产基地2018年预计生产 7062.6 万台。同时该企业生产的产品会
+                    销往河北、山西、四川等二十二个省份市区，其中每个省份市区需求量也就是销售量各不相同，例如其中该企业在河北的销量为
+                    2240.2 万台。
+                </div>
+            </fieldset>
+        </div>
+    </div>
+</div>
+
+<!-- js部分 -->
+<script type="text/javascript" src="/assets/libs/layui/layui.js"></script>
+<script type="text/javascript" src="/assets/libs/jquery/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" src="/assets/libs/slimscroll/jquery.slimscroll.js"></script>
+
+<script type="text/javascript" src="/assets/libs/echarts/echarts.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echarts-gl.min.js"></script>
+<script type="text/javascript" src="/assets/libs/echarts/echartsTheme.js"></script>
+
+<script type="text/javascript" src="/assets/js/common.js"></script>
+<script type="text/javascript" src="/assets/js/utils.js"></script>
+<script type="text/javascript" src="/assets/js/tool.js"></script>
+
+<script>
+    layui.use(['table', 'layer', 'form', 'util', 'admin'], function () {
+        var $ = layui.jquery;
+        var layer = layui.layer;
+        var form = layui.form;
+        var table = layui.table;
+        var util = layui.util;
+        var admin = layui.admin;
+    });
+</script>
 </body>
+
 </html>

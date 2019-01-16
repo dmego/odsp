@@ -15,4 +15,5 @@ public interface DEAService {
 
     JsonResult calFromSo(DEAVo deaVo);
 
+    JsonResult calculate(DEAVo deaVo);
 }

@@ -51,25 +51,20 @@
                     <div class="layui-card-body">
                         <div class="layui-form-item" pane="">
                             <div class="layui-input-block">
-                                <input type="checkbox" name="function" value="1" lay-skin="primary" title="CCR 模型" checked="">
+                                <input type="checkbox" name="function" lay-filter="function" value="1" lay-skin="primary" title="CCR 模型" checked="">
+                                <input type="checkbox" name="function" lay-filter="function" value="2" lay-skin="primary" title="BCC 模型"  checked="">
                             </div>
                             <div class="layui-input-block">
-                                <input type="checkbox" name="function" value="2" lay-skin="primary" title="BCC 模型"  checked="">
+                                <input type="checkbox" name="function" lay-filter="function" value="3" lay-skin="primary" title="DRS 模型">
+                                <input type="checkbox" name="function" lay-filter="function" value="4" lay-skin="primary" title="IRS 模型">
                             </div>
                             <div class="layui-input-block">
-                                <input type="checkbox" name="function" value="3" lay-skin="primary" title="DRS 模型">
+                                <input type="checkbox" name="function" lay-filter="function" value="5" lay-skin="primary" title="GRS 模型">
+                                <input type="checkbox" name="function" lay-filter="function" value="6" lay-skin="primary" title="SBM 模型"  checked="">
                             </div>
                             <div class="layui-input-block">
-                                <input type="checkbox" name="function" value="4" lay-skin="primary" title="GRS 模型">
-                            </div>
-                            <div class="layui-input-block">
-                                <input type="checkbox" name="function" value="5" lay-skin="primary" title="SBM 模型"  checked="">
-                            </div>
-                            <div class="layui-input-block">
-                                <input type="checkbox" name="function" value="6" lay-skin="primary" title="NCN 模型">
-                            </div>
-                            <div class="layui-input-block">
-                                <input type="checkbox" name="function" value="7" lay-skin="primary" title="NDSC 模型">
+                                <input type="checkbox" name="function" lay-filter="function" value="7" lay-skin="primary" title="NCN 模型">
+                                <input type="checkbox" name="function" lay-filter="function" value="8" lay-skin="primary" title="NDSC 模型">
                             </div>
                         </div>
                     </div>
@@ -81,14 +76,14 @@
                             <label class="layui-form-label">评价单元数</label>
                             <div class="layui-input-block">
                                 <input type="text" id="dumNum" name="dumNum" value="4" isChange="false"
-                                       placeholder="[0,+∞)" class="layui-input" lay-verify="required|dumNum">
+                                       placeholder="[1,+∞)" class="layui-input" lay-verify="required|dumNum">
                             </div>
                         </div>
 
                         <div class="layui-form-item">
                             <label class="layui-form-label">投入指标数</label>
                             <div class="layui-input-block">
-                                <input type="text" id="inputNum" name="inputNum" value="2" isChange="false"
+                                <input type="text" id="inputNum" name="inputNum" value="3" isChange="false"
                                        placeholder="[1,+∞)" class="layui-input" lay-verify="required|inputNum">
                             </div>
                         </div>
@@ -96,7 +91,7 @@
                         <div class="layui-form-item">
                             <label class="layui-form-label">产出指标数</label>
                             <div class="layui-input-block">
-                                <input type="text" id="outputNum" name="outputNum" value="1" isChange="false"
+                                <input type="text" id="outputNum" name="outputNum" value="2" isChange="false"
                                        placeholder="[1,+∞)" class="layui-input" lay-verify="required|outputNum">
                             </div>
                         </div>
@@ -166,7 +161,7 @@
         <div id="fl-btn-r" class="layui-col-md7 page-main">
             <!--原始数据表-->
             <div class="layui-card" id="originalTableDiv">
-                <div class="layui-card-header">约束条件系数表
+                <div class="layui-card-header">原始数据表
                     <span id="originalShow" style="float: right; cursor: pointer;">
                         <i class="fa fa-bar-chart" aria-hidden="true" id="originalFa"> 打开图表</i>
                     </span>
@@ -181,22 +176,117 @@
             </div>
 
 
-
-            <!--最终结果表-->
-            <div class="layui-card" id="resultTableDiv">
-                <div class="layui-card-header"><span id="resultTitle">最优解结果表</span>
-                    <span id="resultShow" style="float: right; cursor: pointer;">
-                        <i class="fa fa-bar-chart" aria-hidden="true" id="resultFa"> 打开图表</i>
+            <div class="layui-card" id="ccrTableDiv">
+                <div class="layui-card-header">CCR 模型结果表
+                    <span id="showCCR" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="ccrFa"> 打开图表</i>
                     </span>
                 </div>
                 <div class="layui-card-body">
-                    <table class="layui-hide" id="resultTable"></table>
+                    <table class="layui-hide" id="ccrTable"></table>
                 </div>
-                <div class="layui-card-body dis-none" id="resultEcharts">
-                    <div id="resultEchartsDiv" class="layui-show echartsDiv"></div>
+                <div class="layui-card-body dis-none" id="ccrEcharts">
+                    <div id="ccrEchartsDiv" class="layui-show echartsDiv"></div>
                 </div>
             </div>
 
+            <div class="layui-card" id="bccTableDiv">
+                <div class="layui-card-header">BCC 模型结果表
+                    <span id="showBCC" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="bccFa"> 打开图表</i>
+                    </span>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="bccTable"></table>
+                </div>
+                <div class="layui-card-body dis-none" id="bccEcharts">
+                    <div id="bccEchartsDiv" class="layui-show echartsDiv"></div>
+                </div>
+            </div>
+
+            <div class="layui-card dis-none" id="drsTableDiv">
+                <div class="layui-card-header">DRS 模型结果表
+                    <span id="showDRS" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="drsFa"> 打开图表</i>
+                    </span>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="drsTable"></table>
+                </div>
+                <div class="layui-card-body dis-none" id="drsEcharts">
+                    <div id="drsEchartsDiv" class="layui-show echartsDiv"></div>
+                </div>
+            </div>
+
+            <div class="layui-card dis-none" id="irsTableDiv">
+                <div class="layui-card-header">IRS 模型结果表
+                    <span id="showIGS" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="irsFa"> 打开图表</i>
+                    </span>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="irsTable"></table>
+                </div>
+                <div class="layui-card-body dis-none" id="irsEcharts">
+                    <div id="irsEchartsDiv" class="layui-show echartsDiv"></div>
+                </div>
+            </div>
+
+            <div class="layui-card dis-none" id="grsTableDiv">
+                <div class="layui-card-header">GRS 模型结果表
+                    <span id="showGRS" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="grsFa"> 打开图表</i>
+                    </span>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="grsTable"></table>
+                </div>
+                <div class="layui-card-body dis-none" id="grsEcharts">
+                    <div id="grsEchartsDiv" class="layui-show echartsDiv"></div>
+                </div>
+            </div>
+
+            <div class="layui-card" id="sbmTableDiv">
+                <div class="layui-card-header">SBM 模型结果表
+                    <span id="showSBM" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="sbmFa"> 打开图表</i>
+                    </span>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="sbmTable"></table>
+                </div>
+                <div class="layui-card-body dis-none" id="sbmEcharts">
+                    <div id="sbmEchartsDiv" class="layui-show echartsDiv"></div>
+                </div>
+            </div>
+
+            <div class="layui-card dis-none" id="ncTableDiv">
+                <div class="layui-card-header">NCN 模型结果表
+                    <span id="showNC" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="ncFa"> 打开图表</i>
+                    </span>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="ncTable"></table>
+                </div>
+                <div class="layui-card-body dis-none" id="ncEcharts">
+                    <div id="ncEchartsDiv" class="layui-show echartsDiv"></div>
+                </div>
+            </div>
+
+            <div class="layui-card dis-none" id="ndTableDiv">
+                <div class="layui-card-header">NDSC 模型结果表
+                    <span id="showND" style="float: right; cursor: pointer;">
+                        <i class="fa fa-bar-chart" aria-hidden="true" id="ndFa"> 打开图表</i>
+                    </span>
+                </div>
+                <div class="layui-card-body">
+                    <table class="layui-hide" id="ndTable"></table>
+                </div>
+                <div class="layui-card-body dis-none" id="ndEcharts">
+                    <div id="ndEchartsDiv" class="layui-show echartsDiv"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -224,35 +314,34 @@
         var util = layui.util;
         var admin = layui.admin;
 
-        var strategyData;
-        var fun, variable, constraint, isUpd;
-        var Head, Data, resultHead, resultData;
+        var analysisData;
+        var funs, dumNum, inputNum, outputNum, rtsLower, rtsUpper, isUpd;
+        var Head, Data, resultHead, CCRData,BCCData,SBMData;
 
         //首先获取该页面的初始化数据
         $.ajaxSettings.async = false; //同步获取数据
-        $.getJSON("/assets/js/optimization/strategy.json", function (data) {
-            strategyData = data;
-            admin.putTempData('strategyData', data);
+        $.getJSON("/assets/js/analysis/deamodel.json", function (data) {
+            analysisData = data;
+            admin.putTempData('analysisData', data);
 
-            fun = data.fun; //初始化选择的方法是 1
-            variable = data.variable;
-            constraint = data.constraint;
+            funs = data.funs; //初始化选择的方法是 1,2,5
+            dumNum = data.dumNum;
+            inputNum = data.inputNum;
+            outputNum = data.outputNum;
+            rtsLower = data.rtsLower;
+            rtsUpper = data.rtsUpper;
             isUpd = data.isUpd;
 
             Head = data.Head;
             Data = data.Data;
 
             resultHead = data.resultHead;
-            resultData = data.resultData;
+            CCRData = data.CCRData;
+            BCCData = data.BCCData;
+            SBMData = data.SBMData;
+
         });
 
-        /**单选点击事件
-         * 1.初始化参数设置
-         * 2.初始化系数设置
-         */
-        form.on('radio(function)', function (data) {
-            fun = data.value;
-        });
 
         function renderTable(tableId, head, data) {
             table.render({
@@ -263,19 +352,46 @@
             });
         }
 
+        function renderTableN(tableId, head, data) {
+            table.render({
+                elem: tableId,
+                cellMinWidth: 115,
+                cols: head,
+                data: data
+            });
+        }
+
+        //监听chectbox复选框
+        form.on('checkbox(function)', function(data){
+            if(data.elem.checked && data.value == 5){
+                $("#rtslDiv").removeClass("dis-none");
+                $("#rtsuDiv").removeClass("dis-none");
+            }else if(!data.elem.checked && data.value == 5){
+                $("#rtslDiv").addClass("dis-none");
+                $("#rtsuDiv").addClass("dis-none");
+            }
+        });
+
+
         // 编辑系数之前先校验数据
-        function checkActAte(variable, constraint) {
-            if (variable < 1) {
-                layer.msg("变量个数必须大于1!");
+        function checkActAte(dumNum, inputNum,outputNum) {
+            if(!/^[1-9]\d*$/.test(dumNum)){
+                layer.msg('评价单元必须是大于 0 的整数!');
                 return false;
-            } else if (variable > 100) {
-                layer.msg("最多添加 100 个变量!");
+            } else if (dumNum > 100) {
+                layer.msg("最多添加 100 个评价单元!");
                 return false;
-            } else if (constraint < 1) {
-                layer.msg("约束条件个数必须大于1!");
+            } else if(!/^[1-9]\d*$/.test(inputNum)){
+                layer.msg('投入指标必须是大于 0 的整数!');
                 return false;
-            } else if (constraint > 100) {
-                layer.msg("最多添加 100 个约束条件!");
+            } else if (inputNum > 50) {
+                layer.msg("最多添加 50 个投入指标!");
+                return false;
+            }else if(!/^[1-9]\d*$/.test(outputNum)){
+                layer.msg('产出指标必须是大于 0 的整数!');
+                return false;
+            }  else if (outputNum > 50) {
+                layer.msg("最多添加 50 个产出指标!");
                 return false;
             }
             return true;
@@ -283,23 +399,32 @@
 
         //实时监听 input 值变化
         $(function () {
-            var variable = $("#variable").val();
-            var constraint = $("#constraint").val();
+            var dumNum = $("#dumNum").val();
+            var inputNum = $("#inputNum").val();
+            var outputNum = $("#outputNum").val();
 
-            $("#variable").bind("input propertychange", function (event) {
-                if (variable != $("#variable").val()) {
-                    $("#variable").attr("isChange", "true");
+            $("#dumNum").bind("input propertychange", function (event) {
+                if (dumNum != $("#dumNum").val()) {
+                    $("#dumNum").attr("isChange", "true");
                     isUpd = "noup"; //记录不是更新表格操作
                 } else {
-                    $("#variable").attr("isChange", "false");
+                    $("#dumNum").attr("isChange", "false");
                 }
             });
-            $("#constraint").bind("input propertychange", function (event) {
-                if (constraint != $("#constraint").val()) {
-                    $("#constraint").attr("isChange", "true");
+            $("#inputNum").bind("input propertychange", function (event) {
+                if (inputNum != $("#inputNum").val()) {
+                    $("#inputNum").attr("isChange", "true");
                     isUpd = "noup"; //记录不是更新表格操作
                 } else {
-                    $("#constraint").attr("isChange", "false");
+                    $("#inputNum").attr("isChange", "false");
+                }
+            });
+            $("#outputNum").bind("input propertychange", function (event) {
+                if (inputNum != $("#outputNum").val()) {
+                    $("#outputNum").attr("isChange", "true");
+                    isUpd = "noup"; //记录不是更新表格操作
+                } else {
+                    $("#outputNum").attr("isChange", "false");
                 }
             });
         })
@@ -307,11 +432,12 @@
 
         // 添加编辑按钮点击事件
         $('#btnUpd').click(function () {
-            var vari = $("#variable").val();
-            var cons = $("#constraint").val();
+            var dum = $("#dumNum").val();
+            var input = $("#inputNum").val();
+            var output = $("#outputNum").val();
 
             //校验数据
-            if (!checkActAte(vari, cons)) {
+            if (!checkActAte(dum, input, output)) {
                 return;
             }
 
@@ -320,36 +446,42 @@
                 title: '系数设置',
                 maxmin: true,
                 area: ['550px', '500px'],
-                content: 'strategy/editForm/' + vari + '/' + cons + '/' + isUpd,
+                content: 'deaModel/editForm/' + dum + '/' + input + '/'  + output + '/'+ isUpd,
                 btn: ['保存', '取消'],
                 yes: function (index, layero) {
                     var ifTable = $("div.layui-layer-content > iframe")[0].contentWindow.layui.table;
-                    // console.log(ifTable)
+
                     //在提交数据之前先校验数据
                     var cache = ifTable.cache.ratio;
                     var isNull = false;
                     var isNoDouble = false; //整数或保留3位小数
                     var rag = /^[+-]?\d*\.?\d{0,3}$/; //整数或保留3位小数
+
+                    // console.log(cache)
+
                     //for 循环进行校验
+                    input = parseInt(input);
+                    output = parseInt(output);
                     for (var i = 0; i < cache.length; i++) {
                         var item = cache[i];
                         //先校验非空
-                        for (var j = 1; j <= vari; j++) {
-                            if (isEmpty(item[j+"_x"])) {
-                                isNull = true;
-                                break;
-                            } else if (!rag.test(item[j+'_x'])) {
-                                isNoDouble = true;
-                                break;
-                            }
-                        }
-                        if (i != 0) {
-                            if (isEmpty(item['increment'])) {
-                                isNull = true;
-                                break;
-                            } else if (!rag.test(item['increment'])) {
-                                isNoDouble = true;
-                                break;
+                        for (var j = 1; j <= input + output; j++) {
+                            if(j <= input){
+                                if (isEmpty(item["input_"+j])) {
+                                    isNull = true;
+                                    break;
+                                } else if (!rag.test(item['input_'+j])) {
+                                    isNoDouble = true;
+                                    break;
+                                }
+                            }else{
+                                if (isEmpty(item["output_"+(j-input)])) {
+                                    isNull = true;
+                                    break;
+                                } else if (!rag.test(item['output_'+(j-input)])) {
+                                    isNoDouble = true;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -363,25 +495,24 @@
 
                         var xsData = JSON.parse(JSON.stringify(cache));//表格数据
 
-                        // console.log(xsData)
-
                         Data = xsData;
-                        strategyData["Data"] = Data;
-                        $("#variable").attr("isChange", "false");
-                        $("#constraint").attr("isChange", "false");
+                        if(isUpd == 'noup'){
+                            Head = ifTable.head;
+                        }
 
-                        //重新渲染系数表
-                        layui.table.render({
-                            elem: '#xishu',
-                            cellMinWidth: 110,
-                            cols: [Head],
-                            data: Data,
-                            limit: 100
-                        });
+                        renderTableN('#xishu',Head,Data)
+
+                        analysisData["Data"] = Data;
+                        analysisData["Head"] = Head;
+
+                        $("#dumNum").attr("isChange", "false");
+                        $("#inputNum").attr("isChange", "false");
+                        $("#outputNum").attr("isChange", "false");
+
 
                         isUpd = "isup";
                         //更新graphData数据
-                        admin.putTempData('strategyData', strategyData);
+                        admin.putTempData('analysisData', analysisData);
                     }
                 },
                 btn2: function (index, layero) { //取消按钮
@@ -394,41 +525,73 @@
          * 自定义表单验证规则
          */
         form.verify({
-            variable: function (value, item) {
-                if ($("#variable").attr("isChange") == "true") {
-                    return '变量个数已改变，请重新设置系数!';
+            dumNum: function (value, item) {
+                if ($("#dumNum").attr("isChange") == "true") {
+                    return '评价单元个数已改变，请重新设置系数!';
                 }
-                if (value < 1) {
-                    return '变量个数必须大于1!';
+                if(!/^[1-9]\d*$/.test(value)){
+                    return '评价单元必须是大于 0 的整数!';
                 } else if (value > 100) {
-                    return '最多添加 100 个变量!';
+                    return '最多添加 100 个评价单元!';
                 }
             },
-            constraint: function (value, item) {
-                if ($("#constraint").attr("isChange") == "true") {
-                    return '约束条件个数已改变，请重新设置系数!';
+            inputNum: function (value, item) {
+                if ($("#inputNum").attr("isChange") == "true") {
+                    return '投入指标个数已改变，请重新设置系数!';
                 }
-                if (value < 1) {
-                    return '约束条件个数必须大于1!';
-                } else if (value > 100) {
-                    return '最多添加 100 个约束条件!';
+                if(!/^[1-9]\d*$/.test(value)){
+                    return '投入指标必须是大于 0 的整数!';
+                }  else if (value > 50) {
+                    return '最多添加 50 个投入指标!';
+                }
+            },
+            outputNum: function (value, item) {
+                if ($("#outputNum").attr("isChange") == "true") {
+                    return '产出指标个数已改变，请重新设置系数!';
+                }
+                if(!/^[1-9]\d*$/.test(value)){
+                    return '产出指标必须是大于 0 的整数!';
+                } else if (value > 50) {
+                    return '最多添加 50 个产出指标!';
                 }
             }
         })
 
         // 表单提交事件
         form.on('submit(calculate)', function (data) {
+            layer.load(2);
             //将checkbox 封装成一个数组
             var functions = new Array();
             $("input[name='function']:checked").each(function () {
                 functions.push($(this).val());
             })
-            layer.load(2);
-            $.post('strategy/calculate', {
-                fun: data.field.function,
-                variable: data.field.variable,
-                constraint: data.field.constraint,
-                sType: data.field.sType,
+
+            var dum = parseInt(data.field.dumNum);
+            var input = parseInt(data.field.inputNum);
+            var output = parseInt(data.field.outputNum);
+            //初始化 dmuNames 数据
+            var dmuNames = new Array();
+            for (var i = 1; i <= dum; i++) {
+                dmuNames.push("DMU "+i)
+            }
+            //初始化 variableNames 数组
+            var variableNames = new Array();
+            for (var i = 1; i <= input + output; i++) {
+                if(i <= input){
+                    variableNames.push("INPUT "+i);
+                }else{
+                    variableNames.push("OUTPUT "+(i-input));
+                }
+            }
+            $.post('deaModel/calculate', {
+                funArr: functions,
+                dmuNamesArr:dmuNames,
+                variableNamesArr:variableNames,
+                dumNum: data.field.dumNum,
+                inputNum: data.field.inputNum,
+                outputNum: data.field.outputNum,
+                rtsLower: data.field.rtsLower,
+                rtsUpper: data.field.rtsUpper,
                 ratioTableData: JSON.stringify(table.cache.xishu),
             }, function (data) {
                 layer.closeAll('loading');
@@ -443,89 +606,48 @@
             return false;
         });
 
+
+        function rendTool(data, tableId, tableDivId) {
+            if(isNotEmpty(data)){
+                $(tableDivId).removeClass('dis-none');
+                table.render({
+                    elem: tableId,
+                    cellMinWidth: 110,
+                    cols: [resultHead],
+                    data: data,
+                    limit: 100
+                });
+            }else {
+                $(tableDivId).addClass('dis-none');
+            }
+        }
+
         /**
          * 根据不同的 key 渲染出不同的结果表
          * @param data
          */
         function renderTables(data) {
-            var originalHead, originalData;
-            //首先确定原始数据表的表头及数据
-            originalHead = Head;
-            originalData = Data;
-            resultHead = resultHead;
+
             //渲染原始数据表
-            table.render({
-                elem: '#originalTable',
-                cellMinWidth: 115,
-                cols: [originalHead],
-                data: originalData,
-                limit: 100
-            });
-            //如果选择的是0-1规划，还需要渲染可能结果表
-            if (fun == 3) {
-                $("#maybeTableDiv").removeClass('dis-none');
-                var maybeHead = [];
-                var index = {field: 'index', title: '序号'};
-                maybeHead.push(index);
-                for (var i = 1; i <= $("#variable").val(); i++) {
-                    var x = {field: 'X' + i, title: 'X' + i};
-                    maybeHead.push(x);
-                }
-                var Z = {field: 'Z', title: 'Z'};
-                var meet = {field: 'meet', title: '是否满足约束条件', minWidth: 150};
-                maybeHead.push(Z);
-                maybeHead.push(meet);
+            renderTableN('#originalTable', Head, Data);
 
-                //渲染可能结果表
-                table.render({
-                    elem: '#maybeTable',
-                    cellMinWidth: 50,
-                    cols: [maybeHead],
-                    data: data.calculateResult,
-                    limit: 100
-                });
-            } else {
-                $("#maybeTableDiv").addClass('dis-none');
-            }
-
-            //渲染结果表
-            table.render({
-                elem: '#resultTable',
-                cellMinWidth: 245,
-                cols: [resultHead],
-                data: data.result,
-                limit: 100
-            });
+            //根据结果渲染结果表
+            rendTool(data["1"],'#ccrTable','#ccrTableDiv');
+            rendTool(data["2"],'#bccTable','#bccTableDiv');
+            rendTool(data["3"],'#drsTable','#drsTableDiv');
+            rendTool(data["4"],'#grsTable','#grsTableDiv');
+            rendTool(data["5"],'#irsTable','#irsTableDiv');
+            rendTool(data["6"],'#sbmTable','#sbmTableDiv');
+            rendTool(data["7"],'#ncTable', '#ncTableDiv');
+            rendTool(data["8"],'#ndTable', '#ndTableDiv');
         }
 
         //----------------初始化操作----------------------
-        //系数设置表
-        table.render({
-            elem: '#xishu',
-            cellMinWidth: 115,
-            cols: [Head],
-            data: Data,
-            limit: 100
-
-        });
-
-        //原始数据表
-        table.render({
-            elem: '#originalTable',
-            cellMinWidth: 115,
-            cols: [Head],
-            data: Data,
-            limit: 100
-        });
-
-        //分析结果表
-        table.render({
-            elem: '#resultTable',
-            cellMinWidth: 245,
-            cols: [resultHead],
-            data: resultData,
-            limit: 100
-        });
+        renderTableN('#xishu', Head, Data)  //系数设置表
+        renderTableN('#originalTable', Head, Data)  //原始数据表
+        renderTable('#ccrTable', resultHead, CCRData)  //CCR结果表
+        renderTable('#bccTable', resultHead, BCCData)  //BCC结果表
+        renderTable('#sbmTable', resultHead, SBMData)  //SBM结果表
 
     });
 </script>
